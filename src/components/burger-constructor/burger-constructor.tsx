@@ -37,7 +37,7 @@ export const BurgerConstructor = ({ data }: BurgerConstructorPropTypes) => {
 				<ConstructorElement
 					type="top"
 					isLocked={true}
-					text={bun.name}
+					text={`${bun.name} (верх)`}
 					price={bun.price}
 					thumbnail={bun.imageMobile}
 					extraClass="ml-8"
@@ -67,7 +67,7 @@ export const BurgerConstructor = ({ data }: BurgerConstructorPropTypes) => {
 				<ConstructorElement
 					type="bottom"
 					isLocked={true}
-					text={bun.name}
+					text={`${bun.name} (низ)`}
 					price={bun.price}
 					thumbnail={bun.imageMobile}
 					extraClass="ml-8"
