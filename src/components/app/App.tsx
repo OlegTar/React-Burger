@@ -34,7 +34,6 @@ function App() {
 
 	const convert = (ing: IIngredientFromServer): IIngredient => {
 		return {
-			id: ing._id,
 			imageLarge: ing.image_large,
 			imageMobile: ing.image_mobile,
 			...ing,
@@ -53,12 +52,18 @@ function App() {
 
 		//чтобы надпись Загрузка быстро не моргала.
 		Promise.all([fetch(url), delay])
-			.then(([data]) => {
+			.then(([res]) => {
 				setState('success');
-				return data.json();
+				if (!res.ok) {
+					return Promise.reject(`Ошибка ${res.status}`);
+				}
+				return res.json();
 			})
-			.then((e: DataFromServer) => {
-				setData(e.data.map(convert));
+			.then((res: DataFromServer) => {
+				if (!res.success) {
+					return Promise.reject(`Ошибка`);
+				}
+				setData(res.data.map(convert));
 			})
 			.catch(() => {
 				setState('error');
@@ -91,10 +96,10 @@ function App() {
 					</div>
 				</Modal>
 			)}
-			<section className={`${styles['main-content']}`}>
+			<main className={`${styles['main-content']}`}>
 				<BurgerIngredients data={data} />
 				<BurgerConstructor data={data} />
-			</section>
+			</main>
 		</>
 	);
 }

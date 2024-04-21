@@ -5,17 +5,17 @@ import {
 	DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.scss';
-import { useState } from 'react';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
 import { IIngredient } from '../../types/ingredient';
+import { useModal } from '../../hooks/useModal';
 
 interface BurgerConstructorPropTypes {
 	data: IIngredient[];
 }
 
 export const BurgerConstructor = ({ data }: BurgerConstructorPropTypes) => {
-	const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+	const { isModalOpen, openModal, closeModal } = useModal();
 
 	if (data.length === 0) {
 		return <></>;
@@ -24,8 +24,6 @@ export const BurgerConstructor = ({ data }: BurgerConstructorPropTypes) => {
 	if (bun === undefined || bun === null) {
 		throw new Error('Булочки нет');
 	}
-
-	const closeModal = () => setIsOrderModalOpen(false);
 
 	const fillings = data.filter((element) => element.type !== 'bun');
 	let fixPositionCallBack: () => void;
@@ -51,7 +49,7 @@ export const BurgerConstructor = ({ data }: BurgerConstructorPropTypes) => {
 				>
 					{fillings.map((fil) => {
 						return (
-							<li className={`${styles.ingredient} mb-4`} key={fil.id}>
+							<li className={`${styles.ingredient} mb-4`} key={fil._id}>
 								<section className={styles.drag}>
 									<DragIcon type="primary" />
 								</section>
@@ -84,12 +82,12 @@ export const BurgerConstructor = ({ data }: BurgerConstructorPropTypes) => {
 					htmlType="button"
 					type="primary"
 					size="medium"
-					onClick={() => setIsOrderModalOpen(true)}
+					onClick={openModal}
 				>
 					Оформить заказ
 				</Button>
 			</footer>
-			{isOrderModalOpen && (
+			{isModalOpen && (
 				<Modal
 					title={''}
 					closeModal={closeModal}

@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 //имя файла App требуется, чтобы было с большой буквы (не смотря на то, что разрабатываю под Виндой)
 //которая безралична к регистру символов в файле.
 //Реакт выдаёт ошибку, если имя app.tsx с маленькой буквы, ну и в import'е c маленькой буквы.
-import App from './components/app/App';
+import App from './components/app/app';
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement

@@ -3,22 +3,14 @@ import {
 	CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient.module.scss';
-import { useState } from 'react';
 import { Modal } from '../modal/modal';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { IIngredient } from '../../types/ingredient';
+import { useModal } from '../../hooks/useModal';
 
 export const Ingredient = (prop: IIngredient) => {
 	const { price, name, image } = prop;
-	const [isModalOpen, setModalOpen] = useState(false);
-
-	const openDescription = () => {
-		setModalOpen(true);
-	};
-
-	const closeDescription = () => {
-		setModalOpen(false);
-	};
+	const { isModalOpen, openModal, closeModal } = useModal();
 
 	return (
 		<>
@@ -27,7 +19,7 @@ export const Ingredient = (prop: IIngredient) => {
 				<img
 					src={image}
 					className={`mb-1 ${styles.image}`}
-					onClick={openDescription}
+					onClick={openModal}
 					alt={name}
 				/>
 				<p className={`${styles.price} text text_type_digits-default mb-1`}>
@@ -41,7 +33,7 @@ export const Ingredient = (prop: IIngredient) => {
 				</p>
 			</section>
 			{isModalOpen && (
-				<Modal title="Детали ингредиента" closeModal={closeDescription}>
+				<Modal title="Детали ингредиента" closeModal={closeModal}>
 					<IngredientDetails {...prop} />
 				</Modal>
 			)}

@@ -35,7 +35,7 @@ export const BurgerIngredients = ({ data }: BurgerIngredientsPropTypes) => {
 					{data
 						.filter((ing) => ing.type === 'bun')
 						.map((ing) => (
-							<Ingredient {...ing} imageLarge={ing.imageLarge} key={ing.id} />
+							<Ingredient {...ing} imageLarge={ing.imageLarge} key={ing._id} />
 						))}
 				</section>
 				<header className="text text_type_main-medium">Соусы</header>
@@ -43,7 +43,7 @@ export const BurgerIngredients = ({ data }: BurgerIngredientsPropTypes) => {
 					{data
 						.filter((ing) => ing.type === 'sauce')
 						.map((ing) => (
-							<Ingredient {...ing} imageLarge={ing.imageLarge} key={ing.id} />
+							<Ingredient {...ing} imageLarge={ing.imageLarge} key={ing._id} />
 						))}
 				</section>
 				<header className="text text_type_main-medium">Начинки</header>
@@ -51,7 +51,7 @@ export const BurgerIngredients = ({ data }: BurgerIngredientsPropTypes) => {
 					{data
 						.filter((ing) => ing.type === 'main')
 						.map((ing) => (
-							<Ingredient {...ing} imageLarge={ing.imageLarge} key={ing.id} />
+							<Ingredient {...ing} imageLarge={ing.imageLarge} key={ing._id} />
 						))}
 				</section>
 			</section>
