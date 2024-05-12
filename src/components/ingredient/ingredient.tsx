@@ -7,16 +7,33 @@ import { Modal } from '../modal/modal';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { IIngredient } from '../../types/ingredient';
 import { useModal } from '../../hooks/useModal';
+import { useDrag } from 'react-dnd';
 
-export const Ingredient = (prop: IIngredient) => {
-	const { price, name, image } = prop;
+interface IngredientPropTypes {
+	ingredient: IIngredient;
+	count: number;
+}
+
+export const Ingredient = ({ ingredient, count }: IngredientPropTypes) => {
+	const { price, name, image } = ingredient;
 	const { isModalOpen, openModal, closeModal } = useModal();
+	const [, dragRef] = useDrag({
+		type: 'ingredient',
+		item: ingredient,
+	});
 
 	return (
 		<>
-			<section className={`${styles.ingredient} mr-6`}>
-				<Counter count={1} size="default" extraClass="m-1" />
+			<section className={`${styles.ingredient} mr-6`} ref={dragRef}>
+				{count > 0 && <Counter count={count} size="default" extraClass="m-1" />}
 				<img
+					draggable={false}
+					onDragStart={(e) => {
+						e.preventDefault();
+					}}
+					onDrag={(e) => {
+						e.preventDefault();
+					}}
 					src={image}
 					className={`mb-1 ${styles.image}`}
 					onClick={openModal}
@@ -34,7 +51,7 @@ export const Ingredient = (prop: IIngredient) => {
 			</section>
 			{isModalOpen && (
 				<Modal title="Детали ингредиента" closeModal={closeModal}>
-					<IngredientDetails {...prop} />
+					<IngredientDetails {...ingredient} />
 				</Modal>
 			)}
 		</>

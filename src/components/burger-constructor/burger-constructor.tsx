@@ -9,23 +9,57 @@ import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
 import { IIngredient } from '../../types/ingredient';
 import { useModal } from '../../hooks/useModal';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../services/store';
+import { useDrag, useDrop } from 'react-dnd';
+import { useDispatch } from 'react-redux';
+import { removeIngredient } from '../../services/reducers/constructor-ingredients';
+import { decreaseItem } from '../../services/reducers/ingredients';
 
-interface BurgerConstructorPropTypes {
-	data: IIngredient[];
+export interface BurgerConstructorPropTypes {
+	onDropHandler: (ingredient: IIngredient) => void;
 }
 
-export const BurgerConstructor = ({ data }: BurgerConstructorPropTypes) => {
+export const BurgerConstructor = ({
+	onDropHandler,
+}: BurgerConstructorPropTypes) => {
 	const { isModalOpen, openModal, closeModal } = useModal();
+	const dispatch = useDispatch();
+	const { bun, ingredients } = useSelector(
+		(state: RootState) => state['constructor-ingredients']
+	);
 
-	if (data.length === 0) {
-		return <></>;
-	}
-	const bun = data.find((element) => element.type === 'bun');
-	if (bun === undefined || bun === null) {
-		throw new Error('Булочки нет');
-	}
+	const totalSum =
+		(bun?.price || 0) * 2 +
+		ingredients.reduce((acc, { ingredient }) => acc + ingredient.price, 0);
 
-	const fillings = data.filter((element) => element.type !== 'bun');
+	const [, dragRef] = useDrag({
+		type: 'constr',
+	});
+
+	const [, dropTargetConstr] = useDrop({
+		accept: 'constr',
+		drop() {
+			alert(2);
+		},
+	});
+
+	const handleClose = (ingredient: IIngredient, unqid: string) => {
+		dispatch(removeIngredient(unqid));
+		dispatch(decreaseItem(ingredient._id));
+	};
+
+	const [{ isHover }, dropTarget] = useDrop({
+		accept: 'ingredient',
+		drop(itemId: IIngredient) {
+			onDropHandler(itemId);
+		},
+		collect: (monitor) => ({
+			isHover: monitor.isOver(),
+		}),
+	});
+
+	const additionalClass = isHover ? styles.dashed : '';
 	let fixPositionCallBack: () => void;
 	const fixPositionPromise = new Promise<void>(function (resolve) {
 		fixPositionCallBack = resolve;
@@ -33,49 +67,58 @@ export const BurgerConstructor = ({ data }: BurgerConstructorPropTypes) => {
 
 	return (
 		<section className={`${styles.constr} pt-25 pl-4 ml-10`}>
-			<section className={styles.burger}>
-				<ConstructorElement
-					type="top"
-					isLocked={true}
-					text={`${bun.name} (верх)`}
-					price={bun.price}
-					thumbnail={bun.imageMobile}
-					extraClass="ml-8"
-				/>
+			<section
+				className={`${styles.burger} ${additionalClass}`}
+				ref={dropTarget}
+			>
+				{bun && (
+					<ConstructorElement
+						type="top"
+						isLocked={true}
+						text={`${bun.name} (верх)`}
+						price={bun.price}
+						thumbnail={bun.imageMobile}
+						extraClass="ml-8"
+					/>
+				)}
 
 				<ul
 					id="burger-constructor-list"
 					className={`${styles.list} scroll-pane custom-scroll`}
+					ref={dropTargetConstr}
 				>
-					{fillings.map((fil) => {
+					{ingredients.map(({ ingredient, uniqId }) => {
 						return (
-							<li className={`${styles.ingredient} mb-4`} key={fil._id}>
-								<section className={styles.drag}>
+							<li className={`${styles.ingredient} mb-4`} key={uniqId}>
+								<section className={styles.drag} draggable>
 									<DragIcon type="primary" />
 								</section>
 								<ConstructorElement
 									extraClass="ml-8"
 									isLocked={false}
-									text={fil.name}
-									price={fil.price}
-									thumbnail={fil.imageMobile}
+									text={ingredient.name}
+									price={ingredient.price}
+									thumbnail={ingredient.imageMobile}
+									handleClose={() => handleClose(ingredient, uniqId)}
 								/>
 							</li>
 						);
 					})}
 				</ul>
-				<ConstructorElement
-					type="bottom"
-					isLocked={true}
-					text={`${bun.name} (низ)`}
-					price={bun.price}
-					thumbnail={bun.imageMobile}
-					extraClass="ml-8"
-				/>
+				{bun && (
+					<ConstructorElement
+						type="bottom"
+						isLocked={true}
+						text={`${bun.name} (низ)`}
+						price={bun.price}
+						thumbnail={bun.imageMobile}
+						extraClass="ml-8"
+					/>
+				)}
 			</section>
 			<footer>
 				<p className="text text_type_digits-medium mr-10">
-					610&nbsp;
+					{totalSum}&nbsp;
 					<CurrencyIcon type="primary" />
 				</p>
 				<Button

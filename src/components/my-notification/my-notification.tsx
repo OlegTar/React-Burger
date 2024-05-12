@@ -17,9 +17,8 @@ export const MyNotification = ({
 	message,
 }: MyNotificationPropTypes) => {
 	const [showing, setShowing] = useState(true);
-
 	const additionalClass = success ? styles.success : styles.error;
-	const additionalClass2 = showing ? styles.appearing : '';
+	const additionalClass2 = showing ? styles.appearing : styles.hiding;
 	useEffect(() => {
 		setTimeout(() => setShowing(false), 2000);
 	}, []);

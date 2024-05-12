@@ -14,7 +14,8 @@ footer {
 ul.list {
 	padding: 0;
 	list-style: none;
-	overflow-y: scroll;
+	overflow-y: auto;
+	height: 100%;
 	overflow-x: hidden;
 	li:last-child {
 		margin-bottom: 0;
@@ -35,4 +36,9 @@ ul.list {
 	display: flex;
 	flex-direction: column;
 	height: calc(100% - 86px);
+	width: 568px;
+	&.dashed {
+		border: 2px dashed gray;
+		width: 564px;
+	}
 }
