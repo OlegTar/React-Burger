@@ -37,6 +37,21 @@ const constructorIngredients = createSlice({
 				({ uniqId }) => uniqId !== action.payload
 			),
 		}),
+		changeOrder: (
+			state: ConstructorIngredientsType,
+			action: PayloadAction<{
+				fromIndex: number;
+				toIndex: number;
+			}>
+		) => {
+			const { fromIndex, toIndex } = action.payload;
+			const ingredients = [...state.ingredients];
+			ingredients.splice(toIndex, 0, ingredients.splice(fromIndex, 1)[0]);
+			return {
+				...state,
+				ingredients,
+			};
+		},
 		setBun: (
 			state: ConstructorIngredientsType,
 			action: PayloadAction<IIngredient>
@@ -50,6 +65,6 @@ const constructorIngredients = createSlice({
 		ingredients: (state: ConstructorIngredientsType) => state.ingredients,
 	},
 });
-export const { addIngredient, setBun, removeIngredient } =
+export const { addIngredient, setBun, removeIngredient, changeOrder } =
 	constructorIngredients.actions;
 export { constructorIngredients };

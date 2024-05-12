@@ -2,7 +2,6 @@ import {
 	Button,
 	ConstructorElement,
 	CurrencyIcon,
-	DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.scss';
 import { OrderDetails } from '../order-details/order-details';
@@ -11,10 +10,12 @@ import { IIngredient } from '../../types/ingredient';
 import { useModal } from '../../hooks/useModal';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../services/store';
-import { useDrag, useDrop } from 'react-dnd';
+import { useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import { removeIngredient } from '../../services/reducers/constructor-ingredients';
 import { decreaseItem } from '../../services/reducers/ingredients';
+import { DragConstructorElement } from '../drag-constructor-element/drag-constructor-element';
+import { useMemo } from 'react';
 
 export interface BurgerConstructorPropTypes {
 	onDropHandler: (ingredient: IIngredient) => void;
@@ -29,20 +30,12 @@ export const BurgerConstructor = ({
 		(state: RootState) => state['constructor-ingredients']
 	);
 
-	const totalSum =
-		(bun?.price || 0) * 2 +
-		ingredients.reduce((acc, { ingredient }) => acc + ingredient.price, 0);
-
-	const [, dragRef] = useDrag({
-		type: 'constr',
-	});
-
-	const [, dropTargetConstr] = useDrop({
-		accept: 'constr',
-		drop() {
-			alert(2);
-		},
-	});
+	const totalSum = useMemo(() => {
+		return (
+			(bun?.price || 0) * 2 +
+			ingredients.reduce((acc, { ingredient }) => acc + ingredient.price, 0)
+		);
+	}, [bun, ingredients]);
 
 	const handleClose = (ingredient: IIngredient, unqid: string) => {
 		dispatch(removeIngredient(unqid));
@@ -85,23 +78,16 @@ export const BurgerConstructor = ({
 				<ul
 					id="burger-constructor-list"
 					className={`${styles.list} scroll-pane custom-scroll`}
-					ref={dropTargetConstr}
 				>
-					{ingredients.map(({ ingredient, uniqId }) => {
+					{ingredients.map(({ ingredient, uniqId }, index) => {
 						return (
-							<li className={`${styles.ingredient} mb-4`} key={uniqId}>
-								<section className={styles.drag} draggable>
-									<DragIcon type="primary" />
-								</section>
-								<ConstructorElement
-									extraClass="ml-8"
-									isLocked={false}
-									text={ingredient.name}
-									price={ingredient.price}
-									thumbnail={ingredient.imageMobile}
-									handleClose={() => handleClose(ingredient, uniqId)}
-								/>
-							</li>
+							<DragConstructorElement
+								index={index}
+								key={uniqId}
+								ingredient={ingredient}
+								uniqId={uniqId}
+								handleClose={handleClose}
+							/>
 						);
 					})}
 				</ul>
