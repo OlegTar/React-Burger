@@ -7,33 +7,60 @@ import styles from './burger-constructor.module.scss';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
 import { IIngredient } from '../../types/ingredient';
-import { useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../services/store';
 import { useDrop } from 'react-dnd';
-import { useDispatch } from 'react-redux';
-import { removeIngredient } from '../../services/reducers/constructor-ingredients';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import {
+	addIngredient,
+	clear as clearConstructor,
+	removeIngredient,
+} from '../../services/reducers/constructor-ingredients';
 import { decreaseItem } from '../../services/reducers/ingredients';
 import { DragConstructorElement } from '../drag-constructor-element/drag-constructor-element';
 import { useMemo } from 'react';
 import { sendOrder } from '../../services/actions/order';
 import { MyNotification } from '../my-notification/my-notification';
 import { clearOrder } from '../../services/reducers/order';
+import { createAction, nanoid } from '@reduxjs/toolkit';
+import { setBun as setBunInConstructor } from '../../services/reducers/constructor-ingredients';
+import {
+	setBun as setBunInIngrdients,
+	increaseItem,
+	removeBun as removeBunInIngredients,
+} from '../../services/reducers/ingredients';
 
-export interface BurgerConstructorPropTypes {
-	onDropHandler: (ingredient: IIngredient) => void;
-}
+export const BurgerConstructor = () => {
+	const dispatch = useAppDispatch();
 
-export const BurgerConstructor = ({
-	onDropHandler,
-}: BurgerConstructorPropTypes) => {
-	const dispatch = useDispatch<AppDispatch>();
-	const { bun, ingredients } = useSelector(
-		(state: RootState) => state['constructor-ingredients']
+	const { bun, ingredients } = useAppSelector(
+		(state) => state['constructor-ingredients']
 	);
 
-	const { loading, success, order } = useSelector(
-		(state: RootState) => state.order
+	const { loading, success, order } = useAppSelector((state) => state.order);
+
+	const generateAddIngredientAction = createAction(
+		addIngredient.type,
+		(ingredient: IIngredient) => {
+			return {
+				payload: {
+					ingredient,
+					uniqId: nanoid(),
+				},
+			};
+		}
 	);
+
+	const onDropHandler = (ingredient: IIngredient) => {
+		if (ingredient.type === 'bun') {
+			if (bun !== null) {
+				dispatch(removeBunInIngredients(bun._id));
+			}
+			dispatch(setBunInIngrdients(ingredient._id));
+			dispatch(setBunInConstructor(ingredient));
+		} else {
+			dispatch(increaseItem(ingredient._id));
+			dispatch(generateAddIngredientAction(ingredient));
+		}
+	};
 
 	const createOrder = () => {
 		const ids: string[] = [
@@ -149,7 +176,10 @@ export const BurgerConstructor = ({
 			{order && (
 				<Modal
 					title={''}
-					closeModal={() => dispatch(clearOrder())}
+					closeModal={() => {
+						dispatch(clearOrder());
+						dispatch(clearConstructor());
+					}}
 					fixPositionPromise={fixPositionPromise}
 				>
 					<OrderDetails

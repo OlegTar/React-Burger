@@ -2,23 +2,22 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.scss';
 import { Ingredient } from '../ingredient/ingredient';
 import { useEffect, useRef, useState } from 'react';
-import { IngredientWithCount } from '../../types/ingredientWithCount';
 import { FillingType } from '../../types/fillingType';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../services/store';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
 import { clearCurrentItem } from '../../services/reducers/current-ingredient';
+import { MyNotification } from '../my-notification/my-notification';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 
-interface BurgerIngredientsPropTypes {
-	data: IngredientWithCount[];
-}
+export const BurgerIngredients = () => {
+	const { loading, success, ingredients } = useAppSelector(
+		(state) => state.ingredients
+	);
 
-export const BurgerIngredients = ({ data }: BurgerIngredientsPropTypes) => {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const scrollPane = useRef(null);
 	const [currentTab, setCurrentTab] = useState<FillingType>('bun');
-	const ingredientInModal = useSelector((state: RootState) => state.current);
+	const ingredientInModal = useAppSelector((state) => state.current);
 
 	useEffect(() => {
 		const scrollPaneElement =
@@ -63,12 +62,28 @@ export const BurgerIngredients = ({ data }: BurgerIngredientsPropTypes) => {
 	}
 	const noop = () => {};
 
-	if (data.length === 0) {
+	if (ingredients.length === 0) {
 		return <></>;
 	}
 
 	return (
 		<>
+			{success && (
+				<MyNotification success={true} message={'Данные загружены'} />
+			)}
+			{success === false && (
+				<MyNotification
+					success={false}
+					message={'Данные не удалось подгрузить'}
+				/>
+			)}
+			{loading && (
+				<Modal title="" closeModal={() => {}} hideClose={true}>
+					<div className={`${styles.loading}`}>
+						<p className="text text_type_main-medium p-15">Загрузка...</p>
+					</div>
+				</Modal>
+			)}
 			<section className={`mt-10 ${styles.constr}`}>
 				<header className={`mb-5 text text_type_main-large`}>
 					Соберите бургер
@@ -94,7 +109,7 @@ export const BurgerIngredients = ({ data }: BurgerIngredientsPropTypes) => {
 						Булки
 					</header>
 					<section className={`mt-6 mb-10 pl-4 ${styles.ingredients}`}>
-						{data
+						{ingredients
 							.filter(({ ingredient }) => ingredient.type === 'bun')
 							.map(({ ingredient: ing, count }) => (
 								<Ingredient ingredient={ing} count={count} key={ing._id} />
@@ -104,7 +119,7 @@ export const BurgerIngredients = ({ data }: BurgerIngredientsPropTypes) => {
 						Соусы
 					</header>
 					<section className={`mt-6 mb-10 pl-4 ${styles.ingredients}`}>
-						{data
+						{ingredients
 							.filter(({ ingredient }) => ingredient.type === 'sauce')
 							.map(({ ingredient: ing, count }) => (
 								<Ingredient ingredient={ing} count={count} key={ing._id} />
@@ -114,7 +129,7 @@ export const BurgerIngredients = ({ data }: BurgerIngredientsPropTypes) => {
 						Начинки
 					</header>
 					<section className={`mt-6 mb-10 pl-4 ${styles.ingredients}`}>
-						{data
+						{ingredients
 							.filter(({ ingredient }) => ingredient.type === 'main')
 							.map(({ ingredient: ing, count }) => (
 								<Ingredient ingredient={ing} count={count} key={ing._id} />

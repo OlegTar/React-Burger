@@ -8,7 +8,7 @@ import { XYCoord, useDrag, useDrop } from 'react-dnd';
 import { useRef } from 'react';
 import type { Identifier } from 'dnd-core';
 import { changeOrder } from '../../services/reducers/constructor-ingredients';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../hooks/redux';
 
 interface DragConstructorElementPropTypes {
 	ingredient: IIngredient;
@@ -28,7 +28,7 @@ export const DragConstructorElement = ({
 	uniqId,
 	index,
 }: DragConstructorElementPropTypes) => {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const ref = useRef<HTMLElement>(null);
 	const [{ handlerId }, drop] = useDrop<
 		DragItem,

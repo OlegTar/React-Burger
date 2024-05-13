@@ -1,8 +1,7 @@
 import { baseUrl, ingredients } from '../../config';
+import DataFromServer from '../../types/dataFromServer';
+import { request } from '../../utils/common';
 
-export const getIngredients = async () => {
-	const response = await fetch(`${baseUrl}${ingredients}`);
-	if (response.ok) {
-		return response.json();
-	}
+export const getIngredients = () => {
+	return request<DataFromServer>(`${baseUrl}${ingredients}`);
 };

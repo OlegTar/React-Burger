@@ -6,7 +6,7 @@ import styles from './ingredient.module.scss';
 import { IIngredient } from '../../types/ingredient';
 import { useDrag } from 'react-dnd';
 import { setCurrentItem } from '../../services/reducers/current-ingredient';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../hooks/redux';
 
 interface IngredientPropTypes {
 	ingredient: IIngredient;
@@ -15,7 +15,7 @@ interface IngredientPropTypes {
 
 export const Ingredient = ({ ingredient, count }: IngredientPropTypes) => {
 	const { price, name, image } = ingredient;
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const [, dragRef] = useDrag({
 		type: 'ingredient',
 		item: ingredient,
