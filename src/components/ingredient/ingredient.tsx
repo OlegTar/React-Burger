@@ -3,11 +3,10 @@ import {
 	CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient.module.scss';
-import { Modal } from '../modal/modal';
-import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { IIngredient } from '../../types/ingredient';
-import { useModal } from '../../hooks/useModal';
 import { useDrag } from 'react-dnd';
+import { setCurrentItem } from '../../services/reducers/current-ingredient';
+import { useDispatch } from 'react-redux';
 
 interface IngredientPropTypes {
 	ingredient: IIngredient;
@@ -16,7 +15,7 @@ interface IngredientPropTypes {
 
 export const Ingredient = ({ ingredient, count }: IngredientPropTypes) => {
 	const { price, name, image } = ingredient;
-	const { isModalOpen, openModal, closeModal } = useModal();
+	const dispatch = useDispatch();
 	const [, dragRef] = useDrag({
 		type: 'ingredient',
 		item: ingredient,
@@ -36,7 +35,7 @@ export const Ingredient = ({ ingredient, count }: IngredientPropTypes) => {
 					}}
 					src={image}
 					className={`mb-1 ${styles.image}`}
-					onClick={openModal}
+					onClick={() => dispatch(setCurrentItem(ingredient))}
 					alt={name}
 				/>
 				<p className={`${styles.price} text text_type_digits-default mb-1`}>
@@ -49,11 +48,6 @@ export const Ingredient = ({ ingredient, count }: IngredientPropTypes) => {
 					{name}
 				</p>
 			</section>
-			{isModalOpen && (
-				<Modal title="Детали ингредиента" closeModal={closeModal}>
-					<IngredientDetails {...ingredient} />
-				</Modal>
-			)}
 		</>
 	);
 };

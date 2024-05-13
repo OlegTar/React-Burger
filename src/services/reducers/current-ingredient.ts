@@ -2,13 +2,13 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { IIngredient } from '../../types/ingredient';
 type StateType = IIngredient | null;
 const initialState: StateType = null;
-const currentIngredient = createSlice({
+export const currentIngredient = createSlice({
 	name: 'current',
 	initialState: initialState as StateType,
 	reducers: {
-		setItem: (state: StateType, action: PayloadAction<StateType>) =>
+		setCurrentItem: (state: StateType, action: PayloadAction<IIngredient>) =>
 			action.payload,
-		clearItem: () => null,
+		clearCurrentItem: () => null,
 	},
 });
-export default currentIngredient;
+export const { setCurrentItem, clearCurrentItem } = currentIngredient.actions;

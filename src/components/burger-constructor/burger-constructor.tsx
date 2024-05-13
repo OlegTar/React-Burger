@@ -7,15 +7,17 @@ import styles from './burger-constructor.module.scss';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
 import { IIngredient } from '../../types/ingredient';
-import { useModal } from '../../hooks/useModal';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../services/store';
+import { AppDispatch, RootState } from '../../services/store';
 import { useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import { removeIngredient } from '../../services/reducers/constructor-ingredients';
 import { decreaseItem } from '../../services/reducers/ingredients';
 import { DragConstructorElement } from '../drag-constructor-element/drag-constructor-element';
 import { useMemo } from 'react';
+import { sendOrder } from '../../services/actions/order';
+import { MyNotification } from '../my-notification/my-notification';
+import { clearOrder } from '../../services/reducers/order';
 
 export interface BurgerConstructorPropTypes {
 	onDropHandler: (ingredient: IIngredient) => void;
@@ -24,11 +26,23 @@ export interface BurgerConstructorPropTypes {
 export const BurgerConstructor = ({
 	onDropHandler,
 }: BurgerConstructorPropTypes) => {
-	const { isModalOpen, openModal, closeModal } = useModal();
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 	const { bun, ingredients } = useSelector(
 		(state: RootState) => state['constructor-ingredients']
 	);
+
+	const { loading, success, order } = useSelector(
+		(state: RootState) => state.order
+	);
+
+	const createOrder = () => {
+		const ids: string[] = [
+			bun!._id,
+			...ingredients.map(({ ingredient }) => ingredient._id),
+			bun!._id,
+		];
+		dispatch(sendOrder(ids));
+	};
 
 	const totalSum = useMemo(() => {
 		return (
@@ -111,18 +125,37 @@ export const BurgerConstructor = ({
 					htmlType="button"
 					type="primary"
 					size="medium"
-					onClick={openModal}
+					onClick={createOrder}
+					disabled={bun === null}
 				>
 					Оформить заказ
 				</Button>
 			</footer>
-			{isModalOpen && (
+			{success === true && (
+				<MyNotification success={true} message={'Заказ создался'} />
+			)}
+			{success === false && (
+				<MyNotification success={false} message={'Заказ не удалось создать'} />
+			)}
+			{loading && (
+				<Modal title="" closeModal={() => {}} hideClose={true}>
+					<div className={`${styles.loading}`}>
+						<p className="text text_type_main-medium p-15">
+							Создание заказа...
+						</p>
+					</div>
+				</Modal>
+			)}
+			{order && (
 				<Modal
 					title={''}
-					closeModal={closeModal}
+					closeModal={() => dispatch(clearOrder())}
 					fixPositionPromise={fixPositionPromise}
 				>
-					<OrderDetails fixPositionCallback={fixPositionCallBack!} />
+					<OrderDetails
+						fixPositionCallback={fixPositionCallBack!}
+						order={order}
+					/>
 				</Modal>
 			)}
 		</section>

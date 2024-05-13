@@ -30,16 +30,15 @@ export const DragConstructorElement = ({
 }: DragConstructorElementPropTypes) => {
 	const dispatch = useDispatch();
 	const ref = useRef<HTMLElement>(null);
-	const [{ handlerId, isOver }, drop] = useDrop<
+	const [{ handlerId }, drop] = useDrop<
 		DragItem,
 		void,
-		{ handlerId: Identifier | null; isOver: boolean }
+		{ handlerId: Identifier | null }
 	>({
 		accept: 'constr',
 		collect(monitor) {
 			return {
 				handlerId: monitor.getHandlerId(),
-				isOver: monitor.isOver(),
 			};
 		},
 		hover(item: DragItem, monitor) {

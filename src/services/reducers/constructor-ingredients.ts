@@ -60,10 +60,6 @@ const constructorIngredients = createSlice({
 			bun: action.payload,
 		}),
 	},
-	selectors: {
-		bun: (state: ConstructorIngredientsType) => state.bun,
-		ingredients: (state: ConstructorIngredientsType) => state.ingredients,
-	},
 });
 export const { addIngredient, setBun, removeIngredient, changeOrder } =
 	constructorIngredients.actions;
