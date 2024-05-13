@@ -1,7 +1,9 @@
+import { FillingType } from './fillingType';
+
 export interface IIngredient {
 	_id: string;
 	name: string;
-	type: string;
+	type: FillingType;
 	proteins: number;
 	price: number;
 	fat: number;

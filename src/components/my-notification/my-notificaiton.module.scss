@@ -18,8 +18,7 @@
 }
 
 .hiding {
-	animation-duration: 0.5s;
-	animation-name: slideout;
+	display: none;
 }
 
 @keyframes slidein {

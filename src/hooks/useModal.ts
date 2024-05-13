@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 
-// кастомные хуки всегда должны начинаться с глагола `use`, чтобы реакт понял, что это хук. Он следит за их вызовами
 export const useModal = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
