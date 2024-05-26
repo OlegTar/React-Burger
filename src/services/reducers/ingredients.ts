@@ -1,8 +1,9 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 import { getIngredients } from '../actions/ingredients';
 import { IngredientWithCount } from '../../types/ingredientWithCount';
+import { AppState } from '../store';
 
-type IngredientsState = {
+export type IngredientsState = {
 	loading: boolean;
 	success: boolean | null;
 	ingredients: IngredientWithCount[];

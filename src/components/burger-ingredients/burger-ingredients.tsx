@@ -3,21 +3,13 @@ import styles from './burger-ingredients.module.scss';
 import { Ingredient } from '../ingredient/ingredient';
 import { useEffect, useRef, useState } from 'react';
 import { FillingType } from '../../types/fillingType';
-import { IngredientDetails } from '../ingredient-details/ingredient-details';
-import { Modal } from '../modal/modal';
-import { clearCurrentItem } from '../../services/reducers/current-ingredient';
-import { MyNotification } from '../my-notification/my-notification';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { useAppSelector } from '../../hooks/redux';
 
 export const BurgerIngredients = () => {
-	const { loading, success, ingredients } = useAppSelector(
-		(state) => state.ingredients
-	);
+	const { ingredients } = useAppSelector((state) => state.ingredients);
 
-	const dispatch = useAppDispatch();
 	const scrollPane = useRef(null);
 	const [currentTab, setCurrentTab] = useState<FillingType>('bun');
-	const ingredientInModal = useAppSelector((state) => state.current);
 
 	useEffect(() => {
 		const scrollPaneElement =
@@ -68,22 +60,6 @@ export const BurgerIngredients = () => {
 
 	return (
 		<>
-			{success && (
-				<MyNotification success={true} message={'Данные загружены'} />
-			)}
-			{success === false && (
-				<MyNotification
-					success={false}
-					message={'Данные не удалось подгрузить'}
-				/>
-			)}
-			{loading && (
-				<Modal title="" closeModal={() => {}} hideClose={true}>
-					<div className={`${styles.loading}`}>
-						<p className="text text_type_main-medium p-15">Загрузка...</p>
-					</div>
-				</Modal>
-			)}
 			<section className={`mt-10 ${styles.constr}`}>
 				<header className={`mb-5 text text_type_main-large`}>
 					Соберите бургер
@@ -137,14 +113,6 @@ export const BurgerIngredients = () => {
 					</section>
 				</section>
 			</section>
-			{ingredientInModal && (
-				<Modal
-					title="Детали ингредиента"
-					closeModal={() => dispatch(clearCurrentItem())}
-				>
-					<IngredientDetails {...ingredientInModal} />
-				</Modal>
-			)}
 		</>
 	);
 };

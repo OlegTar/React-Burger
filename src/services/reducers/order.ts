@@ -1,12 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { sendOrder } from '../actions/order';
 import { Order } from '../../types/order';
-type State = {
+export type OrderState = {
 	loading: boolean;
 	success: boolean | null;
 	order: Order | null;
 };
-const initialState: State = {
+const initialState: OrderState = {
 	loading: false,
 	success: null,
 	order: null,
@@ -15,7 +15,7 @@ export const order = createSlice({
 	name: 'order',
 	initialState,
 	reducers: {
-		clearOrder: (state: State) => ({
+		clearOrder: (state: OrderState) => ({
 			...state,
 			order: null,
 			success: null,
@@ -23,17 +23,17 @@ export const order = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(sendOrder.pending, (state: State) => {
+			.addCase(sendOrder.pending, (state: OrderState) => {
 				state.loading = true;
 			})
-			.addCase(sendOrder.rejected, (state: State) => {
+			.addCase(sendOrder.rejected, (state: OrderState) => {
 				state.loading = false;
 				state.success = false;
 				state.order = null;
 			})
 			.addCase(
 				sendOrder.fulfilled,
-				(state: State, action: PayloadAction<Order>) => {
+				(state: OrderState, action: PayloadAction<Order>) => {
 					state.loading = false;
 					state.success = action.payload.success;
 					state.order = action.payload;

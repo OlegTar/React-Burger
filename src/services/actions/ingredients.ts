@@ -6,8 +6,14 @@ export const getIngredients = createAsyncThunk(
 	'ingredients/getIngredients',
 	async () => {
 		try {
-			const response = await getIngredientsApi();
-			return response.data.map(convert);
+			const delay = (seconds: number) => {
+				return new Promise((resolve) => {
+					setTimeout(resolve, seconds * 1000);
+				});
+			};
+
+			const response = await Promise.all([getIngredientsApi(), delay(0.5)]);
+			return response[0].data.map(convert);
 		} catch (e) {
 			//Так как эта функция объявлена как async её возвращаемый результат будет типа Promise.
 			//Выбрасывание здесь ошибки зареджектит этот промис
