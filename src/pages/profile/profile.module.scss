@@ -1,0 +1,16 @@
+.content {
+	display: flex;
+	flex-direction: row;
+}
+
+.menu {
+	display: flex;
+	flex-direction: column;
+	> ul {
+		padding: 0;
+		> li {
+			list-style: none;
+			cursor: pointer;
+		}
+	}
+}

@@ -9,6 +9,11 @@ import { Home } from '../../pages/home';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
 import { MyNotification } from '../my-notification/my-notification';
+import { Login } from '../../pages/login';
+import { Register } from '../../pages/register';
+import { ResetPassword } from '../../pages/reset-password';
+import { ForgotPassword } from '../../pages/forgot-password';
+import { Profile } from '../../pages/profile';
 
 const marginFromEnd = 10;
 
@@ -16,6 +21,7 @@ function App() {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const background = location.state && location.state.background;
+
 	const { loading, success } = useAppSelector((state) => state.ingredients);
 	const dispatch = useAppDispatch();
 	const calculateNewHeight = () => {
@@ -67,6 +73,11 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/ingredients/:id" element={<IngredientDetails />} />
+					<Route path="/login" element={<Login />} />
+					<Route path="/register" element={<Register />} />
+					<Route path="/forgot-password" element={<ForgotPassword />} />
+					<Route path="/reset-password" element={<ResetPassword />} />
+					<Route path="/profile" element={<Profile />} />
 				</Routes>
 				{background && (
 					<Routes>

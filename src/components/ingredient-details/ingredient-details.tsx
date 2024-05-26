@@ -2,7 +2,6 @@ import { useLocation, useParams } from 'react-router';
 import styles from './ingredient-details.module.scss';
 import { useAppSelector } from '../../hooks/redux';
 import { AppState } from '../../services/store';
-import { Link } from 'react-router-dom';
 
 export const IngredientDetails = () => {
 	const { id } = useParams() || '';

@@ -12,7 +12,7 @@ export const getIngredients = createAsyncThunk(
 				});
 			};
 
-			const response = await Promise.all([getIngredientsApi(), delay(0.5)]);
+			const response = await Promise.all([getIngredientsApi(), delay(0)]);
 			return response[0].data.map(convert);
 		} catch (e) {
 			//Так как эта функция объявлена как async её возвращаемый результат будет типа Promise.

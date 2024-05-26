@@ -45,3 +45,5 @@ export const request = async <T>(
 		throw new Error(`Ошибка: ${e}`);
 	}
 };
+
+export const noop = () => {};
