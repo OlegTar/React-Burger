@@ -26,7 +26,7 @@ export const Profile = () => {
 
 	if (user == null) {
 		throw new Error(
-			'Ошибка в коде. Этот компнонент не должен показываться неавторизованному пользователю'
+			'Ошибка в коде. Этот компонент не должен показываться неавторизованному пользователю'
 		);
 	}
 
@@ -42,7 +42,6 @@ export const Profile = () => {
 
 	const logout = useCallback(() => {
 		setErrorMessage('Выйти не удалось');
-		setSucessMessage('Вы вышли');
 		dispatch(logoutAction());
 	}, [setErrorMessage, dispatch]);
 
