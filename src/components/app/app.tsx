@@ -14,16 +14,20 @@ import { Register } from '../../pages/register';
 import { ResetPassword } from '../../pages/reset-password';
 import { ForgotPassword } from '../../pages/forgot-password';
 import { Profile } from '../../pages/profile';
+import { getUser } from '../../services/actions/user';
+import { OnlyAuth, OnlyUnAuth } from '../protected-route/protected-route';
 
 const marginFromEnd = 10;
 
 function App() {
 	const location = useLocation();
 	const navigate = useNavigate();
+
 	const background = location.state && location.state.background;
 
 	const { loading, success } = useAppSelector((state) => state.ingredients);
 	const dispatch = useAppDispatch();
+
 	const calculateNewHeight = () => {
 		const elements = document.getElementsByClassName(styles['main-content']);
 		if (elements.length === 0) {
@@ -39,6 +43,10 @@ function App() {
 		// Возвращаемся к предыдущему пути при закрытии модалки
 		navigate(-1);
 	};
+
+	useEffect(() => {
+		dispatch(getUser());
+	}, [dispatch]);
 
 	useEffect(() => {
 		dispatch(getIngredients());
@@ -73,13 +81,29 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/ingredients/:id" element={<IngredientDetails />} />
-					<Route path="/login" element={<Login />} />
-					<Route path="/register" element={<Register />} />
-					<Route path="/forgot-password" element={<ForgotPassword />} />
-					<Route path="/reset-password" element={<ResetPassword />} />
-					<Route path="/profile" element={<Profile />} />
-					<Route path="/profile/orders" element={<Profile />} />
-					<Route path="/profile/orders/:number" element={<Profile />} />
+					<Route path="/login" element={<OnlyUnAuth component={<Login />} />} />
+					<Route
+						path="/register"
+						element={<OnlyUnAuth component={<Register />} />}
+					/>
+					<Route
+						path="/forgot-password"
+						element={<OnlyUnAuth component={<ForgotPassword />} />}
+					/>
+					<Route
+						path="/reset-password"
+						element={<OnlyUnAuth component={<ResetPassword />} />}
+					/>
+					<Route path="/profile" element={<OnlyAuth component={<Profile />} />}>
+						<Route
+							path="orders"
+							element={<OnlyAuth component={<Profile />} />}
+						/>
+						<Route
+							path="orders/:number"
+							element={<OnlyAuth component={<Profile />} />}
+						/>
+					</Route>
 				</Routes>
 				{background && (
 					<Routes>

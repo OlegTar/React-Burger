@@ -1,5 +1,5 @@
 import { SyntheticEvent } from 'react';
-import { IIngredientFromServer } from '../types/dataFromServer';
+import { IIngredientFromServer } from '../types/data-from-server';
 import { IIngredient } from '../types/ingredient';
 
 export const linkHandler = (
@@ -20,21 +20,14 @@ export const convert = (ing: IIngredientFromServer): IIngredient => {
 	};
 };
 
-const checkResponse = (response: Response, callback?: () => void) => {
+const checkResponse = (response: Response) => {
 	if (response.ok) {
-		if (callback) {
-			callback();
-		}
 		return response.json();
 	}
 	return Promise.reject(`Ошибка ${response.status}`);
 };
 
-export const request = async <T>(
-	url: string,
-	options?: RequestInit,
-	callback?: () => void
-) => {
+export const request = async <T>(url: string, options?: RequestInit) => {
 	try {
 		const response = await fetch(url, options);
 		return checkResponse(response) as T;

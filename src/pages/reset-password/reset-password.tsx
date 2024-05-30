@@ -8,7 +8,7 @@ import styles from './reset-password.module.scss';
 
 export const ResetPassword = () => {
 	return (
-		<section className={styles.content}>
+		<section className={`${styles.content} mt-20`}>
 			<header className="text text_type_main-medium">
 				Восстановление пароля
 			</header>

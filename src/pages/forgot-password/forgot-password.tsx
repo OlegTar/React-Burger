@@ -7,7 +7,7 @@ import { noop } from '../../utils/common';
 import styles from './forgot-password.module.scss';
 export const ForgotPassword = () => {
 	return (
-		<section className={styles.content}>
+		<section className={`${styles.content} mt-20`}>
 			<header className="text text_type_main-medium">
 				Восстановление пароля
 			</header>
