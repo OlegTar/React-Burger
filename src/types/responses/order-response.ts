@@ -1,4 +1,4 @@
-export interface Order {
+export interface OrderResponse {
 	name: string;
 	order: {
 		number: number;

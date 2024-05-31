@@ -1,6 +1,6 @@
 import { baseUrl, login } from '../../config';
-import { LoginRequest } from '../../types/login-request';
-import { LoginResponse } from '../../types/login-response';
+import { LoginRequest } from '../../types/requests/login-request';
+import { LoginResponse } from '../../types/responses/login-response';
 import { request } from '../../utils/common';
 
 export const sendLoginRequest = (loginRequest: LoginRequest) => {

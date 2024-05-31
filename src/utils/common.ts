@@ -1,6 +1,6 @@
 import { SyntheticEvent } from 'react';
-import { IIngredientFromServer } from '../types/data-from-server';
-import { IIngredient } from '../types/ingredient';
+import { IIngredientFromServer } from '../types/responses/data-from-server-response';
+import { IIngredient } from '../types/application-types/ingredient';
 
 export const linkHandler = (
 	e: SyntheticEvent<HTMLAnchorElement>,

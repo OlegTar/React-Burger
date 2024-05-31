@@ -12,8 +12,7 @@ export interface IIngredientFromServer {
 	image_mobile: string;
 }
 
-type DataFromServer = {
+export type DataFromServerResponse = {
 	success: boolean;
 	data: IIngredientFromServer[];
 };
-export default DataFromServer;

@@ -1,4 +1,4 @@
-import { User } from './user';
+import { User } from '../application-types/user';
 
 export type UserResponse = {
 	success: boolean;

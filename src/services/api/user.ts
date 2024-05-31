@@ -1,8 +1,8 @@
 import { baseUrl, user } from '../../config';
-import { UserResponse } from '../../types/user-response';
+import { UserResponse } from '../../types/responses/user-response';
 import { request } from '../../utils/common';
 
-export const getUserRequest = () => {
+export const sendGetUserRequest = () => {
 	return request<UserResponse>(`${baseUrl}${user}`, {
 		method: 'GET',
 		headers: {

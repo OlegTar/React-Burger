@@ -1,20 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User } from '../../types/user';
+import { User } from '../../types/application-types/user';
 import { login } from '../actions/login';
 import { logout } from '../actions/logout';
 import { register } from '../actions/register';
-import { RequestState } from '../../types/request-state';
+import { RequestState } from '../../types/application-types/request-state';
 import { changeUserInfo } from '../actions/change-user-info';
 
 export type UserState = {
 	user: User | null;
 	state: RequestState;
+	errorMessage: string;
 	authChecked: boolean;
 };
 
 const initialState: UserState = {
 	user: null,
 	state: 'init',
+	errorMessage: '',
 	authChecked: false,
 };
 
@@ -30,6 +32,16 @@ export const user = createSlice({
 		},
 		reset: (state) => {
 			state.state = 'init';
+		},
+		setPending: (state) => {
+			state.state = 'pending';
+		},
+		setError: (state, action: PayloadAction<string>) => {
+			state.state = 'error';
+			state.errorMessage = action.payload;
+		},
+		setSuccess: (state) => {
+			state.state = 'success';
 		},
 	},
 	extraReducers: (builder) => {
@@ -55,28 +67,15 @@ export const user = createSlice({
 			})
 			.addCase(logout.rejected, (state) => {
 				state.state = 'error';
-			})
-			.addCase(register.pending, (state) => {
-				state.state = 'pending';
-			})
-			.addCase(register.fulfilled, (state, action) => {
-				state.state = 'success';
-				state.user = action.payload;
-			})
-			.addCase(register.rejected, (state) => {
-				state.state = 'error';
-				state.user = null;
-			})
-			.addCase(changeUserInfo.pending, (state) => {
-				state.state = 'pending';
-			})
-			.addCase(changeUserInfo.fulfilled, (state) => {
-				state.state = 'success';
-			})
-			.addCase(changeUserInfo.rejected, (state) => {
-				state.state = 'error';
 			});
 	},
 });
 
-export const { setUser, setAuthChecked, reset } = user.actions;
+export const {
+	setUser,
+	setAuthChecked,
+	reset,
+	setError,
+	setSuccess,
+	setPending,
+} = user.actions;

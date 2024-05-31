@@ -8,3 +8,6 @@ export const token = 'auth/token';
 export const user = 'auth/user';
 export const refreshToken = 'refreshToken';
 export const accessToken = 'accessToken';
+export const passwordReset = 'password-reset';
+export const changePassword = 'password-reset/reset';
+export const resetPasswordCalled = 'resetPasswordCalled';

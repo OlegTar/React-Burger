@@ -1,5 +1,5 @@
 import { baseUrl, logout } from '../../config';
-import { LogoutResponse } from '../../types/logout-response';
+import { LogoutResponse } from '../../types/responses/logout-response';
 import { request } from '../../utils/common';
 
 export const sendLogoutRequest = (token: string) => {

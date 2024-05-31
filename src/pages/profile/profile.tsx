@@ -3,13 +3,14 @@ import styles from './profile.module.scss';
 import {
 	Button,
 	Input,
+	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { RequestStatus } from '../../components/request-status/request-status';
 import { logout as logoutAction } from '../../services/actions/logout';
 import { changeUserInfo as changeUserInfoAction } from '../../services/actions/change-user-info';
-import { User } from '../../types/user';
+import { User } from '../../types/application-types/user';
 
 export const Profile = () => {
 	const { pathname } = useLocation();
@@ -39,6 +40,15 @@ export const Profile = () => {
 			window.removeEventListener('load', fixPosition);
 		};
 	}, []);
+
+	const reset = () => {
+		setName(user.name);
+		setEmail(user.email);
+		setPassword('');
+	};
+
+	const isChanged =
+		user.name !== name || user.email !== email || password !== '';
 
 	const logout = useCallback(() => {
 		setErrorMessage('Выйти не удалось');
@@ -139,26 +149,36 @@ export const Profile = () => {
 						extraClass="mt-6"
 						icon="EditIcon"
 					/>
-					<Input
+					<PasswordInput
 						value={password}
 						onChange={(e: ChangeEvent<HTMLInputElement>) => {
 							setPassword(e.target.value);
 						}}
-						onPointerEnterCapture={undefined}
-						onPointerLeaveCapture={undefined}
 						placeholder={`Пароль`}
 						extraClass="mt-6"
 						icon="EditIcon"
 					/>
-					<Button
-						htmlType="button"
-						type="primary"
-						size="large"
-						extraClass="mt-6"
-						onClick={changeUserInfo}
-					>
-						Сохранить
-					</Button>
+					{isChanged && (
+						<p>
+							<Button
+								htmlType="button"
+								type="secondary"
+								size="medium"
+								onClick={reset}
+							>
+								Отмена
+							</Button>
+							<Button
+								htmlType="button"
+								type="primary"
+								size="medium"
+								extraClass="mt-6"
+								onClick={changeUserInfo}
+							>
+								Сохранить
+							</Button>
+						</p>
+					)}
 				</section>
 			</section>
 		</>

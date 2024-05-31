@@ -1,4 +1,4 @@
-import { RequestState } from '../../types/request-state';
+import { RequestState } from '../../types/application-types/request-state';
 import { Modal } from '../modal/modal';
 import { MyNotification } from '../my-notification/my-notification';
 import styles from './request-status.module.scss';

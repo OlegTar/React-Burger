@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { getIngredients } from '../actions/ingredients';
-import { IngredientWithCount } from '../../types/ingredient-with-count';
+import { IngredientWithCount } from '../../types/application-types/ingredient-with-count';
 
 export type IngredientsState = {
 	loading: boolean;

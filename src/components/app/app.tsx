@@ -60,10 +60,10 @@ function App() {
 
 	return (
 		<>
-			{success && (
+			{success && location.pathname == '/' && (
 				<MyNotification success={true} message={'Данные загружены'} />
 			)}
-			{success === false && (
+			{success === false && location.pathname == '/' && (
 				<MyNotification
 					success={false}
 					message={'Данные не удалось подгрузить'}

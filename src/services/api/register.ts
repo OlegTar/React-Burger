@@ -1,7 +1,7 @@
 import { baseUrl, register } from '../../config';
-import { RegisterResponse } from '../../types/register-response';
+import { RegisterResponse } from '../../types/responses/register-response';
 
-import { RegisterRequest } from '../../types/register-request';
+import { RegisterRequest } from '../../types/requests/register-request';
 import { request } from '../../utils/common';
 
 export const sendRegisterRequest = (registerRequest: RegisterRequest) => {

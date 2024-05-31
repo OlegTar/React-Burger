@@ -6,7 +6,7 @@ import {
 import styles from './burger-constructor.module.scss';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
-import { IIngredient } from '../../types/ingredient';
+import { IIngredient } from '../../types/application-types/ingredient';
 import { useDrop } from 'react-dnd';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getUserRequest } from '../api/user';
+import { sendGetUserRequest } from '../api/user';
 import { AppDispatch } from '../store';
 import { setAuthChecked, setUser } from '../reducers/user';
 import { accessToken, refreshToken } from '../../config';
@@ -9,7 +9,7 @@ export const getUser = createAsyncThunk<void, void, { dispatch: AppDispatch }>(
 	async (_, { dispatch }) => {
 		if (localStorage.getItem('accessToken')) {
 			try {
-				const res = await getUserRequest();
+				const res = await sendGetUserRequest();
 				dispatch(setUser(res.user));
 				dispatch(setAuthChecked(true));
 			} catch (e) {

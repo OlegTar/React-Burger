@@ -27,7 +27,7 @@ export const Register = () => {
 				password,
 			})
 		);
-	}, [name, email, password, dispatch]);
+	}, [name, email, password]);
 
 	if (state === 'success') {
 		return <Navigate to="/" replace></Navigate>;
@@ -35,6 +35,7 @@ export const Register = () => {
 
 	return (
 		<>
+			{`state = ${state}`}
 			<RequestStatus state={state} errorMessage={'Регистрация не удалась'} />
 			<section className={`${styles.content} mt-20`}>
 				<header className="text text_type_main-medium">Регистрация</header>

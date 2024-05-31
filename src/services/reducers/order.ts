@@ -1,10 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { sendOrder } from '../actions/order';
-import { Order } from '../../types/order';
+import { OrderResponse } from '../../types/responses/order-response';
 export type OrderState = {
 	loading: boolean;
 	success: boolean | null;
-	order: Order | null;
+	order: OrderResponse | null;
 };
 const initialState: OrderState = {
 	loading: false,
@@ -33,7 +33,7 @@ export const order = createSlice({
 			})
 			.addCase(
 				sendOrder.fulfilled,
-				(state: OrderState, action: PayloadAction<Order>) => {
+				(state: OrderState, action: PayloadAction<OrderResponse>) => {
 					state.loading = false;
 					state.success = action.payload.success;
 					state.order = action.payload;

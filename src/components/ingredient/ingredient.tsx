@@ -3,7 +3,7 @@ import {
 	CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient.module.scss';
-import { IIngredient } from '../../types/ingredient';
+import { IIngredient } from '../../types/application-types/ingredient';
 import { useDrag } from 'react-dnd';
 import { useLocation, useNavigate } from 'react-router';
 

@@ -4,10 +4,17 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './login.module.scss';
 import { Link, Navigate } from 'react-router-dom';
-import { ChangeEvent, MouseEvent, useCallback, useState } from 'react';
+import {
+	ChangeEvent,
+	MouseEvent,
+	useCallback,
+	useEffect,
+	useState,
+} from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { login as loginAction } from '../../services/actions/login';
 import { RequestStatus } from '../../components/request-status/request-status';
+import { reset } from '../../services/reducers/user';
 
 export const Login = () => {
 	const dispatch = useAppDispatch();
@@ -18,6 +25,10 @@ export const Login = () => {
 		state: state.user.state,
 		user: state.user.user,
 	}));
+
+	useEffect(() => {
+		dispatch(reset());
+	}, [dispatch]);
 
 	const login = useCallback(() => {
 		dispatch(loginAction({ email, password }));
