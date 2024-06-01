@@ -36,7 +36,9 @@ export const AppHeader = () => {
 				</ul>
 			</nav>
 			<nav className={styles.logo}>
-				<Logo />
+				<Link to="/">
+					<Logo />
+				</Link>
 			</nav>
 			<nav className={styles['last-menu']}>
 				<ul className={styles.menu}>
