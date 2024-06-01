@@ -15,4 +15,5 @@ export interface IIngredientFromServer {
 export type DataFromServerResponse = {
 	success: boolean;
 	data: IIngredientFromServer[];
+	message?: string;
 };

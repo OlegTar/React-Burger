@@ -1,7 +1,8 @@
-export interface OrderResponse {
+export type OrderResponse = {
 	name: string;
 	order: {
 		number: number;
 	};
-	success: boolean;
-}
+	success: true;
+	message?: string;
+};

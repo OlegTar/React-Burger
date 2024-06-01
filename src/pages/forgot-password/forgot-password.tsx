@@ -4,11 +4,12 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Navigate } from 'react-router-dom';
 import styles from './forgot-password.module.scss';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { RequestStatus } from '../../components/request-status/request-status';
 import { passwordReset } from '../../services/actions/password-reset';
 import { resetPasswordCalled } from '../../config';
+import { reset } from '../../services/reducers/user';
 
 export const ForgotPassword = () => {
 	const dispatch = useAppDispatch();
@@ -17,8 +18,12 @@ export const ForgotPassword = () => {
 		errorMessage: state.user.errorMessage,
 	}));
 	const [email, setEmail] = useState('');
-	const resetPassword = useCallback(() => {
+
+	useEffect(() => {
 		localStorage.removeItem(resetPasswordCalled);
+	}, []);
+
+	const resetPassword = useCallback(() => {
 		dispatch(
 			passwordReset({
 				email,
@@ -27,13 +32,20 @@ export const ForgotPassword = () => {
 	}, [email, dispatch]);
 
 	const isPasswordSent = localStorage.getItem(resetPasswordCalled) === '1';
-	if (isPasswordSent && state === 'success') {
-		return <Navigate to="/reset-password" />;
+	if (isPasswordSent) {
+		dispatch(reset());
+		return (
+			<Navigate
+				to="/reset-password"
+				state={{
+					message: 'Код выслан',
+				}}
+			/>
+		);
 	}
 
 	return (
 		<>
-			{`state = ${state}`}
 			<RequestStatus state={state} errorMessage={errorMessage} />
 			<section className={`${styles.content} mt-20`}>
 				<header className="text text_type_main-medium">

@@ -16,6 +16,7 @@ import { ForgotPassword } from '../../pages/forgot-password';
 import { Profile } from '../../pages/profile';
 import { getUser } from '../../services/actions/user';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route/protected-route';
+import { NotFound } from '../../pages/not-found';
 
 const marginFromEnd = 10;
 
@@ -60,10 +61,10 @@ function App() {
 
 	return (
 		<>
-			{success && location.pathname == '/' && (
+			{success && location.pathname === '/' && (
 				<MyNotification success={true} message={'Данные загружены'} />
 			)}
-			{success === false && location.pathname == '/' && (
+			{success === false && location.pathname === '/' && (
 				<MyNotification
 					success={false}
 					message={'Данные не удалось подгрузить'}
@@ -104,6 +105,7 @@ function App() {
 							element={<OnlyAuth component={<Profile />} />}
 						/>
 					</Route>
+					<Route path="*" element={<NotFound />} />
 				</Routes>
 				{background && (
 					<Routes>

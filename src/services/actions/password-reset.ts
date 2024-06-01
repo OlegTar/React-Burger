@@ -14,13 +14,9 @@ export const passwordReset = createAsyncThunk<
 	async (passwordResetRequest: PasswordResetRequest, { dispatch }) => {
 		try {
 			dispatch(setPending());
-			const res = await sendPasswordResetRequest(passwordResetRequest);
-			if (!res.success) {
-				dispatch(setError('Не удалось поменять пароль'));
-			} else {
-				dispatch(setSuccess());
-				localStorage.setItem(resetPasswordCalled, '1');
-			}
+			await sendPasswordResetRequest(passwordResetRequest);
+			dispatch(setSuccess());
+			localStorage.setItem(resetPasswordCalled, '1');
 		} catch (e) {
 			dispatch(setError('Не удалось поменять пароль'));
 		}

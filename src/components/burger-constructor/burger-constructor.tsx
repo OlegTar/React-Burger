@@ -27,13 +27,16 @@ import {
 	increaseItem,
 	removeBun as removeBunInIngredients,
 } from '../../services/reducers/ingredients';
+import { useNavigate } from 'react-router';
 
 export const BurgerConstructor = () => {
 	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 
 	const { bun, ingredients } = useAppSelector(
 		(state) => state['constructor-ingredients']
 	);
+	const { user } = useAppSelector((state) => state.user);
 
 	const { loading, success, order } = useAppSelector((state) => state.order);
 
@@ -63,6 +66,10 @@ export const BurgerConstructor = () => {
 	};
 
 	const createOrder = () => {
+		if (user === null) {
+			navigate('/login');
+			return;
+		}
 		const ids: string[] = [
 			bun!._id,
 			...ingredients.map(({ ingredient }) => ingredient._id),

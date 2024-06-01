@@ -11,12 +11,8 @@ export const changePassword = createAsyncThunk<
 >('user/changePassword', async (request, { dispatch }) => {
 	try {
 		dispatch(setPending());
-		const res = await sendChangePasswordRequest(request);
-		if (!res.success) {
-			dispatch(setError('Не удалось поменять пароль'));
-		} else {
-			dispatch(setSuccess());
-		}
+		await sendChangePasswordRequest(request);
+		dispatch(setSuccess());
 	} catch (e) {
 		dispatch(setError('Не удалось поменять пароль'));
 	}

@@ -12,12 +12,8 @@ export const changeUserInfo = createAsyncThunk<
 	dispatch(setPending());
 	try {
 		const res = await sendChangeUserInfoRequest(request);
-		if (!res.success) {
-			dispatch(setError('Не удалось поменять данные пользователя'));
-		} else {
-			dispatch(setSuccess());
-			dispatch(setUser(res.user));
-		}
+		dispatch(setSuccess());
+		dispatch(setUser(res.user));
 	} catch (e) {
 		dispatch(setError('Не удалось поменять данные пользователя'));
 	}

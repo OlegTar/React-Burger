@@ -12,6 +12,6 @@ export const sendChangeUserInfoRequest = (
 			Authorization: localStorage.getItem('accessToken') as string,
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify(changeUserInfoRequest),
+		body: changeUserInfoRequest,
 	});
 };

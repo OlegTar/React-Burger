@@ -2,7 +2,7 @@ import {
 	Input,
 	Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import styles from './reset-password.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { RequestStatus } from '../../components/request-status/request-status';
@@ -10,11 +10,13 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { resetPasswordCalled } from '../../config';
 import { reset } from '../../services/reducers/user';
 import { changePassword as changePasswordAction } from '../../services/actions/change-password';
+import { MyNotification } from '../../components/my-notification/my-notification';
 
 export const ResetPassword = () => {
 	const isResetPasswordCalled =
 		localStorage.getItem(resetPasswordCalled) === '1';
 
+	const location = useLocation();
 	const dispatch = useAppDispatch();
 	const { state, errorMessage } = useAppSelector((state) => ({
 		state: state.user.state,
@@ -37,12 +39,22 @@ export const ResetPassword = () => {
 		);
 	}, [token, password]);
 
+	if (state === 'success') {
+		localStorage.removeItem(resetPasswordCalled);
+		return (
+			<Navigate to={'/login'} state={{ message: 'Пароль изменён' }} replace />
+		);
+	}
+
 	if (!isResetPasswordCalled) {
 		return <Navigate to={'/forgot-password'} replace />;
 	}
 
 	return (
 		<>
+			{location.state?.message && (
+				<MyNotification success={true} message={location.state.message} />
+			)}
 			<RequestStatus
 				state={state}
 				errorMessage={errorMessage}

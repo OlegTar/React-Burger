@@ -14,15 +14,16 @@ import { User } from '../../types/application-types/user';
 
 export const Profile = () => {
 	const { pathname } = useLocation();
-	const { user, state } = useAppSelector((state) => ({
+	const { user, state, errorMessage } = useAppSelector((state) => ({
 		user: state.user.user as User,
 		state: state.user.state,
+		errorMessage: state.user.errorMessage,
 	}));
 	const [name, setName] = useState(user.name);
 	const [email, setEmail] = useState(user.email);
 	const [password, setPassword] = useState('');
-	const [errorMessage, setErrorMessage] = useState('');
-	const [successMessage, setSucessMessage] = useState('');
+
+	const [successMessage, setSuccessMessage] = useState('');
 	const dispatch = useAppDispatch();
 
 	if (user == null) {
@@ -51,13 +52,11 @@ export const Profile = () => {
 		user.name !== name || user.email !== email || password !== '';
 
 	const logout = useCallback(() => {
-		setErrorMessage('Выйти не удалось');
 		dispatch(logoutAction());
-	}, [setErrorMessage, dispatch]);
+	}, [dispatch]);
 
 	const changeUserInfo = useCallback(() => {
-		setErrorMessage('Не удалось поменять данные пользователя');
-		setSucessMessage('Данные пользователя обновлены');
+		setSuccessMessage('Данные пользователя обновлены');
 		dispatch(
 			changeUserInfoAction({
 				name,
@@ -65,7 +64,7 @@ export const Profile = () => {
 				password,
 			})
 		);
-	}, [setErrorMessage, dispatch, name, email, password]);
+	}, [email, name, password, dispatch]);
 
 	const fixPosition = () => {
 		const container = document.getElementsByClassName(

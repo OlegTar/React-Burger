@@ -1,6 +1,7 @@
 import { User } from '../application-types/user';
 
 export type UserResponse = {
-	success: boolean;
+	success: true;
 	user: User;
+	message?: string;
 };

@@ -2,9 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User } from '../../types/application-types/user';
 import { login } from '../actions/login';
 import { logout } from '../actions/logout';
-import { register } from '../actions/register';
 import { RequestState } from '../../types/application-types/request-state';
-import { changeUserInfo } from '../actions/change-user-info';
 
 export type UserState = {
 	user: User | null;
@@ -65,8 +63,9 @@ export const user = createSlice({
 				state.user = null;
 				state.state = 'init';
 			})
-			.addCase(logout.rejected, (state) => {
+			.addCase(logout.rejected, (state, action) => {
 				state.state = 'error';
+				state.errorMessage = action.error.message || '';
 			});
 	},
 });

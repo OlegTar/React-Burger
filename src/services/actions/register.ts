@@ -19,16 +19,10 @@ export const register = createAsyncThunk<
 	try {
 		dispatch(setPending());
 		const res = await sendRegisterRequest(registerRequest);
-		if (res.success) {
-			localStorage.setItem(accessToken, res.accessToken);
-			localStorage.setItem(refreshToken, res.refreshToken);
-			dispatch(setSuccess());
-			dispatch(setUser(res.user));
-		} else {
-			localStorage.removeItem(accessToken);
-			localStorage.removeItem(refreshToken);
-			dispatch(setError('Не удалось зарегистрироваться'));
-		}
+		localStorage.setItem(accessToken, res.accessToken);
+		localStorage.setItem(refreshToken, res.refreshToken);
+		dispatch(setSuccess());
+		dispatch(setUser(res.user));
 	} catch (e) {
 		localStorage.removeItem(accessToken);
 		localStorage.removeItem(refreshToken);

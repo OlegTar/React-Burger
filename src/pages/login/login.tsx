@@ -3,7 +3,7 @@ import {
 	Input,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './login.module.scss';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import {
 	ChangeEvent,
 	MouseEvent,
@@ -15,8 +15,10 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { login as loginAction } from '../../services/actions/login';
 import { RequestStatus } from '../../components/request-status/request-status';
 import { reset } from '../../services/reducers/user';
+import { MyNotification } from '../../components/my-notification/my-notification';
 
 export const Login = () => {
+	const location = useLocation();
 	const dispatch = useAppDispatch();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -40,6 +42,9 @@ export const Login = () => {
 
 	return (
 		<>
+			{location.state?.message && (
+				<MyNotification success={true} message={location.state.message} />
+			)}
 			<RequestStatus state={state} errorMessage={'Неверные логин и пароль'} />
 			<section className={`${styles.content} mt-20`}>
 				<header className="text text_type_main-medium">Вход</header>
