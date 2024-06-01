@@ -38,10 +38,6 @@ export const Login = () => {
 		dispatch(loginAction({ email: values.email, password: values.password }));
 	}, [values.email, values.password, dispatch]);
 
-	if (state === 'success' && user !== null) {
-		return <Navigate to="/" replace></Navigate>;
-	}
-
 	return (
 		<>
 			{location.state?.message && (
