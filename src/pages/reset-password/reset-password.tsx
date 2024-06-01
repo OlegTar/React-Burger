@@ -1,6 +1,7 @@
 import {
 	Input,
 	Button,
+	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import styles from './reset-password.module.scss';
@@ -24,11 +25,10 @@ export const ResetPassword = () => {
 	}));
 	const [password, setPassword] = useState('');
 	const [token, setToken] = useState('');
-	const [isPassword, setIsPassword] = useState(true);
 
 	useEffect(() => {
 		dispatch(reset());
-	}, []);
+	}, [dispatch]);
 
 	const changePassword = useCallback(() => {
 		dispatch(
@@ -37,7 +37,7 @@ export const ResetPassword = () => {
 				password,
 			})
 		);
-	}, [token, password]);
+	}, [token, password, dispatch]);
 
 	if (state === 'success') {
 		localStorage.removeItem(resetPasswordCalled);
@@ -60,51 +60,50 @@ export const ResetPassword = () => {
 				errorMessage={errorMessage}
 				successMessage={'Пароль изменён'}
 			/>
-			<section className={`${styles.content} mt-20`}>
-				<header className="text text_type_main-medium">
-					Восстановление пароля
-				</header>
-				<Input
-					value={password}
-					onChange={(e: ChangeEvent<HTMLInputElement>) => {
-						setPassword(e.target.value);
-					}}
-					extraClass="mt-6"
-					placeholder="Введите новый пароль"
-					onPointerEnterCapture={undefined}
-					onPointerLeaveCapture={undefined}
-					type={isPassword ? 'password' : 'text'}
-					icon={isPassword ? 'ShowIcon' : 'HideIcon'}
-					onIconClick={() => {
-						setIsPassword(!isPassword);
-					}}
-				/>
-				<Input
-					value={token}
-					onChange={(e: ChangeEvent<HTMLInputElement>) => {
-						setToken(e.target.value);
-					}}
-					onPointerEnterCapture={undefined}
-					onPointerLeaveCapture={undefined}
-					extraClass="mt-6"
-					placeholder="Введите код из письма"
-				/>
-				<Button
-					htmlType="button"
-					type="primary"
-					size="large"
-					extraClass="mt-6"
-					onClick={changePassword}
-				>
-					Сохранить
-				</Button>
-				<p className="text text_type_main-default text_color_inactive mt-20">
-					Вспомнили пароль?{' '}
-					<Link to="/login" className={styles.link}>
-						Войти
-					</Link>
-				</p>
-			</section>
+			<form
+				onSubmit={(e) => {
+					e.preventDefault();
+					changePassword();
+				}}
+			>
+				<section className={`${styles.content} mt-20`}>
+					<header className="text text_type_main-medium">
+						Восстановление пароля
+					</header>
+					<PasswordInput
+						value={password}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+							setPassword(e.target.value);
+						}}
+						extraClass="mt-6"
+						placeholder="Введите новый пароль"
+					/>
+					<Input
+						value={token}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+							setToken(e.target.value);
+						}}
+						onPointerEnterCapture={undefined}
+						onPointerLeaveCapture={undefined}
+						extraClass="mt-6"
+						placeholder="Введите код из письма"
+					/>
+					<Button
+						htmlType="submit"
+						type="primary"
+						size="large"
+						extraClass="mt-6"
+					>
+						Сохранить
+					</Button>
+					<p className="text text_type_main-default text_color_inactive mt-20">
+						Вспомнили пароль?{' '}
+						<Link to="/login" className={styles.link}>
+							Войти
+						</Link>
+					</p>
+				</section>
+			</form>
 		</>
 	);
 };

@@ -47,36 +47,43 @@ export const ForgotPassword = () => {
 	return (
 		<>
 			<RequestStatus state={state} errorMessage={errorMessage} />
-			<section className={`${styles.content} mt-20`}>
-				<header className="text text_type_main-medium">
-					Восстановление пароля
-				</header>
-				<Input
-					value={email}
-					onChange={(e: ChangeEvent<HTMLInputElement>) => {
-						setEmail(e.target.value);
-					}}
-					extraClass="mt-6"
-					placeholder="Укажите e-mail"
-					onPointerEnterCapture={undefined}
-					onPointerLeaveCapture={undefined}
-				/>
-				<Button
-					htmlType="button"
-					type="primary"
-					size="large"
-					extraClass="mt-6"
-					onClick={resetPassword}
-				>
-					Восстановить
-				</Button>
-				<p className="text text_type_main-default text_color_inactive mt-20">
-					Вспомнили пароль?{' '}
-					<Link to="/login" className={styles.link}>
-						Войти
-					</Link>
-				</p>
-			</section>
+			<form
+				onSubmit={(e) => {
+					e.preventDefault();
+					resetPassword();
+				}}
+			>
+				<section className={`${styles.content} mt-20`}>
+					<header className="text text_type_main-medium">
+						Восстановление пароля
+					</header>
+
+					<Input
+						value={email}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+							setEmail(e.target.value);
+						}}
+						extraClass="mt-6"
+						placeholder="Укажите e-mail"
+						onPointerEnterCapture={undefined}
+						onPointerLeaveCapture={undefined}
+					/>
+					<Button
+						htmlType="submit"
+						type="primary"
+						size="large"
+						extraClass="mt-6"
+					>
+						Восстановить
+					</Button>
+					<p className="text text_type_main-default text_color_inactive mt-20">
+						Вспомнили пароль?{' '}
+						<Link to="/login" className={styles.link}>
+							Войти
+						</Link>
+					</p>
+				</section>
+			</form>
 		</>
 	);
 };

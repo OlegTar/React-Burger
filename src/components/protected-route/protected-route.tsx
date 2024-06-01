@@ -1,5 +1,7 @@
 import { useAppSelector } from '../../hooks/redux';
 import { Navigate, useLocation } from 'react-router-dom';
+import { Modal } from '../modal/modal';
+import styles from './protected-route.module.scss';
 
 type TProtectedProps = {
 	onlyUnAuth?: boolean;
@@ -18,7 +20,13 @@ const Protected = ({
 		// Запрос еще выполняется
 		// Выводим прелоадер в ПР
 		// Здесь возвращается просто null для экономии времени
-		return <p>Загрузка...</p>;
+		return (
+			<Modal title="" closeModal={() => {}} hideClose={true}>
+				<div className={`${styles.loading}`}>
+					<p className="text text_type_main-medium p-15">Загрузка...</p>
+				</div>
+			</Modal>
+		);
 	}
 
 	if (onlyUnAuth && isAuthenticated) {

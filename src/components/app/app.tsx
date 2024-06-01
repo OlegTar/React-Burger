@@ -61,9 +61,6 @@ function App() {
 
 	return (
 		<>
-			{success && location.pathname === '/' && (
-				<MyNotification success={true} message={'Данные загружены'} />
-			)}
 			{success === false && location.pathname === '/' && (
 				<MyNotification
 					success={false}

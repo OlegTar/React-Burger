@@ -127,57 +127,64 @@ export const Profile = () => {
 					</p>
 				</section>
 				<section className={`${styles.body}`}>
-					<Input
-						value={name}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
-							setName(e.target.value);
+					<form
+						onSubmit={(e) => {
+							e.preventDefault();
+							changeUserInfo();
 						}}
-						onPointerEnterCapture={undefined}
-						onPointerLeaveCapture={undefined}
-						placeholder={`Имя`}
-						icon="EditIcon"
-					/>
-					<Input
-						value={email}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
-							setEmail(e.target.value);
-						}}
-						onPointerEnterCapture={undefined}
-						onPointerLeaveCapture={undefined}
-						placeholder={`Логин`}
-						extraClass="mt-6"
-						icon="EditIcon"
-					/>
-					<PasswordInput
-						value={password}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
-							setPassword(e.target.value);
-						}}
-						placeholder={`Пароль`}
-						extraClass="mt-6"
-						icon="EditIcon"
-					/>
-					{isChanged && (
-						<p>
-							<Button
-								htmlType="button"
-								type="secondary"
-								size="medium"
-								onClick={reset}
-							>
-								Отмена
-							</Button>
-							<Button
-								htmlType="button"
-								type="primary"
-								size="medium"
-								extraClass="mt-6"
-								onClick={changeUserInfo}
-							>
-								Сохранить
-							</Button>
-						</p>
-					)}
+					>
+						<Input
+							value={name}
+							onChange={(e: ChangeEvent<HTMLInputElement>) => {
+								setName(e.target.value);
+							}}
+							onPointerEnterCapture={undefined}
+							onPointerLeaveCapture={undefined}
+							placeholder={`Имя`}
+							icon="EditIcon"
+							onSubmit={changeUserInfo}
+						/>
+						<Input
+							value={email}
+							onChange={(e: ChangeEvent<HTMLInputElement>) => {
+								setEmail(e.target.value);
+							}}
+							onPointerEnterCapture={undefined}
+							onPointerLeaveCapture={undefined}
+							placeholder={`Логин`}
+							extraClass="mt-6"
+							icon="EditIcon"
+						/>
+						<PasswordInput
+							value={password}
+							onChange={(e: ChangeEvent<HTMLInputElement>) => {
+								setPassword(e.target.value);
+							}}
+							placeholder={`Пароль`}
+							extraClass="mt-6"
+							icon="EditIcon"
+						/>
+						{isChanged && (
+							<p>
+								<Button
+									htmlType="button"
+									type="secondary"
+									size="medium"
+									onClick={reset}
+								>
+									Отмена
+								</Button>
+								<Button
+									htmlType="submit"
+									type="primary"
+									size="medium"
+									extraClass="mt-6"
+								>
+									Сохранить
+								</Button>
+							</p>
+						)}
+					</form>
 				</section>
 			</section>
 		</>

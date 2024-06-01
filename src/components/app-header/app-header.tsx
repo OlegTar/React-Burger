@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styles from './app-header.module.scss';
 import {
 	BurgerIcon,
@@ -8,6 +8,8 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export const AppHeader = () => {
+	const location = useLocation();
+	const { pathname: path } = location;
 	const itemCss = 'p-5 mt-4 mb-4';
 	return (
 		<header className={styles.header}>
@@ -15,8 +17,12 @@ export const AppHeader = () => {
 				<ul className={styles.menu}>
 					<li className={itemCss}>
 						<Link to="/" className={styles.link}>
-							<BurgerIcon type="primary" />
-							<span className="text text_type_main-small ml-2 text_color_primary">
+							<BurgerIcon type={path === '/' ? 'primary' : 'secondary'} />
+							<span
+								className={`text text_type_main-small ml-2 ${
+									path === '/' ? 'text_color_primary' : 'text_color_inactive'
+								}`}
+							>
 								Конструктор
 							</span>
 						</Link>
@@ -36,8 +42,16 @@ export const AppHeader = () => {
 				<ul className={styles.menu}>
 					<li className={itemCss}>
 						<Link to="/profile" className={styles.link}>
-							<ProfileIcon type="secondary" />
-							<span className="text text_type_main-small text_color_inactive ml-2">
+							<ProfileIcon
+								type={path.startsWith('/profile') ? 'primary' : 'secondary'}
+							/>
+							<span
+								className={`text text_type_main-small ml-2 ${
+									path.startsWith('/profile')
+										? 'text_color_primary'
+										: 'text_color_inactive'
+								}`}
+							>
 								Личный кабинет
 							</span>
 						</Link>

@@ -6,7 +6,7 @@ export const sendLogoutRequest = (token: string) => {
 	const body = {
 		token,
 	};
-	return request<LogoutResponse>(`${baseUrl}${logout}222`, {
+	return request<LogoutResponse>(`${baseUrl}${logout}`, {
 		method: 'POST',
 		headers: { 'content-type': 'application/json' },
 		body,
