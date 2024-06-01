@@ -102,10 +102,10 @@ type RequestOptions = {
 
 const checkResponse = (response: AxiosResponse<ResponseType>) => {
 	if (response.status !== HttpStatusCode.Ok) {
-		return Promise.reject(`Ошибка ${response.status}`);
+		return Promise.reject<string>(`Ошибка ${response.status}`);
 	}
 	if (!response.data.success) {
-		return Promise.reject(`Ошибка ${response.data.message || ''}`);
+		return Promise.reject<string>(`Ошибка ${response.data.message || ''}`);
 	}
 	return response.data;
 };

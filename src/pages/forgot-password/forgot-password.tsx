@@ -10,6 +10,7 @@ import { RequestStatus } from '../../components/request-status/request-status';
 import { passwordReset } from '../../services/actions/password-reset';
 import { resetPasswordCalled } from '../../config';
 import { reset } from '../../services/reducers/user';
+import { useForm } from '../../hooks/useForm';
 
 export const ForgotPassword = () => {
 	const dispatch = useAppDispatch();
@@ -17,7 +18,10 @@ export const ForgotPassword = () => {
 		state: state.user.state,
 		errorMessage: state.user.errorMessage,
 	}));
-	const [email, setEmail] = useState('');
+	const { values, handleChange } = useForm<{ email: string }>({
+		email: '',
+	});
+	const { email } = values;
 
 	useEffect(() => {
 		localStorage.removeItem(resetPasswordCalled);
@@ -60,13 +64,12 @@ export const ForgotPassword = () => {
 
 					<Input
 						value={email}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
-							setEmail(e.target.value);
-						}}
+						onChange={handleChange}
 						extraClass="mt-6"
 						placeholder="Укажите e-mail"
 						onPointerEnterCapture={undefined}
 						onPointerLeaveCapture={undefined}
+						name="email"
 					/>
 					<Button
 						htmlType="submit"

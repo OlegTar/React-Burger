@@ -12,6 +12,7 @@ import { resetPasswordCalled } from '../../config';
 import { reset } from '../../services/reducers/user';
 import { changePassword as changePasswordAction } from '../../services/actions/change-password';
 import { MyNotification } from '../../components/my-notification/my-notification';
+import { useForm } from '../../hooks/useForm';
 
 export const ResetPassword = () => {
 	const isResetPasswordCalled =
@@ -23,8 +24,15 @@ export const ResetPassword = () => {
 		state: state.user.state,
 		errorMessage: state.user.errorMessage,
 	}));
-	const [password, setPassword] = useState('');
-	const [token, setToken] = useState('');
+	const { values, handleChange } = useForm<{
+		token: string;
+		password: string;
+	}>({
+		token: '',
+		password: '',
+	});
+
+	const { password, token } = values;
 
 	useEffect(() => {
 		dispatch(reset());
@@ -39,15 +47,14 @@ export const ResetPassword = () => {
 		);
 	}, [token, password, dispatch]);
 
-	if (state === 'success') {
-		localStorage.removeItem(resetPasswordCalled);
-		return (
-			<Navigate to={'/login'} state={{ message: 'Пароль изменён' }} replace />
-		);
-	}
-
 	if (!isResetPasswordCalled) {
-		return <Navigate to={'/forgot-password'} replace />;
+		if (state == 'init') {
+			return <Navigate to={'/forgot-password'} replace />;
+		} else if (state === 'success') {
+			return (
+				<Navigate to={'/login'} state={{ message: 'Пароль изменён' }} replace />
+			);
+		}
 	}
 
 	return (
@@ -55,11 +62,7 @@ export const ResetPassword = () => {
 			{location.state?.message && (
 				<MyNotification success={true} message={location.state.message} />
 			)}
-			<RequestStatus
-				state={state}
-				errorMessage={errorMessage}
-				successMessage={'Пароль изменён'}
-			/>
+			<RequestStatus state={state} errorMessage={errorMessage} />
 			<form
 				onSubmit={(e) => {
 					e.preventDefault();
@@ -72,21 +75,19 @@ export const ResetPassword = () => {
 					</header>
 					<PasswordInput
 						value={password}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
-							setPassword(e.target.value);
-						}}
+						onChange={handleChange}
 						extraClass="mt-6"
 						placeholder="Введите новый пароль"
+						name="password"
 					/>
 					<Input
 						value={token}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
-							setToken(e.target.value);
-						}}
+						onChange={handleChange}
 						onPointerEnterCapture={undefined}
 						onPointerLeaveCapture={undefined}
 						extraClass="mt-6"
 						placeholder="Введите код из письма"
+						name="token"
 					/>
 					<Button
 						htmlType="submit"

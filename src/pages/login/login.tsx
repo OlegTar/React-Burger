@@ -11,24 +11,32 @@ import { login as loginAction } from '../../services/actions/login';
 import { RequestStatus } from '../../components/request-status/request-status';
 import { reset } from '../../services/reducers/user';
 import { MyNotification } from '../../components/my-notification/my-notification';
+import { useForm } from '../../hooks/useForm';
 
 export const Login = () => {
 	const location = useLocation();
 	const dispatch = useAppDispatch();
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
 	const { state, user } = useAppSelector((state) => ({
 		state: state.user.state,
 		user: state.user.user,
 	}));
+
+	const { values, handleChange } = useForm<{
+		email: string;
+		password: string;
+	}>({
+		email: '',
+		password: '',
+	});
+	const { email, password } = values;
 
 	useEffect(() => {
 		dispatch(reset());
 	}, [dispatch]);
 
 	const login = useCallback(() => {
-		dispatch(loginAction({ email, password }));
-	}, [email, password, dispatch]);
+		dispatch(loginAction({ email: values.email, password: values.password }));
+	}, [values.email, values.password, dispatch]);
 
 	if (state === 'success' && user !== null) {
 		return <Navigate to="/" replace></Navigate>;
@@ -50,22 +58,20 @@ export const Login = () => {
 					<header className="text text_type_main-medium">Вход</header>
 					<Input
 						value={email}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
-							setEmail(e.target.value);
-						}}
+						onChange={handleChange}
 						onPointerEnterCapture={undefined}
 						onPointerLeaveCapture={undefined}
 						extraClass="mt-6"
 						placeholder="E-mail"
 						type="email"
+						name="email"
 					/>
 					<PasswordInput
 						value={password}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
-							setPassword(e.target.value);
-						}}
+						onChange={handleChange}
 						extraClass="mt-6"
 						placeholder="Пароль"
+						name="password"
 					/>
 					<Button
 						htmlType="submit"

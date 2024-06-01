@@ -1,13 +1,22 @@
-import { baseUrl, register } from '../../config';
+import { accessToken, baseUrl, refreshToken, register } from '../../config';
 import { RegisterResponse } from '../../types/responses/register-response';
 
 import { RegisterRequest } from '../../types/requests/register-request';
 import { request } from '../../utils/common';
 
-export const sendRegisterRequest = (registerRequest: RegisterRequest) => {
-	return request<RegisterResponse>(`${baseUrl}${register}`, {
-		method: 'POST',
-		headers: { 'content-type': 'application/json' },
-		body: registerRequest,
-	});
+export const sendRegisterRequest = async (registerRequest: RegisterRequest) => {
+	try {
+		const res = await request<RegisterResponse>(`${baseUrl}${register}`, {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: registerRequest,
+		});
+		localStorage.setItem(accessToken, res.accessToken);
+		localStorage.setItem(refreshToken, res.refreshToken);
+		return res;
+	} catch (e) {
+		localStorage.removeItem(accessToken);
+		localStorage.removeItem(refreshToken);
+		throw e;
+	}
 };

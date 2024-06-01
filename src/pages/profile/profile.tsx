@@ -11,6 +11,7 @@ import { RequestStatus } from '../../components/request-status/request-status';
 import { logout as logoutAction } from '../../services/actions/logout';
 import { changeUserInfo as changeUserInfoAction } from '../../services/actions/change-user-info';
 import { User } from '../../types/application-types/user';
+import { useForm } from '../../hooks/useForm';
 
 export const Profile = () => {
 	const { pathname } = useLocation();
@@ -19,10 +20,16 @@ export const Profile = () => {
 		state: state.user.state,
 		errorMessage: state.user.errorMessage,
 	}));
-	const [name, setName] = useState(user.name);
-	const [email, setEmail] = useState(user.email);
-	const [password, setPassword] = useState('');
-
+	const { values, setValues, handleChange } = useForm<{
+		name: string;
+		email: string;
+		password: string;
+	}>({
+		name: user.name,
+		email: user.email,
+		password: '',
+	});
+	const { name, email, password } = values;
 	const [successMessage, setSuccessMessage] = useState('');
 	const dispatch = useAppDispatch();
 
@@ -41,9 +48,11 @@ export const Profile = () => {
 	}, []);
 
 	const reset = () => {
-		setName(user.name);
-		setEmail(user.email);
-		setPassword('');
+		setValues({
+			name: user.name,
+			email: user.email,
+			password: '',
+		});
 	};
 
 	const isChanged =
@@ -133,34 +142,31 @@ export const Profile = () => {
 					>
 						<Input
 							value={name}
-							onChange={(e: ChangeEvent<HTMLInputElement>) => {
-								setName(e.target.value);
-							}}
+							onChange={handleChange}
 							onPointerEnterCapture={undefined}
 							onPointerLeaveCapture={undefined}
 							placeholder={`Имя`}
 							icon="EditIcon"
 							onSubmit={changeUserInfo}
+							name="name"
 						/>
 						<Input
 							value={email}
-							onChange={(e: ChangeEvent<HTMLInputElement>) => {
-								setEmail(e.target.value);
-							}}
+							onChange={handleChange}
 							onPointerEnterCapture={undefined}
 							onPointerLeaveCapture={undefined}
 							placeholder={`Логин`}
 							extraClass="mt-6"
 							icon="EditIcon"
+							name="email"
 						/>
 						<PasswordInput
 							value={password}
-							onChange={(e: ChangeEvent<HTMLInputElement>) => {
-								setPassword(e.target.value);
-							}}
+							onChange={handleChange}
 							placeholder={`Пароль`}
 							extraClass="mt-6"
 							icon="EditIcon"
+							name="password"
 						/>
 						{isChanged && (
 							<p>

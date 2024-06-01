@@ -1,20 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { setError, setPending, setSuccess, setUser } from '../reducers/user';
-import { AppDispatch } from '../store';
 import { ChangeUserInfoRequest } from '../../types/requests/change-user-info-request';
 import { sendChangeUserInfoRequest } from '../api/change-user-info';
+import { User } from '../../types/application-types/user';
 
-export const changeUserInfo = createAsyncThunk<
-	void,
-	ChangeUserInfoRequest,
-	{ dispatch: AppDispatch }
->('user/changeUserInfo', async (request, { dispatch }) => {
-	dispatch(setPending());
-	try {
+export const changeUserInfo = createAsyncThunk<User, ChangeUserInfoRequest>(
+	'user/changeUserInfo',
+	async (request) => {
 		const res = await sendChangeUserInfoRequest(request);
-		dispatch(setSuccess());
-		dispatch(setUser(res.user));
-	} catch (e) {
-		dispatch(setError('Не удалось поменять данные пользователя'));
+		return res.user;
 	}
-});
+);
