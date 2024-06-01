@@ -1,23 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { sendGetUserRequest } from '../api/user';
-import { AppDispatch } from '../store';
-import { setAuthChecked } from '../reducers/user';
 import { User } from '../../types/application-types/user';
 
-export const getUser = createAsyncThunk<
-	User | null,
-	void,
-	{ dispatch: AppDispatch }
->('user/getUser', async (_, { dispatch }) => {
-	if (localStorage.getItem('accessToken')) {
-		try {
+export const getUser = createAsyncThunk<User | null, void>(
+	'user/getUser',
+	async (_) => {
+		if (localStorage.getItem('accessToken')) {
 			const res = await sendGetUserRequest();
 			return res.user;
-		} finally {
-			dispatch(setAuthChecked(true));
+		} else {
+			return null;
 		}
-	} else {
-		dispatch(setAuthChecked(true));
-		return null;
 	}
-});
+);

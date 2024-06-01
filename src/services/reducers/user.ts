@@ -13,23 +13,18 @@ export type UserState = {
 	user: User | null;
 	state: RequestState;
 	errorMessage: string;
-	authChecked: boolean;
 };
 
 const initialState: UserState = {
 	user: null,
 	state: 'init',
 	errorMessage: '',
-	authChecked: false,
 };
 
 export const user = createSlice({
 	name: 'user',
 	initialState,
 	reducers: {
-		setAuthChecked: (state, action: PayloadAction<boolean>) => {
-			state.authChecked = action.payload;
-		},
 		setUser: (state, action: PayloadAction<User | null>) => {
 			state.user = action.payload;
 		},
@@ -104,6 +99,10 @@ export const user = createSlice({
 				state.state = 'success';
 				state.user = action.payload;
 			})
+			.addCase(getUser.pending, (state) => {
+				state.state = 'pending';
+				state.user = null;
+			})
 			.addCase(getUser.rejected, (state) => {
 				state.state = 'error';
 				state.user = null;
@@ -115,4 +114,4 @@ export const user = createSlice({
 	},
 });
 
-export const { setUser, setAuthChecked, reset } = user.actions;
+export const { setUser, reset } = user.actions;

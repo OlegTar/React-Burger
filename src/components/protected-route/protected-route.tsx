@@ -1,7 +1,5 @@
 import { useAppSelector } from '../../hooks/redux';
 import { Navigate, useLocation } from 'react-router-dom';
-import { Modal } from '../modal/modal';
-import styles from './protected-route.module.scss';
 
 type TProtectedProps = {
 	onlyUnAuth?: boolean;
@@ -12,22 +10,8 @@ const Protected = ({
 	onlyUnAuth = false,
 	component,
 }: TProtectedProps): JSX.Element => {
-	const authChecked = useAppSelector((store) => store.user.authChecked);
 	const isAuthenticated = useAppSelector((store) => store.user.user != null);
 	const location = useLocation();
-
-	if (!authChecked) {
-		// Запрос еще выполняется
-		// Выводим прелоадер в ПР
-		// Здесь возвращается просто null для экономии времени
-		return (
-			<Modal title="" closeModal={() => {}} hideClose={true}>
-				<div className={`${styles.loading}`}>
-					<p className="text text_type_main-medium p-15">Загрузка...</p>
-				</div>
-			</Modal>
-		);
-	}
 
 	if (onlyUnAuth && isAuthenticated) {
 		// Пользователь авторизован, но роут предназначен для неавторизованного пользователя
