@@ -27,9 +27,7 @@ export const Profile = () => {
 	const dispatch = useAppDispatch();
 
 	if (user == null) {
-		throw new Error(
-			'Ошибка в коде. Этот компонент не должен показываться неавторизованному пользователю'
-		);
+		throw new Error('Ошибка в коде');
 	}
 
 	useEffect(() => {

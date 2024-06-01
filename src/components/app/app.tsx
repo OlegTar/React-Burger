@@ -15,7 +15,7 @@ import { ResetPassword } from '../../pages/reset-password';
 import { ForgotPassword } from '../../pages/forgot-password';
 import { Profile } from '../../pages/profile';
 import { getUser } from '../../services/actions/user';
-import { OnlyAuth, OnlyUnAuth } from '../protected-route/protected-route';
+import { OnlyAuth, OnlyUnAuth } from '../protected-route';
 import { NotFound } from '../../pages/not-found';
 
 const marginFromEnd = 10;
