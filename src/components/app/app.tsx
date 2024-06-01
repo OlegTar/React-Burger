@@ -76,7 +76,7 @@ function App() {
 			)}
 			<AppHeader />
 			<main className={`${styles['main-content']}`}>
-				<Routes>
+				<Routes location={background || location}>
 					<Route path="/" element={<Home />} />
 					<Route path="/ingredients/:id" element={<IngredientDetails />} />
 					<Route path="/login" element={<OnlyUnAuth component={<Login />} />} />
