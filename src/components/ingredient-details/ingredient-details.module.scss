@@ -3,6 +3,9 @@
 	justify-self: stretch;
 	flex-direction: column;
 	align-items: center;
+}
+
+.modal-border {
 	background-color: var(--background);
 	border-radius: var(--common-border-radius-s);
 }

@@ -6,7 +6,7 @@ import {
 import styles from './burger-constructor.module.scss';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
-import { IIngredient } from '../../types/ingredient';
+import { IIngredient } from '../../types/application-types/ingredient';
 import { useDrop } from 'react-dnd';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
@@ -27,13 +27,16 @@ import {
 	increaseItem,
 	removeBun as removeBunInIngredients,
 } from '../../services/reducers/ingredients';
+import { useNavigate } from 'react-router';
 
 export const BurgerConstructor = () => {
 	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 
 	const { bun, ingredients } = useAppSelector(
 		(state) => state['constructor-ingredients']
 	);
+	const { user } = useAppSelector((state) => state.user);
 
 	const { loading, success, order } = useAppSelector((state) => state.order);
 
@@ -63,6 +66,10 @@ export const BurgerConstructor = () => {
 	};
 
 	const createOrder = () => {
+		if (user === null) {
+			navigate('/login');
+			return;
+		}
 		const ids: string[] = [
 			bun!._id,
 			...ingredients.map(({ ingredient }) => ingredient._id),

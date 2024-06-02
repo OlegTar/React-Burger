@@ -2,7 +2,7 @@ import {
 	ConstructorElement,
 	DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { IIngredient } from '../../types/ingredient';
+import { IIngredient } from '../../types/application-types/ingredient';
 import styles from './drag-constructor-element.module.scss';
 import { XYCoord, useDrag, useDrop } from 'react-dnd';
 import { useRef } from 'react';

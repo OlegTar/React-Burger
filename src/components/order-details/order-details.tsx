@@ -1,10 +1,10 @@
 import styles from './order-details.module.scss';
 import ok from '../../images/ok.png';
-import { Order } from '../../types/order';
+import { OrderResponse } from '../../types/responses/order-response';
 
 interface OrderDetailsPropTypes {
 	fixPositionCallback: () => void;
-	order: Order;
+	order: OrderResponse;
 }
 
 export const OrderDetails = ({

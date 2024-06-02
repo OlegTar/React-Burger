@@ -1,12 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IIngredient } from '../../types/ingredient';
-import { IngredientWithUniqId } from '../../types/ingredientWithUniqId';
+import { IIngredient } from '../../types/application-types/ingredient';
+import { IngredientWithUniqId } from '../../types/application-types/ingredient-with-uniq-id';
 
-type ConstructorIngredientsType = {
+export type ConstructorIngredientsState = {
 	bun: IIngredient | null;
 	ingredients: IngredientWithUniqId[];
 };
-const initialState: ConstructorIngredientsType = {
+const initialState: ConstructorIngredientsState = {
 	bun: null,
 	ingredients: [],
 };
@@ -15,14 +15,14 @@ const constructorIngredients = createSlice({
 	initialState: initialState,
 	reducers: {
 		addIngredient: (
-			state: ConstructorIngredientsType,
+			state: ConstructorIngredientsState,
 			action: PayloadAction<IngredientWithUniqId>
 		) => ({
 			...state,
 			ingredients: [...state.ingredients, action.payload],
 		}),
 		removeIngredient: (
-			state: ConstructorIngredientsType,
+			state: ConstructorIngredientsState,
 			action: PayloadAction<string>
 		) => ({
 			...state,
@@ -31,7 +31,7 @@ const constructorIngredients = createSlice({
 			),
 		}),
 		changeOrder: (
-			state: ConstructorIngredientsType,
+			state: ConstructorIngredientsState,
 			action: PayloadAction<{
 				fromIndex: number;
 				toIndex: number;
@@ -46,7 +46,7 @@ const constructorIngredients = createSlice({
 			};
 		},
 		setBun: (
-			state: ConstructorIngredientsType,
+			state: ConstructorIngredientsState,
 			action: PayloadAction<IIngredient>
 		) => ({
 			...state,

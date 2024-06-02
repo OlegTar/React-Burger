@@ -1,4 +1,4 @@
-import { FillingType } from './fillingType';
+import { FillingType } from './filling-type';
 
 export interface IIngredient {
 	_id: string;

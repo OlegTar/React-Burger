@@ -1,7 +1,7 @@
 import { baseUrl, ingredients } from '../../config';
-import DataFromServer from '../../types/dataFromServer';
+import { DataFromServerResponse } from '../../types/responses/data-from-server-response';
 import { request } from '../../utils/common';
 
-export const getIngredients = () => {
-	return request<DataFromServer>(`${baseUrl}${ingredients}`);
+export const sendGetIngredientsRequets = () => {
+	return request<DataFromServerResponse>(`${baseUrl}${ingredients}`);
 };
