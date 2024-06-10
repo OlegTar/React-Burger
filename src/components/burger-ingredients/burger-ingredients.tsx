@@ -1,14 +1,14 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.scss';
 import { Ingredient } from '../ingredient/ingredient';
-import { useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { FillingType } from '../../types/application-types/filling-type';
 import { useAppSelector } from '../../hooks/redux';
 
-export const BurgerIngredients = () => {
+export const BurgerIngredients: FC = () => {
 	const { ingredients } = useAppSelector((state) => state.ingredients);
 
-	const scrollPane = useRef(null);
+	const scrollPane = useRef<HTMLElement>(null);
 	const [currentTab, setCurrentTab] = useState<FillingType>('bun');
 
 	useEffect(() => {

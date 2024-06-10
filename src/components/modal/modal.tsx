@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import styles from './modal.module.scss';
 import { ModalOverlay } from '../modal-overlay/modal-overlay';
-import { ReactNode, useEffect } from 'react';
+import { FC, ReactNode, useEffect } from 'react';
 import { linkHandler } from '../../utils/common';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -18,13 +18,13 @@ interface ModalPropTypes {
 	fixPositionPromise?: Promise<void>;
 }
 
-export const Modal = ({
+export const Modal: FC<ModalPropTypes> = ({
 	closeModal,
 	children,
 	title,
 	fixPositionPromise,
 	hideClose = false,
-}: ModalPropTypes) => {
+}) => {
 	let element: HTMLDivElement | null;
 	const saveElement = (element_: HTMLDivElement | null) => {
 		element = element_;

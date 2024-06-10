@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { sendLoginRequest } from '../api/login';
+import { sendLoginRequest } from '../../utils/api/login';
 import { LoginRequest } from '../../types/requests/login-request';
 
 export const login = createAsyncThunk(

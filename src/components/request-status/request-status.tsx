@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { RequestState } from '../../types/application-types/request-state';
 import { Modal } from '../modal/modal';
 import { MyNotification } from '../my-notification/my-notification';
@@ -9,11 +10,11 @@ type RequestStatusPropTypes = {
 	successMessage?: string;
 };
 
-export const RequestStatus = ({
+export const RequestStatus: FC<RequestStatusPropTypes> = ({
 	state,
 	errorMessage = '',
 	successMessage = '',
-}: RequestStatusPropTypes) => {
+}) => {
 	return (
 		<>
 			{state === 'init' && <></>}

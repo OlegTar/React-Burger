@@ -1,8 +1,8 @@
 import { accessToken, baseUrl, logout, refreshToken } from '../../config';
 import { LogoutResponse } from '../../types/responses/logout-response';
-import { request } from '../../utils/common';
+import { request } from '../common';
 
-export const sendLogoutRequest = async () => {
+export const sendLogoutRequest = async (): Promise<void> => {
 	const body = {
 		token: localStorage.getItem(refreshToken) || '',
 	};

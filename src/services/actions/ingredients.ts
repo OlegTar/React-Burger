@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { sendGetIngredientsRequets as getIngredientsApi } from '../api/ingredients';
+import { sendGetIngredientsRequets as getIngredientsApi } from '../../utils/api/ingredients';
 import { convert } from '../../utils/common';
 
 export const getIngredients = createAsyncThunk(

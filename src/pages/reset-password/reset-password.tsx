@@ -7,14 +7,14 @@ import { Link, Navigate, useLocation } from 'react-router-dom';
 import styles from './reset-password.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { RequestStatus } from '../../components/request-status/request-status';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { resetPasswordCalled } from '../../config';
 import { reset } from '../../services/reducers/user';
 import { changePassword as changePasswordAction } from '../../services/actions/change-password';
 import { MyNotification } from '../../components/my-notification/my-notification';
 import { useForm } from '../../hooks/useForm';
 
-export const ResetPassword = () => {
+export const ResetPassword: FC = () => {
 	const isResetPasswordCalled =
 		localStorage.getItem(resetPasswordCalled) === '1';
 
@@ -38,17 +38,17 @@ export const ResetPassword = () => {
 		dispatch(reset());
 	}, [dispatch]);
 
-	const changePassword = useCallback(() => {
+	const changePassword = () => {
 		dispatch(
 			changePasswordAction({
 				token,
 				password,
 			})
 		);
-	}, [token, password, dispatch]);
+	};
 
 	if (!isResetPasswordCalled) {
-		if (state == 'init') {
+		if (state === 'init') {
 			return <Navigate to={'/forgot-password'} replace />;
 		} else if (state === 'success') {
 			return (

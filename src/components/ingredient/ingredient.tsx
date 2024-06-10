@@ -6,13 +6,14 @@ import styles from './ingredient.module.scss';
 import { IIngredient } from '../../types/application-types/ingredient';
 import { useDrag } from 'react-dnd';
 import { useLocation, useNavigate } from 'react-router';
+import { FC } from 'react';
 
 interface IngredientPropTypes {
 	ingredient: IIngredient;
 	count: number;
 }
 
-export const Ingredient = ({ ingredient, count }: IngredientPropTypes) => {
+export const Ingredient: FC<IngredientPropTypes> = ({ ingredient, count }) => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { price, name, image } = ingredient;

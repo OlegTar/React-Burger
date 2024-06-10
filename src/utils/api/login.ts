@@ -1,9 +1,11 @@
 import { accessToken, baseUrl, login, refreshToken } from '../../config';
 import { LoginRequest } from '../../types/requests/login-request';
 import { LoginResponse } from '../../types/responses/login-response';
-import { request } from '../../utils/common';
+import { request } from '../common';
 
-export const sendLoginRequest = async (loginRequest: LoginRequest) => {
+export const sendLoginRequest = async (
+	loginRequest: LoginRequest
+): Promise<LoginResponse> => {
 	try {
 		const res = await request<LoginResponse>(`${baseUrl}${login}`, {
 			method: 'POST',

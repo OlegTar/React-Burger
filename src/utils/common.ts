@@ -1,8 +1,5 @@
 import { SyntheticEvent } from 'react';
-import {
-	DataFromServerResponse,
-	IIngredientFromServer,
-} from '../types/responses/data-from-server-response';
+import { IIngredientFromServer } from '../types/responses/data-from-server-response';
 import { IIngredient } from '../types/application-types/ingredient';
 import axios, { AxiosResponse, HttpStatusCode } from 'axios';
 import { accessToken, baseUrl, refreshToken, token } from '../config';
@@ -13,11 +10,8 @@ import { LoginRequest } from '../types/requests/login-request';
 import { PasswordResetRequest } from '../types/requests/password-reset-request';
 import { OrderRequest } from '../types/requests/order-request';
 import { LogoutRequest } from '../types/requests/logout-request';
-import { LoginResponse } from '../types/responses/login-response';
-import { LogoutResponse } from '../types/responses/logout-response';
 import { SimpleResponse } from '../types/responses/simple-response';
-import { OrderResponse } from '../types/responses/order-response';
-import { UserResponse } from '../types/responses/user-response';
+import { ApplicationResponse } from '../types/responses/response-type';
 
 const refreshAccessToken = async () => {
 	const axiosInstance = axios.create();
@@ -78,14 +72,6 @@ export const convert = (ing: IIngredientFromServer): IIngredient => {
 	};
 };
 
-type ResponseType =
-	| LoginResponse
-	| LogoutResponse
-	| SimpleResponse
-	| UserResponse
-	| OrderResponse
-	| DataFromServerResponse;
-
 type RequestOptions = {
 	method: 'GET' | 'POST' | 'PATCH';
 	headers: {
@@ -100,17 +86,17 @@ type RequestOptions = {
 		| OrderRequest;
 };
 
-const checkResponse = (response: AxiosResponse<ResponseType>) => {
+const checkResponse = (response: AxiosResponse<ApplicationResponse>) => {
 	if (response.status !== HttpStatusCode.Ok) {
 		return Promise.reject<string>(`Ошибка ${response.status}`);
 	}
 	if (!response.data.success) {
 		return Promise.reject<string>(`Ошибка ${response.data.message || ''}`);
 	}
-	return response.data;
+	return Promise.resolve(response.data);
 };
 
-export const request = async <T extends ResponseType>(
+export const request = async <T extends ApplicationResponse>(
 	url: string,
 	options?: RequestOptions
 ) => {
@@ -123,10 +109,10 @@ export const request = async <T extends ResponseType>(
 		});
 	}
 
-	const response = await axios<ResponseType>(url, {
+	const response = await axios<ApplicationResponse>(url, {
 		method: !options ? 'GET' : options.method,
 		data: options?.body,
 		headers: headers,
 	});
-	return checkResponse(response) as T;
+	return (await checkResponse(response)) as T;
 };

@@ -4,7 +4,7 @@ import styles from './app.module.scss';
 import '../../index.css';
 import { getIngredients } from '../../services/actions/ingredients';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { Route, Routes, useLocation, useNavigate } from 'react-router';
+import { Route, Routes, useNavigate, useLocation } from 'react-router';
 import { Home } from '../../pages/home';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';

@@ -16,7 +16,7 @@ import {
 } from '../../services/reducers/constructor-ingredients';
 import { decreaseItem } from '../../services/reducers/ingredients';
 import { DragConstructorElement } from '../drag-constructor-element/drag-constructor-element';
-import { useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { sendOrder } from '../../services/actions/order';
 import { MyNotification } from '../my-notification/my-notification';
 import { clearOrder } from '../../services/reducers/order';
@@ -29,7 +29,7 @@ import {
 } from '../../services/reducers/ingredients';
 import { useNavigate } from 'react-router';
 
-export const BurgerConstructor = () => {
+export const BurgerConstructor: FC = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 

@@ -5,7 +5,7 @@ import {
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { RequestStatus } from '../../components/request-status/request-status';
 import { logout as logoutAction } from '../../services/actions/logout';
@@ -13,7 +13,7 @@ import { changeUserInfo as changeUserInfoAction } from '../../services/actions/c
 import { User } from '../../types/application-types/user';
 import { useForm } from '../../hooks/useForm';
 
-export const Profile = () => {
+export const Profile: FC = () => {
 	const { pathname } = useLocation();
 	const { user, state, errorMessage } = useAppSelector((state) => ({
 		user: state.user.user as User,
@@ -30,7 +30,7 @@ export const Profile = () => {
 		password: '',
 	});
 	const { name, email, password } = values;
-	const [successMessage, setSuccessMessage] = useState('');
+	const [successMessage, setSuccessMessage] = useState<string>('');
 	const dispatch = useAppDispatch();
 
 	if (user == null) {
