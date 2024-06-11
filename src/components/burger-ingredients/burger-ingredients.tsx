@@ -8,7 +8,7 @@ import { useAppSelector } from '../../hooks/redux';
 export const BurgerIngredients = () => {
 	const { ingredients } = useAppSelector((state) => state.ingredients);
 
-	const scrollPane = useRef(null);
+	const scrollPane = useRef<HTMLElement>(null);
 	const [currentTab, setCurrentTab] = useState<FillingType>('bun');
 
 	useEffect(() => {

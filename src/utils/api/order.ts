@@ -1,8 +1,8 @@
 import { accessToken, baseUrl, orders } from '../../config';
 import { OrderResponse } from '../../types/responses/order-response';
-import { request } from '../../utils/common';
+import { request } from '../common';
 
-export const sendOrderRequest = (ids: string[]) => {
+export const sendOrderRequest = (ids: string[]): Promise<OrderResponse> => {
 	const body = {
 		ingredients: ids,
 	};

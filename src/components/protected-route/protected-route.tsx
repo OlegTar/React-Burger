@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { useAppSelector } from '../../hooks/redux';
 import { Navigate, useLocation } from 'react-router-dom';
 
@@ -6,10 +7,7 @@ type TProtectedProps = {
 	component: JSX.Element;
 };
 
-const Protected = ({
-	onlyUnAuth = false,
-	component,
-}: TProtectedProps): JSX.Element => {
+const Protected: FC<TProtectedProps> = ({ onlyUnAuth = false, component }) => {
 	const isAuthenticated = useAppSelector((store) => store.user.user != null);
 	const location = useLocation();
 

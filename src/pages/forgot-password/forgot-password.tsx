@@ -4,7 +4,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Navigate } from 'react-router-dom';
 import styles from './forgot-password.module.scss';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { RequestStatus } from '../../components/request-status/request-status';
 import { passwordReset } from '../../services/actions/password-reset';
@@ -12,7 +12,7 @@ import { resetPasswordCalled } from '../../config';
 import { reset } from '../../services/reducers/user';
 import { useForm } from '../../hooks/useForm';
 
-export const ForgotPassword = () => {
+export const ForgotPassword: FC = () => {
 	const dispatch = useAppDispatch();
 	const { state, errorMessage } = useAppSelector((state) => ({
 		state: state.user.state,

@@ -1,16 +1,17 @@
 import styles from './order-details.module.scss';
 import ok from '../../images/ok.png';
 import { OrderResponse } from '../../types/responses/order-response';
+import { FC } from 'react';
 
 interface OrderDetailsPropTypes {
 	fixPositionCallback: () => void;
 	order: OrderResponse;
 }
 
-export const OrderDetails = ({
+export const OrderDetails: FC<OrderDetailsPropTypes> = ({
 	fixPositionCallback,
 	order,
-}: OrderDetailsPropTypes) => {
+}) => {
 	return (
 		<section className={`${styles.content} pl-30 pr-30`}>
 			<section className={`${styles['order-number']} mt-30 mb-8`}>

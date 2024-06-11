@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch } from '../store';
-import { sendRegisterRequest } from '../api/register';
+import { sendRegisterRequest } from '../../utils/api/register';
 import { RegisterRequest } from '../../types/requests/register-request';
 import { User } from '../../types/application-types/user';
 

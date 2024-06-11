@@ -5,14 +5,14 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './login.module.scss';
 import { Link, Navigate, useLocation } from 'react-router-dom';
-import { useCallback } from 'react';
+import { FC } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { login as loginAction } from '../../services/actions/login';
 import { RequestStatus } from '../../components/request-status/request-status';
 import { MyNotification } from '../../components/my-notification/my-notification';
 import { useForm } from '../../hooks/useForm';
 
-export const Login = () => {
+export const Login: FC = () => {
 	const location = useLocation();
 	const dispatch = useAppDispatch();
 	const { state, user } = useAppSelector((state) => ({
@@ -29,9 +29,9 @@ export const Login = () => {
 	});
 	const { email, password } = values;
 
-	const login = useCallback(() => {
+	const login = () => {
 		dispatch(loginAction({ email: values.email, password: values.password }));
-	}, [values.email, values.password, dispatch]);
+	};
 
 	if (state === 'success' && user !== null) {
 		const { from } = location.state || { from: { pathname: '/' } };
