@@ -18,6 +18,7 @@ import { getUser } from '../../services/actions/user';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route';
 import { NotFound } from '../../pages/not-found';
 import { Feed } from '../../pages/feed';
+import { Order } from '../order/order';
 
 const marginFromEnd = 10;
 
@@ -104,6 +105,14 @@ function App() {
 						/>
 					</Route>
 					<Route path="/feed" element={<Feed />} />
+					<Route
+						path="/feed/:number"
+						element={
+							<Modal title="" closeModal={handleModalClose}>
+								<Order />
+							</Modal>
+						}
+					/>
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 				{background && (

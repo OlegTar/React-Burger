@@ -2,8 +2,11 @@ import { FC } from 'react';
 import styles from './order-card.module.scss';
 import { IngredientCircle } from '../ingredient-circle/ingredient-circle';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const OrderCard: FC = () => {
+	const navigate = useNavigate();
+
 	const imgs = [
 		'https://code.s3.yandex.net/react/code/salad-mobile.png',
 		'https://code.s3.yandex.net/react/code/core-mobile.png',
@@ -14,7 +17,10 @@ export const OrderCard: FC = () => {
 	];
 
 	return (
-		<div className={`p-6 mb-4 ${styles['debug']} ${styles['card']}`}>
+		<div
+			className={`p-6 mb-4 ${styles['debug']} ${styles['card']}`}
+			onClick={() => navigate('/feed/33')}
+		>
 			<div className={`${styles['number']} mb-6`}>
 				<p className="text text_type_digits-default">#034535</p>
 				<p className="text text_type_main-default text_color_inactive">

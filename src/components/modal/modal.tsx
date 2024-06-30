@@ -78,7 +78,7 @@ export const Modal: FC<ModalPropTypes> = ({
 				<header
 					className={`${styles.header} ${additionalClass} pl-10 pr-10 pt-10`}
 				>
-					<p className={`${styles.title} text text_type_main-large`}>{title}</p>
+					<p className={`text text_type_main-large`}>{title}</p>
 					<a href="/" onClick={(e) => linkHandler(e, closeModal)}>
 						<CloseIcon type="primary" />
 					</a>

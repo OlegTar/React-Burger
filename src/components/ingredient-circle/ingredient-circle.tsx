@@ -3,17 +3,21 @@ import styles from './ingredient-circle.module.scss';
 
 type IngredientCirclePropTypes = {
 	url: string;
-	margin: number;
-	zIndex: number;
-	rest: number;
+	margin?: number;
+	zIndex?: number;
+	rest?: number;
 };
 
 export const IngredientCircle: FC<IngredientCirclePropTypes> = ({
 	url,
-	margin,
-	zIndex,
-	rest,
+	margin: margin_,
+	zIndex: zIndex_,
+	rest: rest_,
 }) => {
+	const margin = margin_ === undefined ? 0 : margin_;
+	const zIndex = zIndex_ === undefined ? 0 : zIndex_;
+	const rest = rest_ === undefined ? 0 : rest_;
+
 	return (
 		<div
 			className={`${styles['container']}`}
