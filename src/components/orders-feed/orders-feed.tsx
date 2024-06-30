@@ -8,7 +8,7 @@ export const OrdersFeed: FC = () => {
 			<header className={`mb-5 text text_type_main-large`}>
 				Лента заказов
 			</header>
-			<section className={`${styles['cards']}`}>
+			<section className={`${styles['cards']} pr-2`}>
 				{Array.from(Array(10)).map((e) => (
 					<OrderCard />
 				))}
