@@ -1,0 +1,29 @@
+.debug {
+	//border: 1px solid red;
+}
+
+.container {
+	background: linear-gradient(-135deg, #5445f3, #7821be);
+	padding-left: 2px;
+	padding-top: 2px;
+	width: 72px;
+	height: 72px;
+	border-radius: 39px;
+	display: inline-block;
+}
+
+.ingredient-circle {
+	display: inline-block;
+	background-color: black;
+	background-position: -36px;
+	width: 70px;
+	height: 70px;
+	border-radius: 36px;
+	margin-left: 0px;
+	margin-top: 0px;
+	text-align: center;
+	vertical-align: middle;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}

@@ -17,6 +17,7 @@ import { Profile } from '../../pages/profile';
 import { getUser } from '../../services/actions/user';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route';
 import { NotFound } from '../../pages/not-found';
+import { Feed } from '../../pages/feed';
 
 const marginFromEnd = 10;
 
@@ -102,6 +103,7 @@ function App() {
 							element={<OnlyAuth component={<Profile />} />}
 						/>
 					</Route>
+					<Route path="/feed" element={<Feed />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 				{background && (
