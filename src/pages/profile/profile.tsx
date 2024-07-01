@@ -1,41 +1,12 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import styles from './profile.module.scss';
-import {
-	Button,
-	Input,
-	PasswordInput,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-import { FC, useCallback, useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { RequestStatus } from '../../components/request-status/request-status';
+import { FC, useCallback, useEffect } from 'react';
 import { logout as logoutAction } from '../../services/actions/logout';
-import { changeUserInfo as changeUserInfoAction } from '../../services/actions/change-user-info';
-import { User } from '../../types/application-types/user';
-import { useForm } from '../../hooks/useForm';
+import { useAppDispatch } from '../../hooks/redux';
 
 export const Profile: FC = () => {
 	const { pathname } = useLocation();
-	const { user, state, errorMessage } = useAppSelector((state) => ({
-		user: state.user.user as User,
-		state: state.user.state,
-		errorMessage: state.user.errorMessage,
-	}));
-	const { values, setValues, handleChange } = useForm<{
-		name: string;
-		email: string;
-		password: string;
-	}>({
-		name: user.name,
-		email: user.email,
-		password: '',
-	});
-	const { name, email, password } = values;
-	const [successMessage, setSuccessMessage] = useState<string>('');
 	const dispatch = useAppDispatch();
-
-	if (user == null) {
-		throw new Error('Ошибка в коде');
-	}
 
 	useEffect(() => {
 		fixPosition();
@@ -47,31 +18,9 @@ export const Profile: FC = () => {
 		};
 	}, []);
 
-	const reset = () => {
-		setValues({
-			name: user.name,
-			email: user.email,
-			password: '',
-		});
-	};
-
-	const isChanged =
-		user.name !== name || user.email !== email || password !== '';
-
 	const logout = useCallback(() => {
 		dispatch(logoutAction());
 	}, [dispatch]);
-
-	const changeUserInfo = useCallback(() => {
-		setSuccessMessage('Данные пользователя обновлены');
-		dispatch(
-			changeUserInfoAction({
-				name,
-				email,
-				password,
-			})
-		);
-	}, [email, name, password, dispatch]);
 
 	const fixPosition = () => {
 		const container = document.getElementsByClassName(
@@ -88,11 +37,6 @@ export const Profile: FC = () => {
 
 	return (
 		<>
-			<RequestStatus
-				state={state}
-				errorMessage={errorMessage}
-				successMessage={successMessage}
-			/>
 			<section className={`${styles.content} mt-20`}>
 				<section className={`${styles.menu} pr-15`}>
 					<ul>
@@ -134,61 +78,7 @@ export const Profile: FC = () => {
 					</p>
 				</section>
 				<section className={`${styles.body}`}>
-					<form
-						onSubmit={(e) => {
-							e.preventDefault();
-							changeUserInfo();
-						}}
-					>
-						<Input
-							value={name}
-							onChange={handleChange}
-							onPointerEnterCapture={undefined}
-							onPointerLeaveCapture={undefined}
-							placeholder={`Имя`}
-							icon="EditIcon"
-							onSubmit={changeUserInfo}
-							name="name"
-						/>
-						<Input
-							value={email}
-							onChange={handleChange}
-							onPointerEnterCapture={undefined}
-							onPointerLeaveCapture={undefined}
-							placeholder={`Логин`}
-							extraClass="mt-6"
-							icon="EditIcon"
-							name="email"
-						/>
-						<PasswordInput
-							value={password}
-							onChange={handleChange}
-							placeholder={`Пароль`}
-							extraClass="mt-6"
-							icon="EditIcon"
-							name="password"
-						/>
-						{isChanged && (
-							<p>
-								<Button
-									htmlType="button"
-									type="secondary"
-									size="medium"
-									onClick={reset}
-								>
-									Отмена
-								</Button>
-								<Button
-									htmlType="submit"
-									type="primary"
-									size="medium"
-									extraClass="mt-6"
-								>
-									Сохранить
-								</Button>
-							</p>
-						)}
-					</form>
+					<Outlet />
 				</section>
 			</section>
 		</>

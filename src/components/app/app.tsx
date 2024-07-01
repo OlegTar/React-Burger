@@ -18,7 +18,9 @@ import { getUser } from '../../services/actions/user';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route';
 import { NotFound } from '../../pages/not-found';
 import { Feed } from '../../pages/feed';
-import { Order } from '../order/order';
+import { OrderPage } from '../../pages/order-page/order-page';
+import { ProfileOrders } from '../../pages/profile-orders';
+import { ProfileIndex } from '../../pages/profile-index';
 
 const marginFromEnd = 10;
 
@@ -95,24 +97,19 @@ function App() {
 						element={<OnlyUnAuth component={<ResetPassword />} />}
 					/>
 					<Route path="/profile" element={<OnlyAuth component={<Profile />} />}>
+						<Route index element={<OnlyAuth component={<ProfileIndex />} />} />
 						<Route
 							path="orders"
-							element={<OnlyAuth component={<Profile />} />}
+							element={<OnlyAuth component={<ProfileOrders />} />}
 						/>
 						<Route
 							path="orders/:number"
 							element={<OnlyAuth component={<Profile />} />}
 						/>
 					</Route>
-					<Route path="/feed" element={<Feed />} />
-					<Route
-						path="/feed/:number"
-						element={
-							<Modal title="" closeModal={handleModalClose}>
-								<Order />
-							</Modal>
-						}
-					/>
+					<Route path="/feed" element={<Feed />}>
+						<Route path=":number" element={<OrderPage />} />
+					</Route>
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 				{background && (

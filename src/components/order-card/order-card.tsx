@@ -2,10 +2,12 @@ import { FC } from 'react';
 import styles from './order-card.module.scss';
 import { IngredientCircle } from '../ingredient-circle/ingredient-circle';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useStorage } from '../../hooks/useStorage';
 
 export const OrderCard: FC = () => {
 	const navigate = useNavigate();
+	const { setKey } = useStorage();
 
 	const imgs = [
 		'https://code.s3.yandex.net/react/code/salad-mobile.png',
@@ -19,7 +21,10 @@ export const OrderCard: FC = () => {
 	return (
 		<div
 			className={`p-6 mb-4 ${styles['debug']} ${styles['card']}`}
-			onClick={() => navigate('/feed/33')}
+			onClick={() => {
+				setKey('modal', 'true');
+				navigate('/feed/33');
+			}}
 		>
 			<div className={`${styles['number']} mb-6`}>
 				<p className="text text_type_digits-default">#034535</p>
@@ -34,6 +39,7 @@ export const OrderCard: FC = () => {
 				<div className={`${styles['ingredients']}`}>
 					{imgs.map((e, i) => (
 						<IngredientCircle
+							key={i}
 							url={e}
 							margin={i}
 							zIndex={imgs.length - i}

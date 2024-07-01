@@ -9,8 +9,8 @@ export const OrdersFeed: FC = () => {
 				Лента заказов
 			</header>
 			<section className={`${styles['cards']} pr-2`}>
-				{Array.from(Array(10)).map((e) => (
-					<OrderCard />
+				{Array.from(Array(10)).map((e, i) => (
+					<OrderCard key={i} />
 				))}
 			</section>
 		</section>

@@ -3,10 +3,21 @@ import styles from './order.module.scss';
 import { IngredientCircle } from '../ingredient-circle/ingredient-circle';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-export const Order: FC = () => {
+export type OrderPropTypes = {
+	isInModal?: boolean;
+};
+
+export const Order: FC<OrderPropTypes> = ({ isInModal = true }) => {
+	let additionalClass = '';
+	if (!isInModal) {
+		additionalClass += styles['center'];
+	}
+
 	return (
 		<section className={`${styles['order']} ml-8`}>
-			<header className="mt-10 mb-10 text text_type_digits-default">
+			<header
+				className={`mt-10 mb-10 text text_type_digits-default ${additionalClass}`}
+			>
 				#034533
 			</header>
 			<header className="text text_type_main-medium mb-3">
@@ -18,8 +29,8 @@ export const Order: FC = () => {
 			<header className="text text_type_main-medium mb-6">Состав:</header>
 			<section className="mr-10">
 				<ul className={`${styles['list']} pr-6 mt-10`}>
-					{Array.from(Array(10)).map((e) => (
-						<li className={`${styles['item']} mt-4`}>
+					{Array.from(Array(10)).map((e, i) => (
+						<li className={`${styles['item']} mt-4`} key={i}>
 							<div className={`${styles['name']}`}>
 								<IngredientCircle
 									url={'https://code.s3.yandex.net/react/code/salad-mobile.png'}
