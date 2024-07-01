@@ -5,7 +5,11 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 import { useNavigate } from 'react-router-dom';
 import { useStorage } from '../../hooks/useStorage';
 
-export const OrderCard: FC = () => {
+export type OrderCardPropTypes = {
+	inProfile?: boolean;
+};
+
+export const OrderCard: FC<OrderCardPropTypes> = ({ inProfile = false }) => {
 	const navigate = useNavigate();
 	const { setKey } = useStorage();
 
@@ -20,7 +24,9 @@ export const OrderCard: FC = () => {
 
 	return (
 		<div
-			className={`p-6 mb-4 ${styles['debug']} ${styles['card']}`}
+			className={`p-6 mb-4 ${styles['debug']} ${styles['card']} ${
+				inProfile ? styles['profile-width'] : ''
+			}`}
 			onClick={() => {
 				setKey('modal', 'true');
 				navigate('/feed/33');
@@ -32,10 +38,15 @@ export const OrderCard: FC = () => {
 					Сегодня, 16:20
 				</p>
 			</div>
-			<p className="text text_type_main-medium mb-6">
+			<p className="text text_type_main-medium">
 				Death Star Starship Main бургер
 			</p>
-			<div className={`${styles['footer']}`}>
+			{inProfile && (
+				<p className="text text_type_main-default text_color_success mt-2">
+					Создан
+				</p>
+			)}
+			<div className={`${styles['footer']} mt-6`}>
 				<div className={`${styles['ingredients']}`}>
 					{imgs.map((e, i) => (
 						<IngredientCircle

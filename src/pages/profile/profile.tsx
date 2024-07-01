@@ -2,11 +2,19 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import styles from './profile.module.scss';
 import { FC, useCallback, useEffect } from 'react';
 import { logout as logoutAction } from '../../services/actions/logout';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { RequestStatus } from '../../components/request-status/request-status';
+import { User } from '../../types/application-types/user';
 
 export const Profile: FC = () => {
 	const { pathname } = useLocation();
 	const dispatch = useAppDispatch();
+
+	const { state, errorMessage } = useAppSelector((state) => ({
+		user: state.user.user as User,
+		state: state.user.state,
+		errorMessage: state.user.errorMessage,
+	}));
 
 	useEffect(() => {
 		fixPosition();
@@ -37,6 +45,11 @@ export const Profile: FC = () => {
 
 	return (
 		<>
+			<RequestStatus
+				state={state}
+				errorMessage={errorMessage}
+				successMessage={''}
+			/>
 			<section className={`${styles.content} mt-20`}>
 				<section className={`${styles.menu} pr-15`}>
 					<ul>
