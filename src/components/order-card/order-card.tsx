@@ -29,7 +29,11 @@ export const OrderCard: FC<OrderCardPropTypes> = ({ inProfile = false }) => {
 			}`}
 			onClick={() => {
 				setKey('modal', 'true');
-				navigate('/feed/33');
+				if (inProfile) {
+					navigate('/profile/orders/33');
+				} else {
+					navigate('/feed/33');
+				}
 			}}
 		>
 			<div className={`${styles['number']} mb-6`}>

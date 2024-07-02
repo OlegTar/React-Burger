@@ -104,7 +104,7 @@ function App() {
 						/>
 						<Route
 							path="orders/:number"
-							element={<OnlyAuth component={<Profile />} />}
+							element={<OnlyAuth component={<OrderPage />} />}
 						/>
 					</Route>
 					<Route path="/feed" element={<Feed />}>

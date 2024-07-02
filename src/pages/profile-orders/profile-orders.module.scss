@@ -4,8 +4,9 @@
 		list-style: none;
 		cursor: pointer;
 	}
-	overflow-y: auto;
+
 	overflow-x: hidden;
+	overflow-y: auto;
 	scrollbar-color: #8585ad var(--background-alt);
 	scrollbar-width: thin;
 }
