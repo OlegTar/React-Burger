@@ -2,37 +2,64 @@ import { FC } from 'react';
 import styles from './orders-summary.module.scss';
 
 export const OrdersSummary: FC = () => {
+	const maxColumnSize = 10;
+	const orders = Array.from(Array(15));
+	const columns: number[][] = [];
+	orders.forEach((v, i) => {
+		if (i % maxColumnSize == 0) {
+			columns.push([]);
+		}
+		columns[columns.length - 1].push(345311);
+	});
+
+	const inProcessing = Array.from(Array(6));
+	const columnsProcessing: number[][] = [];
+	inProcessing.forEach((v, i) => {
+		if (i % maxColumnSize == 0) {
+			columnsProcessing.push([]);
+		}
+		columnsProcessing[columnsProcessing.length - 1].push(345311);
+	});
+
 	return (
 		<section className={`mt-25 ${styles['container']} ml-15`}>
 			<section className={`mb-15 ${styles['orders-summary']}`}>
 				<section>
 					<header className={`mb-6 text text_type_main-large`}>Готовы:</header>
-					<section>
-						<p className="text text_type_digits-default text_color_success mb-2">
-							034533
-						</p>
-						<p className="text text_type_digits-default text_color_success mb-2">
-							034532
-						</p>
-						<p className="text text_type_digits-default text_color_success mb-2">
-							034530
-						</p>
-						<p className="text text_type_digits-default text_color_success mb-2">
-							034527
-						</p>
-						<p className="text text_type_digits-default text_color_success">
-							034525
-						</p>
+					<section className={`${styles.columns}`}>
+						{columns.map((column) => {
+							return (
+								<div className={`${styles.column} mr-2`}>
+									{column.map((number) => {
+										return (
+											<p className="text text_type_digits-default text_color_success mb-2">
+												034531
+											</p>
+										);
+									})}
+								</div>
+							);
+						})}
 					</section>
 				</section>
 				<section className="ml-9">
 					<header className={`mb-6 text text_type_main-large`}>
 						В работе:
 					</header>
-					<section>
-						<p className="text text_type_digits-default mb-2">034538</p>
-						<p className="text text_type_digits-default mb-2">034541</p>
-						<p className="text text_type_digits-default">034542</p>
+					<section className={`${styles.columns}`}>
+						{columnsProcessing.map((column) => {
+							return (
+								<div className={`${styles.column} mr-2`}>
+									{column.map((number) => {
+										return (
+											<p className="text text_type_digits-default text_color_primary mb-2">
+												034531
+											</p>
+										);
+									})}
+								</div>
+							);
+						})}
 					</section>
 				</section>
 			</section>
