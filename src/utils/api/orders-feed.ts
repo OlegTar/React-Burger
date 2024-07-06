@@ -27,8 +27,6 @@ export const ordersFeedApi = createApi({
 					// wait for the initial query to resolve before proceeding
 					await cacheDataLoaded;
 
-					console.log('111111111111');
-
 					// when data is received from the socket connection to the server,
 					// if it is a message and for the appropriate channel,
 					// update our query result with the received message
@@ -48,7 +46,6 @@ export const ordersFeedApi = createApi({
 				}
 				// cacheEntryRemoved will resolve when the cache subscription is no longer active
 				await cacheEntryRemoved;
-				console.log('22222222222');
 				// perform cleanup steps once the `cacheEntryRemoved` promise resolves
 				ws.close();
 			},

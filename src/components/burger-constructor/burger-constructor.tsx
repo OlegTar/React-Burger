@@ -14,7 +14,7 @@ import {
 	clear as clearConstructor,
 	removeIngredient,
 } from '../../services/reducers/constructor-ingredients';
-import { decreaseItem } from '../../services/reducers/ingredients';
+import { clearCounts, decreaseItem } from '../../services/reducers/ingredients';
 import { DragConstructorElement } from '../drag-constructor-element/drag-constructor-element';
 import { useMemo } from 'react';
 import { sendOrder } from '../../services/actions/order';
@@ -186,6 +186,7 @@ export const BurgerConstructor = () => {
 					closeModal={() => {
 						dispatch(clearOrder());
 						dispatch(clearConstructor());
+						dispatch(clearCounts());
 					}}
 					fixPositionPromise={fixPositionPromise}
 				>

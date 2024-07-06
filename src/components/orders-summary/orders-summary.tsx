@@ -9,7 +9,6 @@ export const OrdersSummary: FC = () => {
 	if (!data) {
 		return <></>;
 	}
-	console.log({ data });
 
 	const maxColumnSize = 10;
 	const ready = data

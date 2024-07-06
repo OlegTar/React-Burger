@@ -1,10 +1,17 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import styles from './order-card.module.scss';
 import { IngredientCircle } from '../ingredient-circle/ingredient-circle';
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import {
+	CurrencyIcon,
+	FormattedDate,
+} from '@ya.praktikum/react-developer-burger-ui-components';
 import { useNavigate } from 'react-router-dom';
 import { useStorage } from '../../hooks/useStorage';
-import { OrderInFeed } from '../../types/application-types/order-in-feed';
+import {
+	OrderInFeed,
+	OrderStatus,
+} from '../../types/application-types/order-in-feed';
+import { useAppSelector } from '../../hooks/redux';
 
 export type OrderCardPropTypes = {
 	inProfile?: boolean;
@@ -17,15 +24,34 @@ export const OrderCard: FC<OrderCardPropTypes> = ({
 }) => {
 	const navigate = useNavigate();
 	const { setKey } = useStorage();
+	const { ingredients } = useAppSelector((state) => state.ingredients);
 
-	const imgs = [
-		'https://code.s3.yandex.net/react/code/salad-mobile.png',
-		'https://code.s3.yandex.net/react/code/core-mobile.png',
-		'https://code.s3.yandex.net/react/code/cheese-mobile.png',
-		'https://code.s3.yandex.net/react/code/meat-04-mobile.png',
-		'https://code.s3.yandex.net/react/code/sauce-02-mobile.png',
-		'https://code.s3.yandex.net/react/code/core-mobile.png',
-	];
+	const mapOfImages = useMemo(
+		() =>
+			ingredients
+				.map((ing) => ing.ingredient)
+				.reduce((acc, cur) => {
+					if (!acc.has(cur._id)) {
+						acc.set(cur._id, cur.imageMobile);
+					}
+					return acc;
+				}, new Map<string, string>()),
+		[ingredients]
+	);
+
+	const map = useMemo(
+		() =>
+			new Map<OrderStatus, string>([
+				['done', 'Готов'],
+				['pending', 'Готовится'],
+				['cancelled', 'Отменён'],
+				['created', 'Создан'],
+			]),
+		[]
+	);
+
+	const getStatus = (status: OrderStatus) => map.get(status);
+	const imgs = order.ingredients.map((ing) => mapOfImages.get(ing) || '');
 
 	return (
 		<div
@@ -35,24 +61,22 @@ export const OrderCard: FC<OrderCardPropTypes> = ({
 			onClick={() => {
 				setKey('modal', 'true');
 				if (inProfile) {
-					navigate('/profile/orders/33');
+					navigate(`/profile/orders/${order.number}`);
 				} else {
-					navigate('/feed/33');
+					navigate(`/feed/${order.number}`);
 				}
 			}}
 		>
 			<div className={`${styles['number']} mb-6`}>
 				<p className="text text_type_digits-default">#{order.number}</p>
 				<p className="text text_type_main-default text_color_inactive">
-					Сегодня, 16:20
+					<FormattedDate date={new Date(order.createdAt)} />
 				</p>
 			</div>
-			<p className="text text_type_main-medium">
-				Death Star Starship Main бургер
-			</p>
+			<p className="text text_type_main-medium">{order.name}</p>
 			{inProfile && (
 				<p className="text text_type_main-default text_color_success mt-2">
-					Создан
+					{getStatus(order.status)}
 				</p>
 			)}
 			<div className={`${styles['footer']} mt-6`}>

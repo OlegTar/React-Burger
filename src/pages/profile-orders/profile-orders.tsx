@@ -11,6 +11,7 @@ export const ProfileOrders: FC = () => {
 		number: 13433,
 		ingredients: [],
 		status: 'done',
+		name: 'asdf',
 	};
 
 	return (
