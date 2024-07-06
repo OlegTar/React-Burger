@@ -1,11 +1,10 @@
 import { FC } from 'react';
 import styles from './orders-summary.module.scss';
 import { useGetAllOrdersQuery } from '../../utils/api/orders-feed';
-import { RequestStatus } from '../request-status/request-status';
-import { order } from '../../services/reducers/order';
 
 export const OrdersSummary: FC = () => {
 	const { data } = useGetAllOrdersQuery();
+
 	if (!data) {
 		return <></>;
 	}

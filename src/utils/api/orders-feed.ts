@@ -5,20 +5,20 @@ const initialState: OrdersFeedState = {
 	orders: [],
 	total: 0,
 	totalToday: 0,
+	state: 'init',
 };
 
 export const ordersFeedApi = createApi({
 	reducerPath: 'ordersFeed',
 	baseQuery: () => {
-		return {
-			data: initialState,
-		};
+		return { data: initialState };
 	},
 	endpoints: (builder) => ({
 		getAllOrders: builder.query<OrdersFeedState, void>({
 			query: () => '',
+			keepUnusedDataFor: 1,
 			async onCacheEntryAdded(
-				arg,
+				_,
 				{ updateCachedData, cacheDataLoaded, cacheEntryRemoved }
 			) {
 				// create a websocket connection when the cache subscription starts
@@ -36,16 +36,18 @@ export const ordersFeedApi = createApi({
 							draft.orders = data.orders;
 							draft.total = data.total;
 							draft.totalToday = data.totalToday;
+							draft.state = 'loaded';
 						});
 					};
 
-					ws.onmessage = listener;
+					ws.addEventListener('message', listener);
 				} catch {
 					// no-op in case `cacheEntryRemoved` resolves before `cacheDataLoaded`,
 					// in which case `cacheDataLoaded` will throw
 				}
 				// cacheEntryRemoved will resolve when the cache subscription is no longer active
 				await cacheEntryRemoved;
+				console.log('connection closed');
 				// perform cleanup steps once the `cacheEntryRemoved` promise resolves
 				ws.close();
 			},

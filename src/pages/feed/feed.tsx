@@ -8,13 +8,13 @@ import { RequestStatus } from '../../components/request-status/request-status';
 
 export const Feed: FC = () => {
 	const showOnlyOrder = useOrderModal();
-	const { isLoading } = useGetAllOrdersQuery();
+	const { data } = useGetAllOrdersQuery();
 
 	return (
 		<>
 			{!showOnlyOrder && (
 				<>
-					{isLoading && <RequestStatus state="pending" />}
+					{data?.state == 'init' && <RequestStatus state="pending" />}
 					<OrdersFeed />
 					<OrdersSummary />
 				</>

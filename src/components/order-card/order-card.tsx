@@ -26,16 +26,16 @@ export const OrderCard: FC<OrderCardPropTypes> = ({
 	const { setKey } = useStorage();
 	const { ingredients } = useAppSelector((state) => state.ingredients);
 
-	const mapOfImages = useMemo(
+	const mapUrlsPrices = useMemo(
 		() =>
 			ingredients
 				.map((ing) => ing.ingredient)
 				.reduce((acc, cur) => {
 					if (!acc.has(cur._id)) {
-						acc.set(cur._id, cur.imageMobile);
+						acc.set(cur._id, { url: cur.imageMobile, price: cur.price });
 					}
 					return acc;
-				}, new Map<string, string>()),
+				}, new Map<string, { url: string; price: number }>()),
 		[ingredients]
 	);
 
@@ -51,7 +51,16 @@ export const OrderCard: FC<OrderCardPropTypes> = ({
 	);
 
 	const getStatus = (status: OrderStatus) => map.get(status);
-	const imgs = order.ingredients.map((ing) => mapOfImages.get(ing) || '');
+	const imgs: string[] = order.ingredients.map(
+		(ing) => mapUrlsPrices.get(ing)?.url || ''
+	);
+
+	const price = order.ingredients.reduce((acc, cur) => {
+		return acc + (mapUrlsPrices.get(cur)?.price || 0);
+	}, 0);
+
+	const MAX_IMGS = 6;
+	const rest = imgs.length - MAX_IMGS;
 
 	return (
 		<div
@@ -81,18 +90,20 @@ export const OrderCard: FC<OrderCardPropTypes> = ({
 			)}
 			<div className={`${styles['footer']} mt-6`}>
 				<div className={`${styles['ingredients']}`}>
-					{imgs.map((e, i) => (
-						<IngredientCircle
-							key={i}
-							url={e}
-							margin={i}
-							zIndex={imgs.length - i}
-							rest={i < 5 ? 0 : 3}
-						/>
-					))}
+					{imgs
+						.filter((e, i) => i < MAX_IMGS)
+						.map((e, i) => (
+							<IngredientCircle
+								key={i}
+								url={e}
+								margin={i}
+								zIndex={imgs.length - i}
+								rest={i < MAX_IMGS - 1 ? 0 : rest}
+							/>
+						))}
 				</div>
 				<div className={`${styles['price']}`}>
-					<p className="text text_type_digits-default mr-2">480</p>
+					<p className="text text_type_digits-default mr-2">{price}</p>
 					<CurrencyIcon type="primary" />
 				</div>
 			</div>
