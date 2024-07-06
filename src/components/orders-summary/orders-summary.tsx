@@ -1,25 +1,41 @@
 import { FC } from 'react';
 import styles from './orders-summary.module.scss';
+import { useGetAllOrdersQuery } from '../../utils/api/orders-feed';
+import { RequestStatus } from '../request-status/request-status';
+import { order } from '../../services/reducers/order';
 
 export const OrdersSummary: FC = () => {
+	const { data } = useGetAllOrdersQuery();
+	if (!data) {
+		return <></>;
+	}
+	console.log({ data });
+
 	const maxColumnSize = 10;
-	const orders = Array.from(Array(15));
+	const ready = data
+		? data.orders.filter((order) => order.status === 'done')
+		: [];
 	const columns: number[][] = [];
-	orders.forEach((v, i) => {
+	ready.forEach((order, i) => {
 		if (i % maxColumnSize == 0) {
 			columns.push([]);
 		}
-		columns[columns.length - 1].push(345311);
+		columns[columns.length - 1].push(order.number);
 	});
 
-	const inProcessing = Array.from(Array(6));
+	const inProcessing = data
+		? data.orders.filter((order) => order.status !== 'done')
+		: [];
 	const columnsProcessing: number[][] = [];
-	inProcessing.forEach((v, i) => {
+	inProcessing.forEach((order, i) => {
 		if (i % maxColumnSize == 0) {
 			columnsProcessing.push([]);
 		}
-		columnsProcessing[columnsProcessing.length - 1].push(345311);
+		columnsProcessing[columnsProcessing.length - 1].push(order.number);
 	});
+
+	const formatNumber = (number: number) =>
+		new Intl.NumberFormat('ru-RU').format(number);
 
 	return (
 		<section className={`mt-25 ${styles['container']} ml-15`}>
@@ -27,13 +43,16 @@ export const OrdersSummary: FC = () => {
 				<section>
 					<header className={`mb-6 text text_type_main-large`}>Готовы:</header>
 					<section className={`${styles.columns}`}>
-						{columns.map((column) => {
+						{columns.map((column, i) => {
 							return (
-								<div className={`${styles.column} mr-2`}>
-									{column.map((number) => {
+								<div className={`${styles.column} mr-2`} key={i}>
+									{column.map((number, i) => {
 										return (
-											<p className="text text_type_digits-default text_color_success mb-2">
-												034531
+											<p
+												className="text text_type_digits-default text_color_success mb-2"
+												key={i}
+											>
+												{number}
 											</p>
 										);
 									})}
@@ -44,16 +63,19 @@ export const OrdersSummary: FC = () => {
 				</section>
 				<section className="ml-9">
 					<header className={`mb-6 text text_type_main-large`}>
-						В работе:
+						В&nbsp;работе:
 					</header>
 					<section className={`${styles.columns}`}>
-						{columnsProcessing.map((column) => {
+						{columnsProcessing.map((column, i) => {
 							return (
-								<div className={`${styles.column} mr-2`}>
-									{column.map((number) => {
+								<div className={`${styles.column} mr-2`} key={i}>
+									{column.map((number, i) => {
 										return (
-											<p className="text text_type_digits-default text_color_primary mb-2">
-												034531
+											<p
+												className="text text_type_digits-default text_color_primary mb-2"
+												key={i}
+											>
+												{number}
 											</p>
 										);
 									})}
@@ -67,12 +89,14 @@ export const OrdersSummary: FC = () => {
 				Выполнено за всё время:
 			</header>
 			<p className={`text text_type_digits-large mb-15 ${styles['number']}`}>
-				28 752
+				{formatNumber(data.total)}
 			</p>
 			<header className={`text text_type_main-large`}>
 				Выполнено за сегодня:
 			</header>
-			<p className={`text text_type_digits-large ${styles['number']}`}>138</p>
+			<p className={`text text_type_digits-large ${styles['number']}`}>
+				{formatNumber(data.totalToday)}
+			</p>
 		</section>
 	);
 };

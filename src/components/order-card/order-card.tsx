@@ -4,12 +4,17 @@ import { IngredientCircle } from '../ingredient-circle/ingredient-circle';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useNavigate } from 'react-router-dom';
 import { useStorage } from '../../hooks/useStorage';
+import { OrderInFeed } from '../../types/application-types/order-in-feed';
 
 export type OrderCardPropTypes = {
 	inProfile?: boolean;
+	order: OrderInFeed;
 };
 
-export const OrderCard: FC<OrderCardPropTypes> = ({ inProfile = false }) => {
+export const OrderCard: FC<OrderCardPropTypes> = ({
+	inProfile = false,
+	order,
+}) => {
 	const navigate = useNavigate();
 	const { setKey } = useStorage();
 
@@ -37,7 +42,7 @@ export const OrderCard: FC<OrderCardPropTypes> = ({ inProfile = false }) => {
 			}}
 		>
 			<div className={`${styles['number']} mb-6`}>
-				<p className="text text_type_digits-default">#034535</p>
+				<p className="text text_type_digits-default">#{order.number}</p>
 				<p className="text text_type_main-default text_color_inactive">
 					Сегодня, 16:20
 				</p>
