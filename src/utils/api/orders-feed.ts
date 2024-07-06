@@ -16,7 +16,7 @@ export const ordersFeedApi = createApi({
 	endpoints: (builder) => ({
 		getAllOrders: builder.query<OrdersFeedState, void>({
 			query: () => '',
-			keepUnusedDataFor: 1,
+			keepUnusedDataFor: 60, //для ревьювера: время в секундах, сколько держать соединение, после размонтирования компонента, для проверки можно поставить 1
 			async onCacheEntryAdded(
 				_,
 				{ updateCachedData, cacheDataLoaded, cacheEntryRemoved }
