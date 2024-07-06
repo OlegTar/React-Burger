@@ -12,6 +12,7 @@ import {
 	OrderStatus,
 } from '../../types/application-types/order-in-feed';
 import { useAppSelector } from '../../hooks/redux';
+import { getStatus } from '../../utils/common';
 
 export type OrderCardPropTypes = {
 	inProfile?: boolean;
@@ -39,18 +40,6 @@ export const OrderCard: FC<OrderCardPropTypes> = ({
 		[ingredients]
 	);
 
-	const map = useMemo(
-		() =>
-			new Map<OrderStatus, string>([
-				['done', 'Готов'],
-				['pending', 'Готовится'],
-				['cancelled', 'Отменён'],
-				['created', 'Создан'],
-			]),
-		[]
-	);
-
-	const getStatus = (status: OrderStatus) => map.get(status);
 	const imgs: string[] = order.ingredients.map(
 		(ing) => mapUrlsPrices.get(ing)?.url || ''
 	);

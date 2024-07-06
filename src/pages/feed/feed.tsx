@@ -5,16 +5,14 @@ import { Outlet } from 'react-router';
 import { useOrderModal } from '../../hooks/useOrderModal';
 import { useGetAllOrdersQuery } from '../../utils/api/orders-feed';
 import { RequestStatus } from '../../components/request-status/request-status';
+import { useAppSelector } from '../../hooks/redux';
 
 export const Feed: FC = () => {
 	const showOnlyOrder = useOrderModal();
-	const { data } = useGetAllOrdersQuery();
-
 	return (
 		<>
 			{!showOnlyOrder && (
 				<>
-					{data?.state == 'init' && <RequestStatus state="pending" />}
 					<OrdersFeed />
 					<OrdersSummary />
 				</>

@@ -1,14 +1,10 @@
 import { FC } from 'react';
 import styles from './orders-summary.module.scss';
 import { useGetAllOrdersQuery } from '../../utils/api/orders-feed';
+import { useAppSelector } from '../../hooks/redux';
 
 export const OrdersSummary: FC = () => {
-	const { data } = useGetAllOrdersQuery();
-
-	if (!data) {
-		return <></>;
-	}
-
+	const data = useAppSelector((data) => data.feed);
 	const maxColumnSize = 10;
 	const ready = data
 		? data.orders.filter((order) => order.status === 'done')

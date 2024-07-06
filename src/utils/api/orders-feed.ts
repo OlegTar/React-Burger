@@ -1,5 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { OrdersFeedState } from '../../types/application-types/orders-feed-state';
+import { setOrders } from '../../services/reducers/feed';
 
 const initialState: OrdersFeedState = {
 	orders: [],
@@ -16,10 +17,10 @@ export const ordersFeedApi = createApi({
 	endpoints: (builder) => ({
 		getAllOrders: builder.query<OrdersFeedState, void>({
 			query: () => '',
-			keepUnusedDataFor: 60, //для ревьювера: время в секундах, сколько держать соединение, после размонтирования компонента, для проверки можно поставить 1
+			keepUnusedDataFor: 1, //для ревьювера: время в секундах, сколько держать соединение, после размонтирования компонента, для проверки можно поставить 1
 			async onCacheEntryAdded(
 				_,
-				{ updateCachedData, cacheDataLoaded, cacheEntryRemoved }
+				{ updateCachedData, cacheDataLoaded, cacheEntryRemoved, dispatch }
 			) {
 				// create a websocket connection when the cache subscription starts
 				const ws = new WebSocket('wss://norma.nomoreparties.space/orders/all');
@@ -32,6 +33,7 @@ export const ordersFeedApi = createApi({
 					// update our query result with the received message
 					const listener = (event: MessageEvent) => {
 						const data = JSON.parse(event.data) as OrdersFeedState;
+						dispatch(setOrders(data));
 						updateCachedData((draft) => {
 							draft.orders = data.orders;
 							draft.total = data.total;
@@ -49,7 +51,7 @@ export const ordersFeedApi = createApi({
 				await cacheEntryRemoved;
 				console.log('connection closed');
 				// perform cleanup steps once the `cacheEntryRemoved` promise resolves
-				ws.close();
+				ws.close(); //для ревьювера: посмотрите комент про keepUnusedDataFor
 			},
 		}),
 	}),

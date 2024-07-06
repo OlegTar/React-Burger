@@ -12,6 +12,7 @@ import { OrderRequest } from '../types/requests/order-request';
 import { LogoutRequest } from '../types/requests/logout-request';
 import { SimpleResponse } from '../types/responses/simple-response';
 import { ApplicationResponse } from '../types/responses/response-type';
+import { OrderStatus } from '../types/application-types/order-in-feed';
 
 const refreshAccessToken = async () => {
 	const axiosInstance = axios.create();
@@ -116,3 +117,12 @@ export const request = async <T extends ApplicationResponse>(
 	});
 	return (await checkResponse(response)) as T;
 };
+
+const map = new Map<OrderStatus, string>([
+	['done', 'Готов'],
+	['pending', 'Готовится'],
+	['cancelled', 'Отменён'],
+	['created', 'Создан'],
+]);
+
+export const getStatus = (status: OrderStatus) => map.get(status);
