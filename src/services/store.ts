@@ -10,6 +10,7 @@ import { user, UserState } from './reducers/user';
 import { ordersFeedApi } from '../utils/api/orders-feed';
 import { feed } from './reducers/feed';
 import { OrdersFeedState } from '../types/application-types/orders-feed-state';
+import { orderDetails, OrderDetailsState } from './reducers/order-details';
 
 export const store = configureStore({
 	reducer: rootReducer,
@@ -23,8 +24,9 @@ export type AppState = {
 	[constructorIngredients.reducerPath]: ConstructorIngredientsState;
 	[order.reducerPath]: OrderState;
 	[user.reducerPath]: UserState;
-	//[ordersFeedApi.reducerPath]: ReturnType<typeof ordersFeedApi.reducer>;
+	[ordersFeedApi.reducerPath]: ReturnType<typeof ordersFeedApi.reducer>;
 	[feed.reducerPath]: OrdersFeedState;
+	[orderDetails.reducerPath]: OrderDetailsState;
 };
 
 export type AppStore = typeof store;

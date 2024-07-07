@@ -45,6 +45,7 @@ export const user = createSlice({
 			.addCase(login.rejected, (state) => {
 				state.user = null;
 				state.state = 'error';
+				state.errorMessage = 'Неверный логин/пароль';
 			})
 			.addCase(logout.pending, (state) => {
 				state.state = 'pending';
@@ -106,6 +107,7 @@ export const user = createSlice({
 			.addCase(getUser.rejected, (state) => {
 				state.state = 'error';
 				state.user = null;
+				state.errorMessage = 'Не удалось получить данные пользователя';
 			})
 			.addCase(getUser.fulfilled, (state, action) => {
 				state.state = 'success';

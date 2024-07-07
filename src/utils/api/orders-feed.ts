@@ -2,17 +2,10 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { OrdersFeedState } from '../../types/application-types/orders-feed-state';
 import { setOrders } from '../../services/reducers/feed';
 
-const initialState: OrdersFeedState = {
-	orders: [],
-	total: 0,
-	totalToday: 0,
-	state: 'init',
-};
-
 export const ordersFeedApi = createApi({
 	reducerPath: 'ordersFeed',
 	baseQuery: () => {
-		return { data: initialState };
+		return { data: {} };
 	},
 	endpoints: (builder) => ({
 		getAllOrders: builder.query<OrdersFeedState, void>({
@@ -34,12 +27,12 @@ export const ordersFeedApi = createApi({
 					const listener = (event: MessageEvent) => {
 						const data = JSON.parse(event.data) as OrdersFeedState;
 						dispatch(setOrders(data));
-						updateCachedData((draft) => {
-							draft.orders = data.orders;
-							draft.total = data.total;
-							draft.totalToday = data.totalToday;
-							draft.state = 'loaded';
-						});
+						// updateCachedData((draft) => {
+						// 	draft.orders = data.orders;
+						// 	draft.total = data.total;
+						// 	draft.totalToday = data.totalToday;
+						// 	draft.state = 'loaded';
+						// });
 					};
 
 					ws.addEventListener('message', listener);

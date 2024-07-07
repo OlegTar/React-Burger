@@ -49,6 +49,7 @@ axios.interceptors.response.use(
 			originalRequest._retry = true;
 			const accessToken = await refreshAccessToken();
 			axios.defaults.headers.common['Authorization'] = accessToken;
+			originalRequest.headers['Authorization'] = accessToken;
 			return axios(originalRequest);
 		}
 		return Promise.reject(error);

@@ -15,9 +15,15 @@ import { useForm } from '../../hooks/useForm';
 export const Login: FC = () => {
 	const location = useLocation();
 	const dispatch = useAppDispatch();
-	const { state, user } = useAppSelector((state) => ({
+
+	// if (localStorage.getItem(accessToken)) {
+	// 	dispatch(getUser());
+	// }
+
+	const { state, user, error } = useAppSelector((state) => ({
 		state: state.user.state,
 		user: state.user.user,
+		error: state.user.errorMessage,
 	}));
 
 	const { values, handleChange } = useForm<{
@@ -43,7 +49,7 @@ export const Login: FC = () => {
 			{location.state?.message && (
 				<MyNotification success={true} message={location.state.message} />
 			)}
-			<RequestStatus state={state} errorMessage={'Неверные логин и пароль'} />
+			<RequestStatus state={state} errorMessage={error} />
 			<form
 				onSubmit={(e) => {
 					e.preventDefault();
