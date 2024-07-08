@@ -21,7 +21,6 @@ import { Feed } from '../../pages/feed';
 import { OrderPage } from '../../pages/order-page/order-page';
 import { ProfileOrders } from '../../pages/profile-orders';
 import { ProfileIndex } from '../../pages/profile-index';
-import { Order } from '../order/order';
 
 const marginFromEnd = 10;
 
@@ -127,7 +126,10 @@ function App() {
 							}
 						/>
 						<Route path="/feed/:number" element={<OrderPage />} />
-						<Route path="/profile/orders/:number" element={<OrderPage />} />
+						<Route
+							path="/profile/orders/:number"
+							element={<OnlyAuth component={<OrderPage />} />}
+						/>
 					</Routes>
 				)}
 			</main>

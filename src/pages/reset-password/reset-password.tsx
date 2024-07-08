@@ -7,9 +7,9 @@ import { Link, Navigate, useLocation } from 'react-router-dom';
 import styles from './reset-password.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { RequestStatus } from '../../components/request-status/request-status';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { resetPasswordCalled } from '../../config';
-import { reset } from '../../services/reducers/user';
+import { resetMessages } from '../../services/reducers/user';
 import { changePassword as changePasswordAction } from '../../services/actions/change-password';
 import { MyNotification } from '../../components/my-notification/my-notification';
 import { useForm } from '../../hooks/useForm';
@@ -20,10 +20,11 @@ export const ResetPassword: FC = () => {
 
 	const location = useLocation();
 	const dispatch = useAppDispatch();
-	const { state, errorMessage } = useAppSelector((state) => ({
-		state: state.user.state,
-		errorMessage: state.user.errorMessage,
-	}));
+	const {
+		passwordResetState: state,
+		changePasswordState,
+		errorMessage,
+	} = useAppSelector((state) => state.user);
 	const { values, handleChange } = useForm<{
 		token: string;
 		password: string;
@@ -33,10 +34,6 @@ export const ResetPassword: FC = () => {
 	});
 
 	const { password, token } = values;
-
-	useEffect(() => {
-		dispatch(reset());
-	}, [dispatch]);
 
 	const changePassword = () => {
 		dispatch(
@@ -50,7 +47,8 @@ export const ResetPassword: FC = () => {
 	if (!isResetPasswordCalled) {
 		if (state === 'init') {
 			return <Navigate to={'/forgot-password'} replace />;
-		} else if (state === 'success') {
+		} else if (changePasswordState === 'success') {
+			dispatch(resetMessages());
 			return (
 				<Navigate to={'/login'} state={{ message: 'Пароль изменён' }} replace />
 			);

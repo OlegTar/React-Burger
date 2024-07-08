@@ -21,7 +21,8 @@ export const feedReducer = createReducer(initialState, (builder) => {
 			state.state = 'open';
 		})
 		.addCase(socketClosed, (state) => {
-			state.state = 'closed';
+			state.state = 'init';
+			state.orders = [];
 		})
 		.addCase(socketError, (state, action) => {
 			state.state = 'error';

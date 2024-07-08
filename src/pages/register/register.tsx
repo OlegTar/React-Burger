@@ -9,13 +9,12 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { register as registerAction } from '../../services/actions/register';
 import { RequestStatus } from '../../components/request-status/request-status';
 import { useForm } from '../../hooks/useForm';
+import { resetMessages } from '../../services/reducers/user';
+import { login } from '../../services/actions/login';
 
 export const Register: FC = () => {
 	const [showPassword, setShowPassword] = useState(false);
-	const { state, user } = useAppSelector((state) => ({
-		state: state.user.state,
-		user: state.user.user,
-	}));
+	const { registerState: state, user } = useAppSelector((state) => state.user);
 
 	const { values, handleChange } = useForm<{
 		name: string;
@@ -42,6 +41,12 @@ export const Register: FC = () => {
 	}, [name, email, password, dispatch]);
 
 	if (state === 'success' && user !== null) {
+		dispatch(
+			login({
+				email,
+				password,
+			})
+		);
 		return <Navigate to="/" replace></Navigate>;
 	}
 

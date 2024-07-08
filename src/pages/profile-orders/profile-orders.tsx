@@ -42,7 +42,12 @@ export const ProfileOrders: FC = () => {
 
 	return (
 		<>
-			{state === 'init' && <RequestStatus state="pending" />}
+			{(state === 'init' || state === 'open' || state === 'error') && (
+				<RequestStatus
+					state={state === 'error' ? 'error' : 'pending'}
+					errorMessage={'Не удалось соединиться с сокетом'}
+				/>
+			)}
 			<ul className={`${styles['orders-list']}`}>
 				{ordersSorted.map((order) => (
 					<li key={order._id} className="mr-2">

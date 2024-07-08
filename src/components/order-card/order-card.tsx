@@ -86,7 +86,15 @@ export const OrderCard: FC<OrderCardPropTypes> = ({
 			</div>
 			<p className="text text_type_main-medium">{order.name}</p>
 			{inProfile && (
-				<p className="text text_type_main-default text_color_success mt-2">
+				<p
+					className={`text text_type_main-default mt-2 ${
+						order.status === 'done'
+							? 'text_color_success'
+							: order.status === 'cancelled'
+							? 'text_color_error'
+							: ''
+					}`}
+				>
 					{getStatus(order.status)}
 				</p>
 			)}

@@ -3,16 +3,18 @@ import {
 	PasswordInput,
 	Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { changeUserInfo as changeUserInfoAction } from '../../services/actions/change-user-info';
 
 import { useForm } from '../../hooks/useForm';
-import { User } from '../../types/application-types/user';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { RequestStatus } from '../../components/request-status/request-status';
+import { resetMessages } from '../../services/reducers/user';
 
 export const ProfileIndex: FC = () => {
-	const { user, state, errorMessage } = useAppSelector((state) => state.user);
+	const { user, state, errorMessage, successMessage } = useAppSelector(
+		(state) => state.user
+	);
 	const { values, setValues, handleChange } = useForm<{
 		name: string;
 		email: string;
@@ -23,8 +25,13 @@ export const ProfileIndex: FC = () => {
 		password: '',
 	});
 	const { name, email, password } = values;
-	const [successMessage, setSuccessMessage] = useState<string>('');
 	const dispatch = useAppDispatch();
+	useEffect(() => {
+		return () => {
+			dispatch(resetMessages());
+		};
+		// eslint-disable-next-line
+	}, []);
 
 	if (user == null) {
 		throw new Error('Ошибка в коде');
@@ -42,7 +49,6 @@ export const ProfileIndex: FC = () => {
 		user.name !== name || user.email !== email || password !== '';
 
 	const changeUserInfo = useCallback(() => {
-		setSuccessMessage('Данные пользователя обновлены');
 		dispatch(
 			changeUserInfoAction({
 				name,
@@ -117,6 +123,3 @@ export const ProfileIndex: FC = () => {
 		</>
 	);
 };
-function logoutAction(): any {
-	throw new Error('Function not implemented.');
-}

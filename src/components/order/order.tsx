@@ -21,6 +21,9 @@ export const Order: FC<OrderPropTypes> = ({ isInModal = true }) => {
 	const modalContext = useContext(ModalContext);
 	const { number: numberS } = useParams();
 	const { orders } = useAppSelector((state) => state.feed);
+	const { orders: privateOrders } = useAppSelector(
+		(state) => state.privateFeed
+	);
 	const { ingredients } = useAppSelector((data) => data.ingredients);
 	const {
 		success,
@@ -83,8 +86,11 @@ export const Order: FC<OrderPropTypes> = ({ isInModal = true }) => {
 			return map;
 		}, new Map<string, { name: string; price: number; type: FillingType; image: string }>());
 
-	//ищём сначала в state'е вебсокета
+	//ищём сначала в state'е вебсокетов
 	let order = orders.find((order) => order.number === number);
+	if (!order) {
+		order = privateOrders.find((order) => order.number === number);
+	}
 
 	let additionalClass = '';
 	if (!isInModal) {
