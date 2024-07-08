@@ -14,12 +14,12 @@ import { orderDetails, OrderDetailsState } from './reducers/order-details';
 import { socketMiddleware } from './middlewares/socketMiddleware';
 import { ordersAll, ordersPrivate } from '../config';
 import {
-	socketClose as socketDisconnect,
+	socketDisconnect as socketDisconnect,
 	socketClosed,
 	socketError,
 	socketMessage,
 	socketOpen,
-	socketPrivateClose as socketPrivateDisconnect,
+	socketPrivateDisconnect as socketPrivateDisconnect,
 	socketPrivateClosed,
 	socketPrivateError,
 	socketPrivateMessage,
@@ -70,5 +70,5 @@ export type AppState = {
 };
 
 export type AppStore = typeof store;
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;

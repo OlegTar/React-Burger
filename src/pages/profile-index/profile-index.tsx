@@ -12,18 +12,14 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { RequestStatus } from '../../components/request-status/request-status';
 
 export const ProfileIndex: FC = () => {
-	const { user, state, errorMessage } = useAppSelector((state) => ({
-		user: state.user.user as User,
-		state: state.user.state,
-		errorMessage: state.user.errorMessage,
-	}));
+	const { user, state, errorMessage } = useAppSelector((state) => state.user);
 	const { values, setValues, handleChange } = useForm<{
 		name: string;
 		email: string;
 		password: string;
 	}>({
-		name: user.name,
-		email: user.email,
+		name: user ? user.name : '',
+		email: user ? user.email : '',
 		password: '',
 	});
 	const { name, email, password } = values;

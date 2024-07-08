@@ -12,11 +12,7 @@ export const Profile: FC = () => {
 	const dispatch = useAppDispatch();
 	const showOnlyOrder = useOrderModal();
 
-	const { state, errorMessage } = useAppSelector((state) => ({
-		user: state.user.user as User,
-		state: state.user.state,
-		errorMessage: state.user.errorMessage,
-	}));
+	const { state, errorMessage } = useAppSelector((state) => state.user);
 
 	useEffect(() => {
 		if (!showOnlyOrder) {

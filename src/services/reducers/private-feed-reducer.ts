@@ -28,7 +28,6 @@ export const privateFeedReducer = createReducer(initialState, (builder) => {
 			state.errorMessage = action.payload;
 		})
 		.addCase(socketPrivateMessage, (state, action) => {
-			console.log('dispatch!');
 			const { payload } = action;
 			state.orders = payload.orders;
 			state.total = payload.total;

@@ -5,7 +5,7 @@ import {
 	CurrencyIcon,
 	FormattedDate,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useStorage } from '../../hooks/useStorage';
 import {
 	OrderInFeed,
@@ -29,6 +29,7 @@ export const OrderCard: FC<OrderCardPropTypes> = ({
 	const navigate = useNavigate();
 	const { setKey } = useStorage();
 	const { ingredients } = useAppSelector((state) => state.ingredients);
+	const location = useLocation();
 
 	const mapUrlsPrices = useMemo(
 		() =>
@@ -63,9 +64,17 @@ export const OrderCard: FC<OrderCardPropTypes> = ({
 				setKey('modal', 'true');
 				dispatch(resetState());
 				if (inProfile) {
-					navigate(`/profile/orders/${order.number}`);
+					navigate(`/profile/orders/${order.number}`, {
+						state: {
+							background: location,
+						},
+					});
 				} else {
-					navigate(`/feed/${order.number}`);
+					navigate(`/feed/${order.number}`, {
+						state: {
+							background: location,
+						},
+					});
 				}
 			}}
 		>

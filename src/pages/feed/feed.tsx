@@ -6,7 +6,7 @@ import { useOrderModal } from '../../hooks/useOrderModal';
 import { useDispatch } from 'react-redux';
 import {
 	socketStart,
-	socketClose,
+	socketDisconnect,
 } from '../../services/actions/socket-actions';
 import { ordersAll } from '../../config';
 
@@ -15,16 +15,14 @@ export const Feed: FC = () => {
 	const dispatch = useDispatch();
 	useEffect(() => {
 		if (!showOnlyOrder) {
-			console.log('start!');
 			dispatch(socketStart(ordersAll));
 			return () => {
 				if (!showOnlyOrder) {
-					console.log('close!');
-					dispatch(socketClose());
+					dispatch(socketDisconnect());
 				}
 			};
 		}
-	});
+	}, []);
 
 	return (
 		<>

@@ -1,15 +1,8 @@
-import { useDispatch } from 'react-redux';
-import { ordersAll } from '../../config';
 import { useAppSelector } from '../../hooks/redux';
-import { useGetOrdersQuery } from '../../utils/api/orders-feed';
 import { OrderCard } from '../order-card/order-card';
 import { RequestStatus } from '../request-status/request-status';
 import styles from './orders-feed.module.scss';
-import { FC, useEffect } from 'react';
-import {
-	socketClose,
-	socketStart,
-} from '../../services/actions/socket-actions';
+import { FC } from 'react';
 
 export const OrdersFeed: FC = () => {
 	const { orders, state } = useAppSelector((state) => state.feeds);

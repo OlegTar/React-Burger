@@ -6,7 +6,7 @@ import { OrderInFeed } from '../../types/application-types/order-in-feed';
 import { useDispatch } from 'react-redux';
 import {
 	socketStart,
-	socketClose,
+	socketDisconnect,
 } from '../../services/actions/socket-actions';
 
 export const OrdersSummary: FC = () => {

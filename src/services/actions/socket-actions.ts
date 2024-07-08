@@ -7,7 +7,7 @@ export const socketStart = createAction('socket/start', (url: string) => ({
 }));
 export const socketOpen = createAction('socket/open');
 export const socketClosed = createAction('socket/closed');
-export const socketClose = createAction('socket/close');
+export const socketDisconnect = createAction('socket/disconnect');
 export const socketSend = createAction(
 	'socket/send',
 	(payload: PayloadType) => ({ payload })
@@ -30,7 +30,9 @@ export const socketPrivateStart = createAction(
 );
 export const socketPrivateOpen = createAction('socket/private/open');
 export const socketPrivateClosed = createAction('socket/private/closed');
-export const socketPrivateClose = createAction('socket/private/close');
+export const socketPrivateDisconnect = createAction(
+	'socket/private/disconnect'
+);
 export const socketPrivateSend = createAction(
 	'socket/private/send',
 	(payload: PayloadType) => ({ payload })

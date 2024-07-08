@@ -1,21 +1,16 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { Order } from '../../components/order/order';
-import { useStorage } from '../../hooks/useStorage';
 import { Modal } from '../../components/modal/modal';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 export const OrderPage: FC = () => {
 	const navigate = useNavigate();
-	const { readKey, removeKey } = useStorage();
-	let modal = readKey('modal');
-	useEffect(() => {
-		modal = readKey('modal');
-		return () => {
-			removeKey('modal');
-		};
-	});
+	const location = useLocation();
+	console.log(location.state);
+	const background = location.state && location.state.background;
+	const isInModal = !!background;
 
-	if (modal === 'true') {
+	if (isInModal) {
 		return (
 			<Modal title="" closeModal={() => navigate(-1)}>
 				<Order isInModal={true} />
@@ -24,4 +19,5 @@ export const OrderPage: FC = () => {
 	} else {
 		return <Order isInModal={false} />;
 	}
+	//return <Order isInModal={false} />;;
 };

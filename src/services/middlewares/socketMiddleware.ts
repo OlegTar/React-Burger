@@ -38,19 +38,13 @@ export const socketMiddleware = (
 
 		return (next) => (action) => {
 			const { dispatch } = store;
-			console.log({ action });
-
 			if (start.match(action)) {
-				if (socket == null) {
-					url = action.payload as string;
-					socket = new WebSocket(url);
-					isConnected = true;
-				}
-			}
-			if (socket) {
+				url = action.payload as string;
+				socket = new WebSocket(url);
+				isConnected = true;
+
 				// функция, которая вызывается при открытии сокета
 				socket.onopen = (event) => {
-					//console.log(`n = ${n}`);
 					console.log({ url });
 					dispatch(open());
 				};
@@ -58,63 +52,59 @@ export const socketMiddleware = (
 				// функция, которая вызывается при ошибке соединения
 				socket.onerror = (event: Event) => {
 					console.log(event);
-					//dispatch(error('Произошла ошибка'));
-					//dispatch(close());
+					dispatch(error('Произошла ошибка'));
 				};
 
 				// функция, которая вызывается при получения события от сервера
-				socket.onmessage = (event: MessageEvent) => {
-					console.log('message1');
+				socket.onmessage = async (event: MessageEvent) => {
 					try {
-						const data = JSON.parse(event.data) as OrdersFeedState;
-						console.log(data);
-						//dispatch(message(data));
+						const data = JSON.parse(event.data);
+						if (
+							withTokenRefresh &&
+							(data as { message: string }).message ===
+								'Invalid or missing token'
+						) {
+							try {
+								const newAccessToken = await refreshAccessToken();
 
-						//let data: OrdersFeedState; // & { message?: string };
-						//throw new Error('asdfasdf');
-						// 	// if (
-						// 	// 	withTokenRefresh &&
-						// 	// 	data.message === 'Invalid or missing token'
-						// 	// ) {
-						// 	// 	try {
-						// 	// 		const newAccessToken = await refreshAccessToken();
-						// 	// 		const wssUrl = new URL(url);
-						// 	// 		wssUrl.searchParams.set(
-						// 	// 			'token',
-						// 	// 			newAccessToken.replace('Bearer ', '')
-						// 	// 		);
-						// 	// 		dispatch(close());
-						// 	// 		dispatch(start(wssUrl.toString()));
-						// 	// 	} catch (e) {
-						// 	// 		throw new Error('Не удалось обновить токен');
-						// 	// 	}
-						// 	// } else {
-						// 	//}
+								const wssUrl = new URL(url);
+								wssUrl.searchParams.set(
+									'token',
+									newAccessToken.replace('Bearer ', '')
+								);
+								dispatch(start(wssUrl.toString()));
+							} catch (err) {
+								dispatch(error((err as { message: string }).message));
+							}
+
+							dispatch(disconnect());
+						} else {
+							dispatch(message(data));
+						}
 					} catch (err) {
-						// 	// const e = err as Error;
-						// 	// dispatch(error(e.message));
-						// 	//isConnected = false;
-						// 	//dispatch(close());
+						const e = err as Error;
+						dispatch(error(e.message));
 					}
 				};
 
 				socket.onclose = () => {
-					// if (isConnected) {
-					// 	console.log('reconnect');
-					// 	if (reconnectTimer) {
-					// 		clearTimeout(reconnectTimer);
-					// 	}
-					// 	reconnectTimer = window.setTimeout(() => {
-					// 		dispatch(start(url));
-					// 	}, RECONNECT_PERIOD);
-					// }
-					//dispatch(closed());
-				};
+					dispatch(closed());
 
-				if (send.match(action)) {
-					//socket.send(JSON.stringify(action.payload));
-				} else if (disconnect.match(action)) {
-					console.log('close!!');
+					if (isConnected) {
+						console.log('reconnect');
+						reconnectTimer = window.setTimeout(() => {
+							dispatch(start(url));
+						}, RECONNECT_PERIOD);
+					}
+				};
+			}
+
+			if (socket) {
+				if (send && send.match(action)) {
+					socket.send(JSON.stringify(action.payload));
+				}
+
+				if (disconnect.match(action)) {
 					isConnected = false;
 					clearTimeout(reconnectTimer);
 					reconnectTimer = 0;

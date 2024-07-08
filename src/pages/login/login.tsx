@@ -20,11 +20,11 @@ export const Login: FC = () => {
 	// 	dispatch(getUser());
 	// }
 
-	const { state, user, error } = useAppSelector((state) => ({
-		state: state.user.state,
-		user: state.user.user,
-		error: state.user.errorMessage,
-	}));
+	const {
+		state,
+		user,
+		errorMessage: error,
+	} = useAppSelector((state) => state.user);
 
 	const { values, handleChange } = useForm<{
 		email: string;

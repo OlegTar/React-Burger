@@ -7,6 +7,7 @@ import { FC } from 'react';
 export const IngredientDetails: FC = () => {
 	const { id } = useParams() || '';
 	const location = useLocation();
+	console.log(location.state);
 	const background = location.state && location.state.background;
 	const isInModal = !!background;
 
