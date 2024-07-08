@@ -1,17 +1,21 @@
 import { useAppSelector } from '../../hooks/redux';
+import { sortByDateReversed } from '../../utils/common';
 import { OrderCard } from '../order-card/order-card';
 import { RequestStatus } from '../request-status/request-status';
 import styles from './orders-feed.module.scss';
 import { FC } from 'react';
 
 export const OrdersFeed: FC = () => {
-	const { orders, state } = useAppSelector((state) => state.feeds);
+	const { orders, state } = useAppSelector((state) => state.feed);
+
+	let ordersSorted = [...orders];
+	ordersSorted.sort(sortByDateReversed);
 
 	return (
 		<>
-			{(state == 'init' || state == 'error') && (
+			{(state === 'init' || state === 'error') && (
 				<RequestStatus
-					state={`${state == 'init' ? 'pending' : 'error'}`}
+					state={`${state === 'init' ? 'pending' : 'error'}`}
 					errorMessage="Не удалось установить соединение"
 				/>
 			)}
@@ -20,8 +24,8 @@ export const OrdersFeed: FC = () => {
 					Лента заказов
 				</header>
 				<section className={`${styles['cards']} pr-2`}>
-					{orders.map((order, i) => (
-						<OrderCard key={i} order={order} />
+					{ordersSorted.map((order) => (
+						<OrderCard key={order._id} order={order} />
 					))}
 				</section>
 			</section>

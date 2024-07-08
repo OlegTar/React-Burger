@@ -1,23 +1,17 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import styles from './orders-summary.module.scss';
-import { useGetOrdersQuery } from '../../utils/api/orders-feed';
 import { useAppSelector } from '../../hooks/redux';
 import { OrderInFeed } from '../../types/application-types/order-in-feed';
-import { useDispatch } from 'react-redux';
-import {
-	socketStart,
-	socketDisconnect,
-} from '../../services/actions/socket-actions';
 
 export const OrdersSummary: FC = () => {
-	const data = useAppSelector((data) => data.feeds);
+	const data = useAppSelector((data) => data.feed);
 	const maxColumnSize = 10;
 	const ready = data
 		? data.orders.filter((order: OrderInFeed) => order.status === 'done')
 		: [];
 	const columns: number[][] = [];
 	ready.forEach((order: OrderInFeed, i: number) => {
-		if (i % maxColumnSize == 0) {
+		if (i % maxColumnSize === 0) {
 			columns.push([]);
 		}
 		columns[columns.length - 1].push(order.number);
@@ -28,7 +22,7 @@ export const OrdersSummary: FC = () => {
 		: [];
 	const columnsProcessing: number[][] = [];
 	inProcessing.forEach((order: OrderInFeed, i: number) => {
-		if (i % maxColumnSize == 0) {
+		if (i % maxColumnSize === 0) {
 			columnsProcessing.push([]);
 		}
 		columnsProcessing[columnsProcessing.length - 1].push(order.number);
@@ -46,11 +40,11 @@ export const OrdersSummary: FC = () => {
 						{columns.map((column, i) => {
 							return (
 								<div className={`${styles.column} mr-2`} key={i}>
-									{column.map((number, i) => {
+									{column.map((number) => {
 										return (
 											<p
 												className="text text_type_digits-default text_color_success mb-2"
-												key={i}
+												key={number}
 											>
 												{number}
 											</p>
@@ -73,7 +67,7 @@ export const OrdersSummary: FC = () => {
 										return (
 											<p
 												className="text text_type_digits-default text_color_primary mb-2"
-												key={i}
+												key={number}
 											>
 												{number}
 											</p>

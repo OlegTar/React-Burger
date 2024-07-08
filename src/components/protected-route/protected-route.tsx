@@ -12,13 +12,11 @@ const Protected: FC<TProtectedProps> = ({ onlyUnAuth = false, component }) => {
 	const { state, user } = useAppSelector((store) => store.user);
 	const location = useLocation();
 
-	console.log(location.state);
-
-	if (state == 'pending') {
+	if (state === 'pending' || state === 'init') {
 		return <RequestStatus state="pending" />;
 	}
 
-	const isAuthenticated = state == 'success' && user != null;
+	const isAuthenticated = state === 'success' && user != null;
 
 	if (onlyUnAuth && isAuthenticated) {
 		// Пользователь авторизован, но роут предназначен для неавторизованного пользователя

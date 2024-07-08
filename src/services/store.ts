@@ -7,19 +7,16 @@ import {
 } from './reducers/constructor-ingredients';
 import { OrderState, order } from './reducers/order';
 import { user, UserState } from './reducers/user';
-import { ordersFeedApi } from '../utils/api/orders-feed';
-import { feed } from './reducers/feed';
 import { OrdersFeedState } from '../types/application-types/orders-feed-state';
 import { orderDetails, OrderDetailsState } from './reducers/order-details';
 import { socketMiddleware } from './middlewares/socketMiddleware';
-import { ordersAll, ordersPrivate } from '../config';
 import {
-	socketDisconnect as socketDisconnect,
+	socketDisconnect,
 	socketClosed,
 	socketError,
 	socketMessage,
 	socketOpen,
-	socketPrivateDisconnect as socketPrivateDisconnect,
+	socketPrivateDisconnect,
 	socketPrivateClosed,
 	socketPrivateError,
 	socketPrivateMessage,
@@ -35,7 +32,6 @@ export const store = configureStore({
 	devTools: process.env.NODE_ENV !== 'production',
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat(
-			ordersFeedApi.middleware,
 			socketMiddleware({
 				start: socketStart,
 				open: socketOpen,
@@ -45,15 +41,18 @@ export const store = configureStore({
 				send: socketSend,
 				message: socketMessage,
 			}),
-			socketMiddleware({
-				start: socketPrivateStart,
-				open: socketPrivateOpen,
-				disconnect: socketPrivateDisconnect,
-				closed: socketPrivateClosed,
-				error: socketPrivateError,
-				send: socketPrivateSend,
-				message: socketPrivateMessage,
-			})
+			socketMiddleware(
+				{
+					start: socketPrivateStart,
+					open: socketPrivateOpen,
+					disconnect: socketPrivateDisconnect,
+					closed: socketPrivateClosed,
+					error: socketPrivateError,
+					send: socketPrivateSend,
+					message: socketPrivateMessage,
+				},
+				true
+			)
 		),
 });
 
@@ -62,10 +61,8 @@ export type AppState = {
 	[constructorIngredients.reducerPath]: ConstructorIngredientsState;
 	[order.reducerPath]: OrderState;
 	[user.reducerPath]: UserState;
-	[ordersFeedApi.reducerPath]: ReturnType<typeof ordersFeedApi.reducer>;
-	[feed.reducerPath]: OrdersFeedState;
 	[orderDetails.reducerPath]: OrderDetailsState;
-	feeds: OrdersFeedState;
+	feed: OrdersFeedState;
 	privateFeed: OrdersFeedState;
 };
 

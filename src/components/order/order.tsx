@@ -54,6 +54,7 @@ export const Order: FC<OrderPropTypes> = ({ isInModal = true }) => {
 			window.removeEventListener('load', fixSizeOfList);
 			window.removeEventListener('resize', fixSizeOfList);
 		};
+		// eslint-disable-next-line
 	}, []);
 
 	if (!loading) {
@@ -120,8 +121,6 @@ export const Order: FC<OrderPropTypes> = ({ isInModal = true }) => {
 			return groups;
 		}, {});
 
-		//	const ings = new Set(order.ingredients).values();
-
 		ings = order.ingredients
 			.reduce(
 				(acc: { set: Set<string>; result: string[] }, _id) => {
@@ -133,11 +132,11 @@ export const Order: FC<OrderPropTypes> = ({ isInModal = true }) => {
 				},
 				{ set: new Set<string>(), result: [] }
 			)
-			.result.sort((a_id, b_id) => {
-				if (mapIdToNamePrice.get(a_id)?.type == 'bun') {
+			.result.sort((a_id: string, b_id: string) => {
+				if (mapIdToNamePrice.get(a_id)?.type === 'bun') {
 					return -1;
 				}
-				if (mapIdToNamePrice.get(b_id)?.type == 'bun') {
+				if (mapIdToNamePrice.get(b_id)?.type === 'bun') {
 					return 1;
 				}
 				return 0;
@@ -175,14 +174,22 @@ export const Order: FC<OrderPropTypes> = ({ isInModal = true }) => {
 					<header className="text text_type_main-medium mb-3">
 						{order.name}
 					</header>
-					<p className="text text_type_main-default text_color_success mb-15">
+					<p
+						className={`text text_type_main-default mb-15 ${
+							order.status === 'done'
+								? 'text_color_success'
+								: order.status === 'cancelled'
+								? 'text_color_error'
+								: ''
+						}`}
+					>
 						{getStatus(order.status)}
 					</p>
 					<header className="text text_type_main-medium mb-6">Состав:</header>
 					<section className="mr-10">
 						<ul className={`${styles['list']} pr-6 mt-10`}>
-							{ings.map((_id, i) => (
-								<li className={`${styles['item']} mt-4`} key={i}>
+							{ings.map((_id) => (
+								<li className={`${styles['item']} mt-4`} key={_id}>
 									<div className={`${styles['name']}`}>
 										<IngredientCircle url={mapIdToNamePrice.get(_id)?.image!} />
 										<p className="ml-4 text text_type_main-default">

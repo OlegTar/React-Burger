@@ -3,10 +3,8 @@ import { constructorIngredients } from './constructor-ingredients';
 import { order } from './order';
 import { combineReducers } from 'redux';
 import { user } from './user';
-import { ordersFeedApi } from '../../utils/api/orders-feed';
-import { feed } from './feed';
 import { orderDetails } from './order-details';
-import { feedsReducer } from './feeds';
+import { feedReducer } from './feed-reducer';
 import { privateFeedReducer } from './private-feed-reducer';
 
 export const rootReducer = combineReducers({
@@ -14,9 +12,7 @@ export const rootReducer = combineReducers({
 	[constructorIngredients.reducerPath]: constructorIngredients.reducer,
 	[order.reducerPath]: order.reducer,
 	[user.reducerPath]: user.reducer,
-	[ordersFeedApi.reducerPath]: ordersFeedApi.reducer,
-	[feed.reducerPath]: feed.reducer,
 	[orderDetails.reducerPath]: orderDetails.reducer,
-	feeds: feedsReducer,
+	feed: feedReducer,
 	privateFeed: privateFeedReducer,
 });

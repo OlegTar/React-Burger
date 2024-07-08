@@ -12,7 +12,10 @@ import { OrderRequest } from '../types/requests/order-request';
 import { LogoutRequest } from '../types/requests/logout-request';
 import { SimpleResponse } from '../types/responses/simple-response';
 import { ApplicationResponse } from '../types/responses/response-type';
-import { OrderStatus } from '../types/application-types/order-in-feed';
+import {
+	OrderInFeed,
+	OrderStatus,
+} from '../types/application-types/order-in-feed';
 
 export const refreshAccessToken = async () => {
 	const axiosInstance = axios.create();
@@ -127,3 +130,14 @@ const map = new Map<OrderStatus, string>([
 ]);
 
 export const getStatus = (status: OrderStatus) => map.get(status);
+
+export const sortByDateReversed = (a: OrderInFeed, b: OrderInFeed) => {
+	const dateA = new Date(a.createdAt);
+	const dateB = new Date(b.createdAt);
+	if (dateA < dateB) {
+		return 1;
+	} else if (dateA > dateB) {
+		return -1;
+	}
+	return 0;
+};
