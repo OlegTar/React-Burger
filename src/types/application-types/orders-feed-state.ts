@@ -4,5 +4,5 @@ export type OrdersFeedState = {
 	orders: OrderInFeed[];
 	total: number;
 	totalToday: number;
-	state: 'init' | 'loaded';
+	state: 'init' | 'loaded' | 'open' | 'error' | 'closed';
 };

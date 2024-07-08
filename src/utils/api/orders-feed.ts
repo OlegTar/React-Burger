@@ -8,15 +8,15 @@ export const ordersFeedApi = createApi({
 		return { data: {} };
 	},
 	endpoints: (builder) => ({
-		getAllOrders: builder.query<OrdersFeedState, void>({
-			query: () => '',
+		getOrders: builder.query<OrdersFeedState, string>({
+			query: (url: string) => '',
 			keepUnusedDataFor: 1, //для ревьювера: время в секундах, сколько держать соединение, после размонтирования компонента, для проверки можно поставить 1
 			async onCacheEntryAdded(
-				_,
+				url,
 				{ updateCachedData, cacheDataLoaded, cacheEntryRemoved, dispatch }
 			) {
 				// create a websocket connection when the cache subscription starts
-				const ws = new WebSocket('wss://norma.nomoreparties.space/orders/all');
+				const ws = new WebSocket(url);
 				try {
 					// wait for the initial query to resolve before proceeding
 					await cacheDataLoaded;
@@ -50,4 +50,4 @@ export const ordersFeedApi = createApi({
 	}),
 });
 
-export const { useGetAllOrdersQuery } = ordersFeedApi;
+export const { useGetOrdersQuery } = ordersFeedApi;

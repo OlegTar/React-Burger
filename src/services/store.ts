@@ -11,12 +11,35 @@ import { ordersFeedApi } from '../utils/api/orders-feed';
 import { feed } from './reducers/feed';
 import { OrdersFeedState } from '../types/application-types/orders-feed-state';
 import { orderDetails, OrderDetailsState } from './reducers/order-details';
+import { socketMiddleware } from './middlewares/socketMiddleware';
+import { ordersAll, ordersPrivate } from '../config';
+import {
+	socketClose,
+	socketClosed,
+	socketError,
+	socketMessage,
+	socketOpen,
+	socketSend,
+	socketStart,
+} from './actions/socket-actions';
 
 export const store = configureStore({
 	reducer: rootReducer,
 	devTools: process.env.NODE_ENV !== 'production',
 	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware().concat(ordersFeedApi.middleware),
+		getDefaultMiddleware().concat(
+			ordersFeedApi.middleware,
+			socketMiddleware(ordersAll, {
+				start: socketStart(),
+				open: socketOpen(),
+				close: socketClose(),
+				closed: socketClosed(),
+				error: socketError(),
+				send: socketSend.type,
+				message: socketMessage,
+			})
+			//socketMiddleware(ordersPrivate)
+		),
 });
 
 export type AppState = {
@@ -27,6 +50,7 @@ export type AppState = {
 	[ordersFeedApi.reducerPath]: ReturnType<typeof ordersFeedApi.reducer>;
 	[feed.reducerPath]: OrdersFeedState;
 	[orderDetails.reducerPath]: OrderDetailsState;
+	feeds: OrdersFeedState;
 };
 
 export type AppStore = typeof store;

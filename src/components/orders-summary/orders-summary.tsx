@@ -1,16 +1,17 @@
 import { FC } from 'react';
 import styles from './orders-summary.module.scss';
-import { useGetAllOrdersQuery } from '../../utils/api/orders-feed';
+import { useGetOrdersQuery } from '../../utils/api/orders-feed';
 import { useAppSelector } from '../../hooks/redux';
+import { OrderInFeed } from '../../types/application-types/order-in-feed';
 
 export const OrdersSummary: FC = () => {
-	const data = useAppSelector((data) => data.feed);
+	const data = useAppSelector((data) => data.feeds);
 	const maxColumnSize = 10;
 	const ready = data
-		? data.orders.filter((order) => order.status === 'done')
+		? data.orders.filter((order: OrderInFeed) => order.status === 'done')
 		: [];
 	const columns: number[][] = [];
-	ready.forEach((order, i) => {
+	ready.forEach((order: OrderInFeed, i: number) => {
 		if (i % maxColumnSize == 0) {
 			columns.push([]);
 		}
@@ -18,10 +19,10 @@ export const OrdersSummary: FC = () => {
 	});
 
 	const inProcessing = data
-		? data.orders.filter((order) => order.status !== 'done')
+		? data.orders.filter((order: OrderInFeed) => order.status !== 'done')
 		: [];
 	const columnsProcessing: number[][] = [];
-	inProcessing.forEach((order, i) => {
+	inProcessing.forEach((order: OrderInFeed, i: number) => {
 		if (i % maxColumnSize == 0) {
 			columnsProcessing.push([]);
 		}

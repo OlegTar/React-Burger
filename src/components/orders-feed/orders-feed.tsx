@@ -1,17 +1,34 @@
+import { useDispatch } from 'react-redux';
+import { ordersAll } from '../../config';
 import { useAppSelector } from '../../hooks/redux';
-import { useGetAllOrdersQuery } from '../../utils/api/orders-feed';
+import { useGetOrdersQuery } from '../../utils/api/orders-feed';
 import { OrderCard } from '../order-card/order-card';
 import { RequestStatus } from '../request-status/request-status';
 import styles from './orders-feed.module.scss';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
+import {
+	socketClose,
+	socketStart,
+} from '../../services/actions/socket-actions';
 
 export const OrdersFeed: FC = () => {
-	useGetAllOrdersQuery();
-	const { orders, state } = useAppSelector((state) => state.feed);
+	const dispatch = useDispatch();
+	useEffect(() => {
+		dispatch(socketStart());
+		return () => {
+			//dispatch(socketClose());
+		};
+	}, []);
+	const { orders, state } = useAppSelector((state) => state.feeds);
 
 	return (
 		<>
-			{state == 'init' && <RequestStatus state="pending" />}
+			{(state == 'init' || state == 'error') && (
+				<RequestStatus
+					state={`${state == 'init' ? 'pending' : 'error'}`}
+					errorMessage="Не удалось установить соединение"
+				/>
+			)}
 			<section className={`mt-10 ${styles['orders-feed']}`}>
 				<header className={`mb-5 text text_type_main-large`}>
 					Лента заказов

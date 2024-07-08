@@ -6,6 +6,7 @@ import { user } from './user';
 import { ordersFeedApi } from '../../utils/api/orders-feed';
 import { feed } from './feed';
 import { orderDetails } from './order-details';
+import { feedsReducer } from './feeds';
 
 export const rootReducer = combineReducers({
 	[ingredients.reducerPath]: ingredients.reducer,
@@ -15,4 +16,5 @@ export const rootReducer = combineReducers({
 	[ordersFeedApi.reducerPath]: ordersFeedApi.reducer,
 	[feed.reducerPath]: feed.reducer,
 	[orderDetails.reducerPath]: orderDetails.reducer,
+	feeds: feedsReducer,
 });

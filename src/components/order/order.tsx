@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useContext, useEffect } from 'react';
 import styles from './order.module.scss';
 import { IngredientCircle } from '../ingredient-circle/ingredient-circle';
 import {
@@ -11,12 +11,14 @@ import { getStatus } from '../../utils/common';
 import { FillingType } from '../../types/application-types/filling-type';
 import { RequestStatus } from '../request-status/request-status';
 import { getOrder } from '../../services/actions/order-details';
+import { ModalContext } from '../modal/modal';
 
 export type OrderPropTypes = {
 	isInModal?: boolean;
 };
 
 export const Order: FC<OrderPropTypes> = ({ isInModal = true }) => {
+	const modalContext = useContext(ModalContext);
 	const { number: numberS } = useParams();
 	const { orders } = useAppSelector((state) => state.feed);
 	const { ingredients } = useAppSelector((data) => data.ingredients);
@@ -27,6 +29,9 @@ export const Order: FC<OrderPropTypes> = ({ isInModal = true }) => {
 	} = useAppSelector((state) => state['order-details']);
 
 	const fixSizeOfList = () => {
+		if (isInModal) {
+			return;
+		}
 		const lists = document.getElementsByClassName(`${styles['list']}`);
 		const footers = document.getElementsByClassName(`${styles['footer']}`);
 		if (lists.length > 0 && footers.length > 0) {
@@ -50,6 +55,10 @@ export const Order: FC<OrderPropTypes> = ({ isInModal = true }) => {
 			window.removeEventListener('resize', fixSizeOfList);
 		};
 	}, []);
+
+	if (!loading) {
+		setTimeout(fixSizeOfList, 0);
+	}
 
 	const error = success !== null && !success;
 
@@ -84,7 +93,7 @@ export const Order: FC<OrderPropTypes> = ({ isInModal = true }) => {
 	if (!order) {
 		if (order_) {
 			order = order_.orders[0];
-		} else if (!loading) {
+		} else if (!loading && !error) {
 			dispatch(getOrder(number));
 		}
 	}
@@ -135,18 +144,27 @@ export const Order: FC<OrderPropTypes> = ({ isInModal = true }) => {
 			});
 	}
 
-	if (!loading) {
-		setTimeout(fixSizeOfList, 0);
+	if (order) {
+		setTimeout(modalContext.setPosition, 0);
 	}
 
 	return (
 		<>
-			{(error || loading) && (
+			{loading && (
 				<RequestStatus
-					state={error ? 'error' : 'pending'}
+					state={'pending'}
 					errorMessage="Не удалось получить данные"
 				/>
 			)}
+
+			{error && (
+				<section className={`${styles['order']} ml-8`}>
+					<p className="text text_type_main-large mt-7">
+						Не удалось получить данные
+					</p>
+				</section>
+			)}
+
 			{order && (
 				<section className={`${styles['order']} ml-8`}>
 					<header

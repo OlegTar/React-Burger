@@ -2,8 +2,16 @@ import { FC } from 'react';
 import styles from './profile-orders.module.scss';
 import { OrderCard } from '../../components/order-card/order-card';
 import { OrderInFeed } from '../../types/application-types/order-in-feed';
+import { useGetOrdersQuery } from '../../utils/api/orders-feed';
+import { accessToken, ordersPrivate } from '../../config';
 
 export const ProfileOrders: FC = () => {
+	useGetOrdersQuery(
+		ordersPrivate +
+			'?token=' +
+			localStorage.getItem(accessToken)?.replace('Bearer ', '')
+	);
+
 	const order: OrderInFeed = {
 		_id: 'asdfa',
 		createdAt: new Date().toDateString(),

@@ -2,8 +2,7 @@ import { FC, useEffect } from 'react';
 import { Order } from '../../components/order/order';
 import { useStorage } from '../../hooks/useStorage';
 import { Modal } from '../../components/modal/modal';
-import { useNavigate, useParams } from 'react-router';
-import { useGetAllOrdersQuery } from '../../utils/api/orders-feed';
+import { useNavigate } from 'react-router';
 
 export const OrderPage: FC = () => {
 	const navigate = useNavigate();

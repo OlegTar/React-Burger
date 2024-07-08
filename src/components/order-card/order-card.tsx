@@ -13,6 +13,8 @@ import {
 } from '../../types/application-types/order-in-feed';
 import { useAppSelector } from '../../hooks/redux';
 import { getStatus } from '../../utils/common';
+import { useDispatch } from 'react-redux';
+import { resetState } from '../../services/reducers/order-details';
 
 export type OrderCardPropTypes = {
 	inProfile?: boolean;
@@ -23,6 +25,7 @@ export const OrderCard: FC<OrderCardPropTypes> = ({
 	inProfile = false,
 	order,
 }) => {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { setKey } = useStorage();
 	const { ingredients } = useAppSelector((state) => state.ingredients);
@@ -58,6 +61,7 @@ export const OrderCard: FC<OrderCardPropTypes> = ({
 			}`}
 			onClick={() => {
 				setKey('modal', 'true');
+				dispatch(resetState());
 				if (inProfile) {
 					navigate(`/profile/orders/${order.number}`);
 				} else {
