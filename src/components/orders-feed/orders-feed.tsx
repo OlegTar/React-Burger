@@ -12,13 +12,6 @@ import {
 } from '../../services/actions/socket-actions';
 
 export const OrdersFeed: FC = () => {
-	const dispatch = useDispatch();
-	useEffect(() => {
-		dispatch(socketStart());
-		return () => {
-			//dispatch(socketClose());
-		};
-	}, []);
 	const { orders, state } = useAppSelector((state) => state.feeds);
 
 	return (

@@ -6,6 +6,7 @@ const initialState: OrdersFeedState = {
 	total: 0,
 	totalToday: 0,
 	state: 'init',
+	errorMessage: '',
 };
 
 export const feed = createSlice({

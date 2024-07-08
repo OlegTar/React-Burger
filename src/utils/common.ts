@@ -14,7 +14,7 @@ import { SimpleResponse } from '../types/responses/simple-response';
 import { ApplicationResponse } from '../types/responses/response-type';
 import { OrderStatus } from '../types/application-types/order-in-feed';
 
-const refreshAccessToken = async () => {
+export const refreshAccessToken = async () => {
 	const axiosInstance = axios.create();
 	const { data: result } = await axiosInstance<RefreshTokenResponse>(
 		`${baseUrl}${token}`,

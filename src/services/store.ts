@@ -14,11 +14,18 @@ import { orderDetails, OrderDetailsState } from './reducers/order-details';
 import { socketMiddleware } from './middlewares/socketMiddleware';
 import { ordersAll, ordersPrivate } from '../config';
 import {
-	socketClose,
+	socketClose as socketDisconnect,
 	socketClosed,
 	socketError,
 	socketMessage,
 	socketOpen,
+	socketPrivateClose as socketPrivateDisconnect,
+	socketPrivateClosed,
+	socketPrivateError,
+	socketPrivateMessage,
+	socketPrivateOpen,
+	socketPrivateSend,
+	socketPrivateStart,
 	socketSend,
 	socketStart,
 } from './actions/socket-actions';
@@ -29,16 +36,24 @@ export const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat(
 			ordersFeedApi.middleware,
-			socketMiddleware(ordersAll, {
-				start: socketStart(),
-				open: socketOpen(),
-				close: socketClose(),
-				closed: socketClosed(),
-				error: socketError(),
-				send: socketSend.type,
+			socketMiddleware({
+				start: socketStart,
+				open: socketOpen,
+				disconnect: socketDisconnect,
+				closed: socketClosed,
+				error: socketError,
+				send: socketSend,
 				message: socketMessage,
+			}),
+			socketMiddleware({
+				start: socketPrivateStart,
+				open: socketPrivateOpen,
+				disconnect: socketPrivateDisconnect,
+				closed: socketPrivateClosed,
+				error: socketPrivateError,
+				send: socketPrivateSend,
+				message: socketPrivateMessage,
 			})
-			//socketMiddleware(ordersPrivate)
 		),
 });
 
@@ -51,6 +66,7 @@ export type AppState = {
 	[feed.reducerPath]: OrdersFeedState;
 	[orderDetails.reducerPath]: OrderDetailsState;
 	feeds: OrdersFeedState;
+	privateFeed: OrdersFeedState;
 };
 
 export type AppStore = typeof store;

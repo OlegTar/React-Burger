@@ -1,8 +1,13 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import styles from './orders-summary.module.scss';
 import { useGetOrdersQuery } from '../../utils/api/orders-feed';
 import { useAppSelector } from '../../hooks/redux';
 import { OrderInFeed } from '../../types/application-types/order-in-feed';
+import { useDispatch } from 'react-redux';
+import {
+	socketStart,
+	socketClose,
+} from '../../services/actions/socket-actions';
 
 export const OrdersSummary: FC = () => {
 	const data = useAppSelector((data) => data.feeds);
