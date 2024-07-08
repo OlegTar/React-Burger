@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { register as registerAction } from '../../services/actions/register';
 import { RequestStatus } from '../../components/request-status/request-status';
 import { useForm } from '../../hooks/useForm';
-import { resetMessages } from '../../services/reducers/user';
 import { login } from '../../services/actions/login';
 
 export const Register: FC = () => {

@@ -7,10 +7,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useStorage } from '../../hooks/useStorage';
-import {
-	OrderInFeed,
-	OrderStatus,
-} from '../../types/application-types/order-in-feed';
+import { OrderInFeed } from '../../types/application-types/order-in-feed';
 import { useAppSelector } from '../../hooks/redux';
 import { getStatus } from '../../utils/common';
 import { useDispatch } from 'react-redux';
