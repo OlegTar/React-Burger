@@ -22,7 +22,6 @@ export const privateFeedReducer = createReducer(initialState, (builder) => {
 		})
 		.addCase(socketPrivateClosed, (state) => {
 			state.state = 'init';
-			state.orders = [];
 		})
 		.addCase(socketPrivateError, (state, action) => {
 			state.state = 'error';
