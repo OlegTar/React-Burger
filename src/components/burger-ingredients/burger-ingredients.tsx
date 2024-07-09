@@ -63,7 +63,11 @@ export const BurgerIngredients = () => {
 		}
 		const header = headers[index];
 		const headerRect = header.getBoundingClientRect();
-		pane.scrollBy(0, headerRect.y - paneRect.y);
+		pane.scrollBy({
+			left: 0,
+			top: headerRect.y - paneRect.y,
+			behavior: 'smooth',
+		});
 	};
 
 	return (
