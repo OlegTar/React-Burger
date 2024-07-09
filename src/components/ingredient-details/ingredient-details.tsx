@@ -2,8 +2,9 @@ import { useLocation, useParams } from 'react-router';
 import styles from './ingredient-details.module.scss';
 import { useAppSelector } from '../../hooks/redux';
 import { AppState } from '../../services/store';
+import { FC } from 'react';
 
-export const IngredientDetails = () => {
+export const IngredientDetails: FC = () => {
 	const { id } = useParams() || '';
 	const location = useLocation();
 	const background = location.state && location.state.background;

@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { useAppSelector } from '../../hooks/redux';
 import { Navigate, useLocation } from 'react-router-dom';
+import { RequestStatus } from '../request-status/request-status';
 
 type TProtectedProps = {
 	onlyUnAuth?: boolean;
@@ -8,8 +9,14 @@ type TProtectedProps = {
 };
 
 const Protected: FC<TProtectedProps> = ({ onlyUnAuth = false, component }) => {
-	const isAuthenticated = useAppSelector((store) => store.user.user != null);
+	const { state, user } = useAppSelector((store) => store.user);
 	const location = useLocation();
+
+	if (state === 'pending' || state === 'init') {
+		return <RequestStatus state="pending" />;
+	}
+
+	const isAuthenticated = state === 'success' && user != null;
 
 	if (onlyUnAuth && isAuthenticated) {
 		// Пользователь авторизован, но роут предназначен для неавторизованного пользователя

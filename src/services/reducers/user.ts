@@ -13,12 +13,20 @@ export type UserState = {
 	user: User | null;
 	state: RequestState;
 	errorMessage: string;
+	successMessage: string;
+	passwordResetState: RequestState;
+	changePasswordState: RequestState;
+	registerState: RequestState;
 };
 
 const initialState: UserState = {
 	user: null,
 	state: 'init',
 	errorMessage: '',
+	successMessage: '',
+	passwordResetState: 'init',
+	changePasswordState: 'init',
+	registerState: 'init',
 };
 
 export const user = createSlice({
@@ -30,6 +38,10 @@ export const user = createSlice({
 		},
 		reset: (state) => {
 			state.state = 'init';
+		},
+		resetMessages: (state) => {
+			state.errorMessage = '';
+			state.successMessage = '';
 		},
 	},
 	extraReducers: (builder) => {
@@ -45,13 +57,14 @@ export const user = createSlice({
 			.addCase(login.rejected, (state) => {
 				state.user = null;
 				state.state = 'error';
+				state.errorMessage = 'Неверный логин/пароль';
 			})
 			.addCase(logout.pending, (state) => {
 				state.state = 'pending';
 			})
 			.addCase(logout.fulfilled, (state) => {
 				state.user = null;
-				state.state = 'init';
+				state.state = 'success';
 			})
 			.addCase(logout.rejected, (state) => {
 				state.state = 'error';
@@ -67,36 +80,39 @@ export const user = createSlice({
 			.addCase(changeUserInfo.fulfilled, (state, action) => {
 				state.state = 'success';
 				state.user = action.payload;
+				state.successMessage = 'Данные пользователя изменены';
 			})
 			.addCase(changePassword.pending, (state) => {
-				state.state = 'pending';
+				state.changePasswordState = 'pending';
 			})
 			.addCase(changePassword.rejected, (state) => {
-				state.state = 'error';
+				state.changePasswordState = 'error';
 				state.errorMessage = 'Не удалось поменять пароль';
 			})
 			.addCase(changePassword.fulfilled, (state) => {
-				state.state = 'success';
+				state.changePasswordState = 'success';
+				state.successMessage = 'Пароль изменён';
 			})
 			.addCase(passwordReset.pending, (state) => {
-				state.state = 'pending';
+				state.passwordResetState = 'pending';
 			})
 			.addCase(passwordReset.rejected, (state) => {
-				state.state = 'error';
+				state.passwordResetState = 'error';
 				state.errorMessage = 'Не удалось поменять пароль';
 			})
 			.addCase(passwordReset.fulfilled, (state) => {
-				state.state = 'success';
+				state.passwordResetState = 'success';
+				state.successMessage = 'Письмо отправлено';
 			})
 			.addCase(register.pending, (state) => {
-				state.state = 'pending';
+				state.registerState = 'pending';
 			})
 			.addCase(register.rejected, (state) => {
-				state.state = 'error';
+				state.registerState = 'error';
 				state.errorMessage = 'Не удалось зарегистрироаться';
 			})
 			.addCase(register.fulfilled, (state, action) => {
-				state.state = 'success';
+				state.registerState = 'success';
 				state.user = action.payload;
 			})
 			.addCase(getUser.pending, (state) => {
@@ -106,6 +122,7 @@ export const user = createSlice({
 			.addCase(getUser.rejected, (state) => {
 				state.state = 'error';
 				state.user = null;
+				state.errorMessage = 'Не удалось получить данные пользователя';
 			})
 			.addCase(getUser.fulfilled, (state, action) => {
 				state.state = 'success';
@@ -114,4 +131,4 @@ export const user = createSlice({
 	},
 });
 
-export const { setUser, reset } = user.actions;
+export const { setUser, reset, resetMessages } = user.actions;
