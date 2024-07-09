@@ -31,7 +31,7 @@ export const AppHeader = () => {
 						<Link to="/feed" className={styles.link}>
 							<ListIcon type={path === '/feed' ? 'primary' : 'secondary'} />
 							<span className="text text_type_main-small text_color_inactive ml-2">
-								Лента заказов1
+								Лента заказов
 							</span>
 						</Link>
 					</li>
