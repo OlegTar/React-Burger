@@ -1,3 +1,4 @@
+import { createContext, useContext } from 'react';
 import ReactDOM from 'react-dom';
 import styles from './modal.module.scss';
 import { ModalOverlay } from '../modal-overlay/modal-overlay';
@@ -17,6 +18,10 @@ interface ModalPropTypes {
 	hideClose?: boolean;
 	fixPositionPromise?: Promise<void>;
 }
+
+export const ModalContext = createContext({
+	setPosition: () => {},
+});
 
 export const Modal: FC<ModalPropTypes> = ({
 	closeModal,
@@ -73,20 +78,22 @@ export const Modal: FC<ModalPropTypes> = ({
 	const additionalClass = title === '' ? styles.abs : '';
 
 	return ReactDOM.createPortal(
-		<div className={styles.modal} ref={saveElement}>
-			{!hideClose && (
-				<header
-					className={`${styles.header} ${additionalClass} pl-10 pr-10 pt-10`}
-				>
-					<p className={`${styles.title} text text_type_main-large`}>{title}</p>
-					<a href="/" onClick={(e) => linkHandler(e, closeModal)}>
-						<CloseIcon type="primary" />
-					</a>
-				</header>
-			)}
-			{children}
-			<ModalOverlay closeModal={closeModal} />
-		</div>,
+		<ModalContext.Provider value={{ setPosition }}>
+			<div className={styles.modal} ref={saveElement}>
+				{!hideClose && (
+					<header
+						className={`${styles.header} ${additionalClass} pl-10 pr-10 pt-10`}
+					>
+						<p className={`text text_type_main-large`}>{title}</p>
+						<a href="/" onClick={(e) => linkHandler(e, closeModal)}>
+							<CloseIcon type="primary" />
+						</a>
+					</header>
+				)}
+				{children}
+				<ModalOverlay closeModal={closeModal} />
+			</div>
+		</ModalContext.Provider>,
 		modalRoot
 	);
 };

@@ -28,10 +28,12 @@ export const AppHeader = () => {
 						</Link>
 					</li>
 					<li className={`${itemCss} ml-2`}>
-						<ListIcon type="secondary" />
-						<span className="text text_type_main-small text_color_inactive ml-2">
-							Лента заказов
-						</span>
+						<Link to="/feed" className={styles.link}>
+							<ListIcon type={path === '/feed' ? 'primary' : 'secondary'} />
+							<span className="text text_type_main-small text_color_inactive ml-2">
+								Лента заказов
+							</span>
+						</Link>
 					</li>
 				</ul>
 			</nav>

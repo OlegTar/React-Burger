@@ -9,15 +9,11 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { RequestStatus } from '../../components/request-status/request-status';
 import { passwordReset } from '../../services/actions/password-reset';
 import { resetPasswordCalled } from '../../config';
-import { reset } from '../../services/reducers/user';
 import { useForm } from '../../hooks/useForm';
 
 export const ForgotPassword: FC = () => {
 	const dispatch = useAppDispatch();
-	const { state, errorMessage } = useAppSelector((state) => ({
-		state: state.user.state,
-		errorMessage: state.user.errorMessage,
-	}));
+	const { state, errorMessage } = useAppSelector((state) => state.user);
 	const { values, handleChange } = useForm<{ email: string }>({
 		email: '',
 	});
@@ -37,7 +33,7 @@ export const ForgotPassword: FC = () => {
 
 	const isPasswordSent = localStorage.getItem(resetPasswordCalled) === '1';
 	if (isPasswordSent) {
-		dispatch(reset());
+		//dispatch(resetMessages());
 		return (
 			<Navigate
 				to="/reset-password"

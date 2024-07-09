@@ -5,6 +5,7 @@ export const useModal = () => {
 
 	// `useCallback` нужен для того, чтобы зафиксировать ссылку на функцию. Таким образом уменьшится кол-во перерисовок компонента, куда будет передана эта функция
 	const openModal = useCallback(() => {
+		console.log('openModal');
 		setIsModalOpen(true);
 	}, []);
 
