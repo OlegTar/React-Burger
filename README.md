@@ -1,3 +1,10 @@
+# Яндекс.Облако
+
+Код размещён в Яндекс.облаке.\
+https://olegtar.nomorepartiesco.ru/
+
+Доступ ssh olegtar@158.160.143.63, папка с сайтом /home/olegtar/react-burger/
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
