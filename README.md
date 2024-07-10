@@ -2,6 +2,7 @@
 
 Код размещён в Яндекс.облаке.\
 https://olegtar.nomorepartiesco.ru/
+https://olegtar.ru/
 
 Доступ ssh olegtar@158.160.143.63, папка с сайтом /home/olegtar/react-burger/
 
