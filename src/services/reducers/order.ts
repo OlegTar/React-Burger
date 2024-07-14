@@ -4,7 +4,10 @@ import { OrderResponse } from '../../types/responses/order-response';
 export type OrderState = {
 	loading: boolean;
 	success: boolean | null;
-	order: OrderResponse | null;
+	order: {
+		name: string;
+		number: number;
+	} | null;
 };
 const initialState: OrderState = {
 	loading: false,
@@ -36,7 +39,10 @@ export const order = createSlice({
 				(state: OrderState, action: PayloadAction<OrderResponse>) => {
 					state.loading = false;
 					state.success = action.payload.success;
-					state.order = action.payload;
+					state.order = {
+						name: action.payload.name,
+						number: action.payload.order.number,
+					};
 				}
 			);
 	},

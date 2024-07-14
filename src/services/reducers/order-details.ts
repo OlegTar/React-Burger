@@ -1,11 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { getOrder } from '../actions/order-details';
 import { OrderDetailsResponse } from '../../types/responses/order-details-response';
+import { OrderInFeed } from '../../types/application-types/order-in-feed';
 
 export type OrderDetailsState = {
 	loading: boolean;
 	success: boolean | null;
-	order: OrderDetailsResponse | null;
+	order: (OrderInFeed & { owner: string }) | null;
 };
 
 const initialState: OrderDetailsState = {
@@ -37,8 +38,13 @@ export const orderDetails = createSlice({
 					action: PayloadAction<OrderDetailsResponse>
 				) => {
 					state.loading = false;
-					state.success = action.payload.success;
-					state.order = action.payload;
+					if (action.payload.orders.length == 0) {
+						state.success = false;
+						state.order = null;
+					} else {
+						state.success = true;
+						state.order = action.payload.orders[0];
+					}
 				}
 			);
 	},

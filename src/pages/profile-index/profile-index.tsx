@@ -12,9 +12,8 @@ import { RequestStatus } from '../../components/request-status/request-status';
 import { resetMessages } from '../../services/reducers/user';
 
 export const ProfileIndex: FC = () => {
-	const { user, state, errorMessage, successMessage } = useAppSelector(
-		(state) => state.user
-	);
+	const { user, state, errorMessage, successMessage, changeUserInfoState } =
+		useAppSelector((state) => state.user);
 	const { values, setValues, handleChange } = useForm<{
 		name: string;
 		email: string;
@@ -26,12 +25,12 @@ export const ProfileIndex: FC = () => {
 	});
 	const { name, email, password } = values;
 	const dispatch = useAppDispatch();
-	useEffect(() => {
-		return () => {
-			dispatch(resetMessages());
-		};
-		// eslint-disable-next-line
-	}, []);
+	// useEffect(() => {
+	// 	return () => {
+	// 		dispatch(resetMessages());
+	// 	};
+	// 	// eslint-disable-next-line
+	// }, []);
 
 	if (user == null) {
 		throw new Error('Ошибка в коде');
@@ -62,6 +61,11 @@ export const ProfileIndex: FC = () => {
 		<>
 			<RequestStatus
 				state={state}
+				errorMessage={errorMessage}
+				successMessage={successMessage}
+			/>
+			<RequestStatus
+				state={changeUserInfoState}
 				errorMessage={errorMessage}
 				successMessage={successMessage}
 			/>

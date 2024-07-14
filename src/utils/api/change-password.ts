@@ -8,7 +8,7 @@ export const sendChangePasswordRequest = (
 ): Promise<ApplicationResponse> => {
 	const result = request(`${baseUrl}${changePassword}`, {
 		method: 'POST',
-		headers: { 'content-type': 'application/json' },
+		headers: { 'Content-Type': 'application/json' },
 		body: changePasswordRequest,
 	});
 	localStorage.removeItem(resetPasswordCalled);

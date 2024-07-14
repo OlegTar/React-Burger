@@ -6,7 +6,7 @@ export type ConstructorIngredientsState = {
 	bun: IIngredient | null;
 	ingredients: IngredientWithUniqId[];
 };
-const initialState: ConstructorIngredientsState = {
+export const initialState: ConstructorIngredientsState = {
 	bun: null,
 	ingredients: [],
 };
@@ -39,6 +39,14 @@ const constructorIngredients = createSlice({
 		) => {
 			const { fromIndex, toIndex } = action.payload;
 			const ingredients = [...state.ingredients];
+			if (
+				fromIndex >= ingredients.length ||
+				toIndex >= ingredients.length ||
+				fromIndex < 0 ||
+				toIndex < 0
+			) {
+				return state;
+			}
 			ingredients.splice(toIndex, 0, ingredients.splice(fromIndex, 1)[0]);
 			return {
 				...state,
