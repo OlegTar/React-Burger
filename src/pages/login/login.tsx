@@ -2,15 +2,15 @@ import {
 	Button,
 	Input,
 	PasswordInput,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './login.module.scss';
-import { Link, Navigate, useLocation } from 'react-router-dom';
-import { FC } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { login as loginAction } from '../../services/actions/login';
-import { RequestStatus } from '../../components/request-status/request-status';
-import { MyNotification } from '../../components/my-notification/my-notification';
-import { useForm } from '../../hooks/useForm';
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import styles from "./login.module.scss";
+import { Link, Navigate, useLocation } from "react-router-dom";
+import { FC } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { login as loginAction } from "../../services/actions/login";
+import { RequestStatus } from "../../components/request-status/request-status";
+import { MyNotification } from "../../components/my-notification/my-notification";
+import { useForm } from "../../hooks/useForm";
 
 export const Login: FC = () => {
 	const location = useLocation();
@@ -30,8 +30,8 @@ export const Login: FC = () => {
 		email: string;
 		password: string;
 	}>({
-		email: '',
-		password: '',
+		email: "",
+		password: "",
 	});
 	const { email, password } = values;
 
@@ -39,8 +39,8 @@ export const Login: FC = () => {
 		dispatch(loginAction({ email: values.email, password: values.password }));
 	};
 
-	if (state === 'success' && user !== null) {
-		const { from } = location.state || { from: { pathname: '/' } };
+	if (state === "success" && user !== null) {
+		const { from } = location.state || { from: { pathname: "/" } };
 		return <Navigate to={from} />;
 	}
 
@@ -83,14 +83,14 @@ export const Login: FC = () => {
 					>
 						Войти
 					</Button>
-					<p className="text text_type_main-default text_color_inactive mt-20">
-						Вы &mdash; новый пользователь?{' '}
+					<p className="text text_type_main-default text_color_inactive mt-10">
+						Вы &mdash; новый пользователь?{" "}
 						<Link to="/register" className={styles.link}>
 							Зарегистрироваться
 						</Link>
 					</p>
 					<p className="text text_type_main-default text_color_inactive mt-4">
-						Забыли пароль?{' '}
+						Забыли пароль?{" "}
 						<Link to="/forgot-password" className={styles.link}>
 							Восстановить пароль
 						</Link>
