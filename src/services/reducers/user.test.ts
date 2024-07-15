@@ -32,36 +32,36 @@ jest.mock("axios");
 
 const reducer = user.reducer;
 
+const initialStateWithUser: UserState = {
+	user: {
+		name: "Oleg",
+		email: "o.tarusow@yandex.ru",
+	},
+	changePasswordState: "init",
+	passwordResetState: "init",
+	changeUserInfoState: "init",
+	registerState: "init",
+	errorMessage: "",
+	successMessage: "",
+	state: "init",
+};
+
 describe("user reducer tests", () => {
+	let store: ReturnType<typeof configureStore<AppState>>;
+	let appInitialState: AppState;
+	beforeEach(() => {
+		store = configureStore({ reducer: rootReducer });
+		appInitialState = store.getState();
+	});
+
 	it("Test of initial tests", () => {
 		//act
 		const state = reducer(undefined, { type: "" });
 		//assert
-		expect(state).toStrictEqual({
-			user: null,
-			state: "init",
-			errorMessage: "",
-			successMessage: "",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			changePasswordState: "init",
-			registerState: "init",
-		} as UserState);
+		expect(state).toStrictEqual(initialState);
 	});
 
 	it("setUser: should set the user property", () => {
-		//arrange
-		const initialState: UserState = {
-			user: null,
-			state: "init",
-			errorMessage: "",
-			successMessage: "",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			changePasswordState: "init",
-			registerState: "init",
-		};
-
 		//act
 		const state = reducer(
 			initialState,
@@ -79,47 +79,30 @@ describe("user reducer tests", () => {
 
 	it("reset: should set state to init", () => {
 		//arrange
-		const initialState: UserState = {
-			user: {
-				name: "Oleg",
-				email: "o.tarusow@yandex.ru",
-			},
+		const initialStateSuccess: UserState = {
+			...initialState,
 			state: "success",
-			errorMessage: "",
-			successMessage: "",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			changePasswordState: "init",
-			registerState: "init",
 		};
 
 		//act
-		const state = reducer(initialState, reset());
+		const state = reducer(initialStateSuccess, reset());
 		//assert
-		expect(state).toStrictEqual({
-			...initialState,
-			state: "init",
-		});
+		expect(state).toStrictEqual({ ...initialStateSuccess, state: "init" });
 	});
 
 	it("resetMessages: should clear messages", () => {
 		//arrange
-		const initialState: UserState = {
-			user: null,
-			state: "success",
+		const initialStateWithMessages: UserState = {
+			...initialState,
 			errorMessage: "test",
 			successMessage: "test",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			changePasswordState: "init",
-			registerState: "init",
 		};
 
 		//act
-		const state = reducer(initialState, resetMessages());
+		const state = reducer(initialStateWithMessages, resetMessages());
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithMessages,
 			errorMessage: "",
 			successMessage: "",
 		});
@@ -127,49 +110,23 @@ describe("user reducer tests", () => {
 
 	it("login.pending should set state to 'pending' and user to null", () => {
 		//arrange
-		const initialState: UserState = {
-			user: {
-				name: "Oleg",
-				email: "o.tarusow@yandex.ru",
-			},
-			changePasswordState: "init",
-			passwordResetState: "init",
-			changeUserInfoState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
+
 		//act
-		const state = reducer(initialState, { type: login.pending.type });
+		const state = reducer(initialStateWithUser, { type: login.pending.type });
 		//arrange
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			user: null,
 			state: "pending",
 		});
 	});
 
 	it("login.rejected should set state to 'error', the user to null, and the successMessage to 'Неверный логин/пароль'", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				name: "Oleg",
-				email: "o.tarusow@yandex.ru",
-			},
-			changePasswordState: "init",
-			passwordResetState: "init",
-			changeUserInfoState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, { type: login.rejected.type });
+		const state = reducer(initialStateWithUser, { type: login.rejected.type });
 		//arrange
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			user: null,
 			state: "error",
 			errorMessage: "Неверный логин/пароль",
@@ -197,145 +154,67 @@ describe("user reducer tests", () => {
 	});
 
 	it("logout.pending should set state to 'pending'", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				email: "o.tarusow@yandex.ru",
-				name: "Oleg",
-			},
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, { type: logout.pending.type });
+		const state = reducer(initialStateWithUser, { type: logout.pending.type });
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			state: "pending",
 		});
 	});
 
 	it("logout.rejected should set the state to 'error' and set the errorMessage to 'Выйти не удалось'", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				email: "o.tarusow@yandex.ru",
-				name: "Oleg",
-			},
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, { type: logout.rejected.type });
+		const state = reducer(initialStateWithUser, { type: logout.rejected.type });
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			state: "error",
 			errorMessage: "Выйти не удалось",
 		});
 	});
 
 	it("logout.fulfilled should set the state to 'success' and set the user to null", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				email: "o.tarusow@yandex.ru",
-				name: "Oleg",
-			},
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, { type: logout.fulfilled.type });
+		const state = reducer(initialStateWithUser, {
+			type: logout.fulfilled.type,
+		});
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			state: "success",
 			user: null,
 		});
 	});
 
 	it("changeUserInfo.pending should set the changeUserInfoState to 'pending'", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				email: "o.tarusow@yandex.ru",
-				name: "Oleg",
-			},
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, { type: changeUserInfo.pending.type });
+		const state = reducer(initialStateWithUser, {
+			type: changeUserInfo.pending.type,
+		});
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			changeUserInfoState: "pending",
 		});
 	});
 
 	it("changeUserInfo.rejected should set the changeUserInfoState to 'error' and set the errorMessage", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				email: "o.tarusow@yandex.ru",
-				name: "Oleg",
-			},
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, { type: changeUserInfo.rejected.type });
+		const state = reducer(initialStateWithUser, {
+			type: changeUserInfo.rejected.type,
+		});
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			changeUserInfoState: "error",
 			errorMessage: "Не удалось поменять данные пользователя",
 		});
 	});
 
 	it("changeUserInfo.fulfilled should set the changeUserInfoState to 'success' and set the successMessage, and fill the user", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				email: "o.tarusow@yandex.ru",
-				name: "Oleg",
-			},
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, {
+		const state = reducer(initialStateWithUser, {
 			type: changeUserInfo.fulfilled.type,
 			payload: {
 				email: "o.tarusow@yandex.ru",
@@ -344,80 +223,40 @@ describe("user reducer tests", () => {
 		});
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			changeUserInfoState: "success",
 			successMessage: "Данные пользователя изменены",
 		});
 	});
 
 	it("changePassword.pending should set the changePasswordState to 'pending'", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				email: "o.tarusow@yandex.ru",
-				name: "Oleg",
-			},
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, {
+		const state = reducer(initialStateWithUser, {
 			type: changePassword.pending.type,
 		});
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			changePasswordState: "pending",
 		});
 	});
 
 	it("changePassword.rejected should set the changePasswordState to 'error' and set the errorMessage", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				email: "o.tarusow@yandex.ru",
-				name: "Oleg",
-			},
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, { type: changePassword.rejected.type });
+		const state = reducer(initialStateWithUser, {
+			type: changePassword.rejected.type,
+		});
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			changePasswordState: "error",
 			errorMessage: "Не удалось поменять пароль",
 		});
 	});
 
 	it("changePassword.fulfilled should set the changePasswordState to 'success' and set the successMessage", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				email: "o.tarusow@yandex.ru",
-				name: "Oleg",
-			},
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, {
+		const state = reducer(initialStateWithUser, {
 			type: changePassword.fulfilled.type,
 			payload: {
 				email: "o.tarusow@yandex.ru",
@@ -427,157 +266,76 @@ describe("user reducer tests", () => {
 		});
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			changePasswordState: "success",
 			successMessage: "Пароль изменён",
 		});
 	});
 
 	it("passwordReset.pending should set the passwordResetState to 'pending'", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				email: "o.tarusow@yandex.ru",
-				name: "Oleg",
-			},
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, {
+		const state = reducer(initialStateWithUser, {
 			type: passwordReset.pending.type,
 		});
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			passwordResetState: "pending",
 		});
 	});
 
 	it("passwordReset.rejected should set the passwordResetState to 'error' and set the errorMessage", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				email: "o.tarusow@yandex.ru",
-				name: "Oleg",
-			},
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, {
+		const state = reducer(initialStateWithUser, {
 			type: passwordReset.rejected.type,
 		});
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			passwordResetState: "error",
 			errorMessage: "Не удалось поменять пароль",
 		});
 	});
 
 	it("passwordReset.fulfilled should set the passwordResetState to 'success' and set the successMessage", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				email: "o.tarusow@yandex.ru",
-				name: "Oleg",
-			},
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, {
+		const state = reducer(initialStateWithUser, {
 			type: passwordReset.fulfilled.type,
 		});
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			passwordResetState: "success",
 			successMessage: "Письмо отправлено",
 		});
 	});
 
 	it("register.pending should set the registerState to 'pending'", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				email: "o.tarusow@yandex.ru",
-				name: "Oleg",
-			},
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, {
+		const state = reducer(initialStateWithUser, {
 			type: register.pending.type,
 		});
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			registerState: "pending",
 		});
 	});
 
 	it("register.rejected should set the registerState to 'error' and set the errorMessage", () => {
-		//arrange
-		const initialState: UserState = {
-			user: {
-				email: "o.tarusow@yandex.ru",
-				name: "Oleg",
-			},
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
-		const state = reducer(initialState, {
+		const state = reducer(initialStateWithUser, {
 			type: register.rejected.type,
 		});
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			registerState: "error",
 			errorMessage: "Не удалось зарегистрироваться",
 		});
 	});
 
 	it("register.fulfilled should set the registerState to 'success' and set the successMessage", () => {
-		//arrange
-		const initialState: UserState = {
-			user: null,
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
 		const state = reducer(initialState, {
 			type: register.fulfilled.type,
@@ -588,27 +346,12 @@ describe("user reducer tests", () => {
 		});
 		//assert
 		expect(state).toStrictEqual({
-			...initialState,
+			...initialStateWithUser,
 			registerState: "success",
-			user: {
-				name: "Oleg",
-				email: "o.tarusow@yandex.ru",
-			},
 		});
 	});
 
 	it("getUser.pending should set the state to 'pending'", () => {
-		//arrange
-		const initialState: UserState = {
-			user: null,
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
 		const state = reducer(initialState, {
 			type: getUser.pending.type,
@@ -621,17 +364,6 @@ describe("user reducer tests", () => {
 	});
 
 	it("getUser.rejected should set the state to 'error', the user to null, and set the errorMessage", () => {
-		//arrange
-		const initialState: UserState = {
-			user: null,
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
 		const state = reducer(initialState, {
 			type: getUser.rejected.type,
@@ -646,17 +378,6 @@ describe("user reducer tests", () => {
 	});
 
 	it("getUser.fulfilled should set the state to 'success', fill the user property", () => {
-		//arrange
-		const initialState: UserState = {
-			user: null,
-			changePasswordState: "init",
-			changeUserInfoState: "init",
-			passwordResetState: "init",
-			registerState: "init",
-			errorMessage: "",
-			successMessage: "",
-			state: "init",
-		};
 		//act
 		const state = reducer(initialState, {
 			type: getUser.fulfilled.type,
@@ -678,8 +399,6 @@ describe("user reducer tests", () => {
 
 	it("login: status 200 OK, should set the user property", async () => {
 		//arrange
-		const store = configureStore({ reducer: rootReducer });
-		const initialState = store.getState();
 		(axios.post as jest.Mock).mockResolvedValue({
 			status: 200,
 			statusText: "200 OK",
@@ -705,9 +424,9 @@ describe("user reducer tests", () => {
 		);
 		//assert
 		expect(store.getState()).toStrictEqual({
-			...initialState,
+			...appInitialState,
 			user: {
-				...initialState.user,
+				...initialState,
 				state: "success",
 				user: {
 					email: "o.tarusow@yandex.ru",
@@ -719,8 +438,6 @@ describe("user reducer tests", () => {
 
 	it("login: status 401 Unauthorized, should set success to false", async () => {
 		//arrange
-		const store = configureStore({ reducer: rootReducer });
-		const initialState = store.getState();
 		(axios.post as jest.Mock).mockResolvedValue({
 			status: 401,
 			statusText: "401 Unauthorized",
@@ -739,9 +456,9 @@ describe("user reducer tests", () => {
 		);
 		//assert
 		expect(store.getState()).toStrictEqual({
-			...initialState,
+			...appInitialState,
 			user: {
-				...initialState.user,
+				...initialState,
 				errorMessage: "Неверный логин/пароль",
 				state: "error",
 				user: null,
@@ -751,8 +468,6 @@ describe("user reducer tests", () => {
 
 	it("login: status 200 OK, but success is false, should set success to false", async () => {
 		//arrange
-		const store = configureStore({ reducer: rootReducer });
-		const initialState = store.getState();
 		(axios.post as jest.Mock).mockResolvedValue({
 			status: 200,
 			statusText: "200 OK",
@@ -771,9 +486,9 @@ describe("user reducer tests", () => {
 		);
 		//assert
 		expect(store.getState()).toStrictEqual({
-			...initialState,
+			...appInitialState,
 			user: {
-				...initialState.user,
+				...initialState,
 				errorMessage: "Неверный логин/пароль",
 				state: "error",
 				user: null,
@@ -783,7 +498,6 @@ describe("user reducer tests", () => {
 
 	it("login: should send request", async () => {
 		//arrange
-		const store = configureStore({ reducer: rootReducer });
 		(axios.post as jest.Mock).mockImplementationOnce(jest.fn);
 
 		//act
@@ -806,7 +520,6 @@ describe("user reducer tests", () => {
 
 	it("logout: 200 OK, should send request", async () => {
 		//arrange
-		const store = configureStore({ reducer: rootReducer });
 		(axios.post as jest.Mock).mockImplementationOnce(jest.fn);
 		Storage.prototype.getItem = jest.fn((t) =>
 			t === refreshToken ? "test" : "",
@@ -826,7 +539,6 @@ describe("user reducer tests", () => {
 
 	it("logout: 200 OK: should set property user to null", async () => {
 		//arrange
-		const store = configureStore({ reducer: rootReducer });
 		const initialUserState = reducer(undefined, { type: "" });
 		(axios.post as jest.Mock).mockResolvedValueOnce({
 			status: 200,
@@ -853,23 +565,19 @@ describe("user reducer tests", () => {
 
 	it("logout: 500 Internal Server Error: should set state 'error'", async () => {
 		//arrange
-		const store = configureStore({ reducer: rootReducer });
-		const initialUserState = reducer(undefined, { type: "" });
 		(axios.post as jest.Mock).mockResolvedValueOnce({
 			status: 500,
 			statusText: "500 Internal Server Error",
 			data: {},
 		} as AxiosResponse);
-		const initialState = store.getState();
-
 		//act
 		await store.dispatch(logout());
 
 		//assert
 		expect(store.getState()).toStrictEqual({
-			...initialState,
+			...appInitialState,
 			user: {
-				...initialUserState,
+				...initialState,
 				user: null,
 				state: "error",
 				errorMessage: "Выйти не удалось",
@@ -879,7 +587,6 @@ describe("user reducer tests", () => {
 
 	it("changeUserInfo: should send request", async () => {
 		//arrange
-		const store = configureStore({ reducer: rootReducer });
 		Storage.prototype.getItem = jest.fn((token) => {
 			if (token === accessToken) {
 				return "Bearer test";
@@ -914,8 +621,6 @@ describe("user reducer tests", () => {
 
 	it("changeUserInfo: 403 Forbidden: should set the error property", async () => {
 		//arrange
-		const store = configureStore({ reducer: rootReducer });
-		const initialUserState = reducer(undefined, { type: "" });
 		(axios.patch as jest.Mock).mockResolvedValueOnce({
 			status: 403,
 			statusText: "403 Forbidden",
@@ -924,7 +629,6 @@ describe("user reducer tests", () => {
 				success: false,
 			},
 		} as AxiosResponse);
-		const initialState = store.getState();
 
 		//act
 		await store.dispatch(
@@ -936,9 +640,9 @@ describe("user reducer tests", () => {
 		);
 		//assert
 		expect(store.getState()).toStrictEqual({
-			...initialState,
+			...appInitialState,
 			user: {
-				...initialUserState,
+				...initialState,
 				user: null,
 				changeUserInfoState: "error",
 				errorMessage: "Не удалось поменять данные пользователя",
@@ -948,8 +652,6 @@ describe("user reducer tests", () => {
 
 	it("changeUserInfo: 200 OK: should change the user property", async () => {
 		//arrange
-		const store = configureStore({ reducer: rootReducer });
-		const initialUserState = reducer(undefined, { type: "" });
 		(axios.patch as jest.Mock).mockResolvedValueOnce({
 			status: 200,
 			statusText: "200 OK",
@@ -958,8 +660,6 @@ describe("user reducer tests", () => {
 				user: { email: "o.tarusow@yandex.ru", name: "Oleg" },
 			},
 		} as AxiosResponse);
-		const initialState = store.getState();
-
 		//act
 		await store.dispatch(
 			changeUserInfo({
@@ -970,9 +670,9 @@ describe("user reducer tests", () => {
 		);
 		//assert
 		expect(store.getState()).toStrictEqual({
-			...initialState,
+			...appInitialState,
 			user: {
-				...initialUserState,
+				...initialState,
 				user: {
 					email: "o.tarusow@yandex.ru",
 					name: "Oleg",
@@ -985,7 +685,6 @@ describe("user reducer tests", () => {
 
 	it("changePassword: should send request", async () => {
 		//arrange
-		const store = configureStore({ reducer: rootReducer });
 		Storage.prototype.getItem = jest.fn((token) => {
 			if (token === accessToken) {
 				return "Bearer test";
@@ -1013,26 +712,6 @@ describe("user reducer tests", () => {
 				},
 			},
 		);
-	});
-
-	it("changePassword: should send request", async () => {
-		//arrange
-		const initialState = reducer(undefined, { type: "" });
-
-		//act
-		const state = reducer(
-			undefined,
-			changePassword.pending("", {
-				password: "test",
-				token: "test",
-			}),
-		);
-
-		//assert
-		expect(state).toStrictEqual({
-			...initialState,
-			changePasswordState: "pending",
-		});
 	});
 	//Наставник сказал не тестировать store, только reducer, оставляю тестирование store'а
 });

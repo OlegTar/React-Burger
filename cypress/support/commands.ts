@@ -53,12 +53,14 @@ Cypress.Commands.add("doesNotHaveCount", (ingredientId: string) => {
 });
 
 Cypress.Commands.add("checkModalIsOpen", () => {
-	cy.get("#modal > *:first-child").should("exist");
-	cy.get("#modal > *:first-child")
+	cy.get("#modal > *:first-child").as("modal-child");
+	cy.get("@modal-child").should("exist");
+	cy.get("@modal-child")
 		.should("have.css", "position", "absolute")
 		.should("have.css", "z-index", "101");
-	cy.get("#modal-overlay > *:first-child").should("exist");
-	cy.get("#modal-overlay > *:first-child")
+	cy.get("#modal-overlay > *:first-child").as("overlay-child");
+	cy.get("@overlay-child").should("exist");
+	cy.get("@overlay-child")
 		.should("have.css", "position", "absolute")
 		.should("have.css", "z-index", "100");
 });
