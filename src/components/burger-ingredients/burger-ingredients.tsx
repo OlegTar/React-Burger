@@ -1,128 +1,128 @@
-import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './burger-ingredients.module.scss';
-import { Ingredient } from '../ingredient/ingredient';
-import { useEffect, useRef, useState } from 'react';
-import { FillingType } from '../../types/application-types/filling-type';
-import { useAppSelector } from '../../hooks/redux';
+import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import styles from "./burger-ingredients.module.scss";
+import { Ingredient } from "../ingredient/ingredient";
+import { useEffect, useRef, useState } from "react";
+import { FillingType } from "../../types/application-types/filling-type";
+import { useAppSelector } from "../../hooks/redux";
 
 export const BurgerIngredients = () => {
-	const { ingredients } = useAppSelector((state) => state.ingredients);
+  const { ingredients } = useAppSelector((state) => state.ingredients);
 
-	const scrollPane = useRef<HTMLElement>(null);
-	const [currentTab, setCurrentTab] = useState<FillingType>('bun');
+  const scrollPane = useRef<HTMLElement>(null);
+  const [currentTab, setCurrentTab] = useState<FillingType>("bun");
 
-	useEffect(() => {
-		const scrollPaneElement =
-			scrollPane.current !== null ? (scrollPane.current as HTMLElement) : null;
-		if (scrollPaneElement) {
-			scrollPaneElement.addEventListener('scroll', highLightTab);
-		}
-		return () => {
-			if (scrollPaneElement) {
-				scrollPaneElement.removeEventListener('scroll', highLightTab);
-			}
-		};
-	}, []);
+  useEffect(() => {
+    const scrollPaneElement =
+      scrollPane.current !== null ? (scrollPane.current as HTMLElement) : null;
+    if (scrollPaneElement) {
+      scrollPaneElement.addEventListener("scroll", highLightTab);
+    }
+    return () => {
+      if (scrollPaneElement) {
+        scrollPaneElement.removeEventListener("scroll", highLightTab);
+      }
+    };
+  }, []);
 
-	const highLightTab = () => {
-		if (!scrollPane.current) {
-			return;
-		}
-		const pane = scrollPane.current as HTMLElement;
-		const paneRect = pane.getBoundingClientRect();
-		const headers = pane.querySelectorAll('header');
-		let nearestHeader: HTMLElement = headers[0];
-		let min = Math.abs(paneRect.top - headers[0].getBoundingClientRect().top);
-		for (let i = 1; i < headers.length; i++) {
-			const currentDistance = Math.abs(
-				paneRect.top - headers[i].getBoundingClientRect().top
-			);
-			if (currentDistance < min) {
-				min = currentDistance;
-				nearestHeader = headers[i];
-			}
-		}
-		const value = nearestHeader.getAttribute('data-value') as FillingType;
-		setCurrentTab(value);
-	};
+  const highLightTab = () => {
+    if (!scrollPane.current) {
+      return;
+    }
+    const pane = scrollPane.current as HTMLElement;
+    const paneRect = pane.getBoundingClientRect();
+    const headers = pane.querySelectorAll("header");
+    let nearestHeader: HTMLElement = headers[0];
+    let min = Math.abs(paneRect.top - headers[0].getBoundingClientRect().top);
+    for (let i = 1; i < headers.length; i++) {
+      const currentDistance = Math.abs(
+        paneRect.top - headers[i].getBoundingClientRect().top
+      );
+      if (currentDistance < min) {
+        min = currentDistance;
+        nearestHeader = headers[i];
+      }
+    }
+    const value = nearestHeader.getAttribute("data-value") as FillingType;
+    setCurrentTab(value);
+  };
 
-	const scrollTo = (headerValue: FillingType) => {
-		if (!scrollPane.current) {
-			return;
-		}
-		const pane = scrollPane.current as HTMLElement;
-		const paneRect = pane.getBoundingClientRect();
-		const headers = pane.querySelectorAll('header');
-		let index = 0;
-		for (let i = 0; i < headers.length; i++) {
-			const header = headers[i];
-			if ((header.getAttribute('data-value') as FillingType) === headerValue) {
-				index = i;
-				break;
-			}
-		}
-		const header = headers[index];
-		const headerRect = header.getBoundingClientRect();
-		pane.scrollBy({
-			left: 0,
-			top: headerRect.y - paneRect.y,
-			behavior: 'smooth',
-		});
-	};
+  const scrollTo = (headerValue: FillingType) => {
+    if (!scrollPane.current) {
+      return;
+    }
+    const pane = scrollPane.current as HTMLElement;
+    const paneRect = pane.getBoundingClientRect();
+    const headers = pane.querySelectorAll("header");
+    let index = 0;
+    for (let i = 0; i < headers.length; i++) {
+      const header = headers[i];
+      if ((header.getAttribute("data-value") as FillingType) === headerValue) {
+        index = i;
+        break;
+      }
+    }
+    const header = headers[index];
+    const headerRect = header.getBoundingClientRect();
+    pane.scrollBy({
+      left: 0,
+      top: headerRect.y - paneRect.y,
+      behavior: "smooth",
+    });
+  };
 
-	return (
-		<section className={`mt-10 ${styles.constr}`}>
-			<header className={`mb-5 text text_type_main-large`}>
-				Соберите бургер
-			</header>
-			<nav className={`${styles.tabs} mb-10`}>
-				{[
-					{ value: 'bun' as FillingType, title: 'Булки' },
-					{ value: 'sauce' as FillingType, title: 'Соусы' },
-					{ value: 'main' as FillingType, title: 'Начинки' },
-				].map(({ value, title }) => (
-					<Tab
-						active={value === currentTab}
-						value={value}
-						onClick={() => scrollTo(value)}
-						key={value}
-					>
-						{title}
-					</Tab>
-				))}
-			</nav>
-			<section className={styles['scroll-pane']} ref={scrollPane}>
-				<header className="text text_type_main-medium" data-value="bun">
-					Булки
-				</header>
-				<section className={`mt-6 mb-10 pl-4 ${styles.ingredients}`}>
-					{ingredients
-						.filter(({ ingredient }) => ingredient.type === 'bun')
-						.map(({ ingredient: ing, count }) => (
-							<Ingredient ingredient={ing} count={count} key={ing._id} />
-						))}
-				</section>
-				<header className="text text_type_main-medium" data-value="sauce">
-					Соусы
-				</header>
-				<section className={`mt-6 mb-10 pl-4 ${styles.ingredients}`}>
-					{ingredients
-						.filter(({ ingredient }) => ingredient.type === 'sauce')
-						.map(({ ingredient: ing, count }) => (
-							<Ingredient ingredient={ing} count={count} key={ing._id} />
-						))}
-				</section>
-				<header className="text text_type_main-medium" data-value="main">
-					Начинки
-				</header>
-				<section className={`mt-6 mb-10 pl-4 ${styles.ingredients}`}>
-					{ingredients
-						.filter(({ ingredient }) => ingredient.type === 'main')
-						.map(({ ingredient: ing, count }) => (
-							<Ingredient ingredient={ing} count={count} key={ing._id} />
-						))}
-				</section>
-			</section>
-		</section>
-	);
+  return (
+    <section className={`mt-10 ${styles.constr}`}>
+      <header className={`mb-5 text text_type_main-large`}>
+        Соберите бургер
+      </header>
+      <nav className={`${styles.tabs} mb-10`}>
+        {[
+          { value: "bun" as FillingType, title: "Булки" },
+          { value: "sauce" as FillingType, title: "Соусы" },
+          { value: "main" as FillingType, title: "Начинки" },
+        ].map(({ value, title }) => (
+          <Tab
+            active={value === currentTab}
+            value={value}
+            onClick={() => scrollTo(value)}
+            key={value}
+          >
+            {title}
+          </Tab>
+        ))}
+      </nav>
+      <section className={styles["scroll-pane"]} ref={scrollPane}>
+        <header className="text text_type_main-medium" data-value="bun">
+          Булки
+        </header>
+        <section className={`mt-6 mb-10 pl-4 ${styles.ingredients}`}>
+          {ingredients
+            .filter(({ ingredient }) => ingredient.type === "bun")
+            .map(({ ingredient: ing, count }) => (
+              <Ingredient ingredient={ing} count={count} key={ing._id} />
+            ))}
+        </section>
+        <header className="text text_type_main-medium" data-value="sauce">
+          Соусы
+        </header>
+        <section className={`mt-6 mb-10 pl-4 ${styles.ingredients}`}>
+          {ingredients
+            .filter(({ ingredient }) => ingredient.type === "sauce")
+            .map(({ ingredient: ing, count }) => (
+              <Ingredient ingredient={ing} count={count} key={ing._id} />
+            ))}
+        </section>
+        <header className="text text_type_main-medium" data-value="main">
+          Начинки
+        </header>
+        <section className={`mt-6 mb-10 pl-4 ${styles.ingredients}`}>
+          {ingredients
+            .filter(({ ingredient }) => ingredient.type === "main")
+            .map(({ ingredient: ing, count }) => (
+              <Ingredient ingredient={ing} count={count} key={ing._id} />
+            ))}
+        </section>
+      </section>
+    </section>
+  );
 };
