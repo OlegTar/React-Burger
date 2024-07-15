@@ -16,7 +16,7 @@ import {
 } from "../../services/reducers/constructor-ingredients";
 import { clearCounts, decreaseItem } from "../../services/reducers/ingredients";
 import { DragConstructorElement } from "../drag-constructor-element/drag-constructor-element";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { sendOrder } from "../../services/actions/order";
 import { MyNotification } from "../my-notification/my-notification";
 import { clearOrder } from "../../services/reducers/order";
@@ -114,14 +114,16 @@ export const BurgerConstructor = () => {
         data-cy="dropTarget"
       >
         {bun && (
-          <ConstructorElement
-            type="top"
-            isLocked={true}
-            text={`${bun.name} (верх)`}
-            price={bun.price}
-            thumbnail={bun.imageMobile}
-            extraClass="ml-8 bun-top"
-          />
+          <div data-cy="bun-top">
+            <ConstructorElement
+              type="top"
+              isLocked={true}
+              text={`${bun.name} (верх)`}
+              price={bun.price}
+              thumbnail={bun.imageMobile}
+              extraClass="ml-8"
+            />
+          </div>
         )}
 
         <ul
@@ -142,14 +144,16 @@ export const BurgerConstructor = () => {
           })}
         </ul>
         {bun && (
-          <ConstructorElement
-            type="bottom"
-            isLocked={true}
-            text={`${bun.name} (низ)`}
-            price={bun.price}
-            thumbnail={bun.imageMobile}
-            extraClass="ml-8 bun-bottom"
-          />
+          <div data-cy="bun-bottom">
+            <ConstructorElement
+              type="bottom"
+              isLocked={true}
+              text={`${bun.name} (низ)`}
+              price={bun.price}
+              thumbnail={bun.imageMobile}
+              extraClass="ml-8"
+            />
+          </div>
         )}
       </section>
       <footer>
@@ -163,6 +167,7 @@ export const BurgerConstructor = () => {
           size="medium"
           onClick={createOrder}
           disabled={bun === null}
+          data-cy="order"
         >
           Оформить заказ
         </Button>

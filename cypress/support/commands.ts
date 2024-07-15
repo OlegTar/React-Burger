@@ -37,26 +37,43 @@
 // }
 
 Cypress.Commands.add("drag", (ingredientId: string) => {
-  cy.get(`[data-cy='ingredient_${ingredientId}']`).trigger("dragstart");
-  cy.get("[data-cy='dropTarget']").trigger("drop");
-  return cy.get("[data-cy='dropTarget']");
+	cy.get(`[data-cy='ingredient_${ingredientId}']`).trigger("dragstart");
+	cy.get("[data-cy='dropTarget']").trigger("drop");
 });
 
 Cypress.Commands.add("getCount", (ingredientId: string) => {
-  return cy
-    .get(`[data-cy='card_${ingredientId}'] .counter__num`)
-    .invoke("text")
-    .then(parseInt);
+	return cy
+		.get(`[data-cy='card_${ingredientId}'] .counter__num`)
+		.invoke("text")
+		.then(parseInt);
 });
 
 Cypress.Commands.add("doesNotHaveCount", (ingredientId: string) => {
-  cy.get(`[data-cy='card_${ingredientId}'] .counter__num`).should("not.exist");
+	cy.get(`[data-cy='card_${ingredientId}'] .counter__num`).should("not.exist");
+});
+
+Cypress.Commands.add("checkModalIsOpen", () => {
+	cy.get("#modal > *:first-child").should("exist");
+	cy.get("#modal > *:first-child")
+		.should("have.css", "position", "absolute")
+		.should("have.css", "z-index", "101");
+	cy.get("#modal-overlay > *:first-child").should("exist");
+	cy.get("#modal-overlay > *:first-child")
+		.should("have.css", "position", "absolute")
+		.should("have.css", "z-index", "100");
+});
+
+Cypress.Commands.add("checkModalIsClosed", () => {
+	cy.get("#modal > *").should("not.exist");
+	cy.get("#modal-overlay > *").should("not.exist");
 });
 
 declare namespace Cypress {
-  interface Chainable {
-    getCount(ingredientId: string): Chainable<number>;
-    doesNotHaveCount(ingredientId: string): Chainable<void>;
-    drag(ingredientId: string): Cypress.Chainable<JQuery<HTMLElement>>;
-  }
+	interface Chainable {
+		getCount(ingredientId: string): Chainable<number>;
+		doesNotHaveCount(ingredientId: string): Chainable<void>;
+		drag(ingredientId: string): Cypress.Chainable<JQuery<HTMLElement>>;
+		checkModalIsOpen(): Chainable<void>;
+		checkModalIsClosed(): Chainable<void>;
+	}
 }

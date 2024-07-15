@@ -38,7 +38,7 @@ export const orderDetails = createSlice({
           action: PayloadAction<OrderDetailsResponse>
         ) => {
           state.loading = false;
-          if (action.payload.orders.length == 0) {
+          if (action.payload.orders.length === 0) {
             state.success = false;
             state.order = null;
           } else {
