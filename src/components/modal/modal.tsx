@@ -1,14 +1,14 @@
-import { createContext, useContext } from 'react';
-import ReactDOM from 'react-dom';
-import styles from './modal.module.scss';
-import { ModalOverlay } from '../modal-overlay/modal-overlay';
-import { FC, ReactNode, useEffect } from 'react';
-import { linkHandler } from '../../utils/common';
-import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { createContext } from "react";
+import ReactDOM from "react-dom";
+import styles from "./modal.module.scss";
+import { ModalOverlay } from "../modal-overlay/modal-overlay";
+import { FC, ReactNode, useEffect } from "react";
+import { linkHandler } from "../../utils/common";
+import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
-const modalRoot = document.getElementById('modal');
+const modalRoot = document.getElementById("modal");
 if (modalRoot === null) {
-	throw new Error('Error');
+	throw new Error("Error");
 }
 
 interface ModalPropTypes {
@@ -55,27 +55,27 @@ export const Modal: FC<ModalPropTypes> = ({
 	}
 
 	const handlerKeyPress = (e: KeyboardEvent) => {
-		if (e.code === 'Escape') {
+		if (e.code === "Escape") {
 			closeModal();
 		}
 	};
 
 	useEffect(() => {
-		window.addEventListener('resize', setPosition);
+		window.addEventListener("resize", setPosition);
 		if (!hideClose) {
-			window.document.body.addEventListener('keydown', handlerKeyPress);
+			window.document.body.addEventListener("keydown", handlerKeyPress);
 		}
 		setTimeout(setPosition, 0);
 
 		return () => {
-			window.removeEventListener('resize', setPosition);
+			window.removeEventListener("resize", setPosition);
 			if (!hideClose) {
-				window.document.body.removeEventListener('keydown', handlerKeyPress);
+				window.document.body.removeEventListener("keydown", handlerKeyPress);
 			}
 		};
 	});
 
-	const additionalClass = title === '' ? styles.abs : '';
+	const additionalClass = title === "" ? styles.abs : "";
 
 	return ReactDOM.createPortal(
 		<ModalContext.Provider value={{ setPosition }}>
@@ -85,7 +85,11 @@ export const Modal: FC<ModalPropTypes> = ({
 						className={`${styles.header} ${additionalClass} pl-10 pr-10 pt-10`}
 					>
 						<p className={`text text_type_main-large`}>{title}</p>
-						<a href="/" onClick={(e) => linkHandler(e, closeModal)}>
+						<a
+							href="/"
+							onClick={(e) => linkHandler(e, closeModal)}
+							data-cy="close-modal"
+						>
 							<CloseIcon type="primary" />
 						</a>
 					</header>
@@ -94,6 +98,6 @@ export const Modal: FC<ModalPropTypes> = ({
 				<ModalOverlay closeModal={closeModal} />
 			</div>
 		</ModalContext.Provider>,
-		modalRoot
+		modalRoot,
 	);
 };
