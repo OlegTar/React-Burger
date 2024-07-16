@@ -1,12 +1,12 @@
-import type { Middleware, MiddlewareAPI } from 'redux';
-import { AppDispatch, RootState } from '../store';
-import { PayloadType } from '../actions/socket-actions';
-import { OrdersFeedState } from '../../types/application-types/orders-feed-state';
-import { refreshAccessToken } from '../../utils/common';
+import type { Middleware, MiddlewareAPI } from "redux";
+import { AppDispatch, AppState } from "../store";
+import { PayloadType } from "../actions/socket-actions";
+import { OrdersFeedState } from "../../types/application-types/orders-feed-state";
+import { refreshAccessToken } from "../../utils/common";
 import {
 	ActionCreatorWithoutPayload,
 	ActionCreatorWithPayload,
-} from '@reduxjs/toolkit';
+} from "@reduxjs/toolkit";
 
 const RECONNECT_PERIOD = 3000;
 
@@ -28,11 +28,11 @@ export const socketMiddleware = (
 		send: ActionCreatorWithPayload<PayloadType>;
 		message: ActionCreatorWithPayload<OrdersFeedState>;
 	},
-	withTokenRefresh: boolean = false
+	withTokenRefresh: boolean = false,
 ): Middleware => {
-	return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
+	return ((store: MiddlewareAPI<AppDispatch, AppState>) => {
 		let socket: WebSocket | null = null;
-		let url = '';
+		let url = "";
 		let isConnected = false;
 		let reconnectTimer = 0;
 
@@ -52,7 +52,7 @@ export const socketMiddleware = (
 				// функция, которая вызывается при ошибке соединения
 				socket.onerror = (event: Event) => {
 					console.log(event);
-					dispatch(error('Произошла ошибка'));
+					dispatch(error("Произошла ошибка"));
 				};
 
 				// функция, которая вызывается при получения события от сервера
@@ -62,15 +62,15 @@ export const socketMiddleware = (
 						if (
 							withTokenRefresh &&
 							(data as { message: string }).message ===
-								'Invalid or missing token'
+								"Invalid or missing token"
 						) {
 							try {
 								const newAccessToken = await refreshAccessToken();
 
 								const wssUrl = new URL(url);
 								wssUrl.searchParams.set(
-									'token',
-									newAccessToken.replace('Bearer ', '')
+									"token",
+									newAccessToken.replace("Bearer ", ""),
 								);
 								dispatch(start(wssUrl.toString()));
 							} catch (err) {
@@ -91,7 +91,7 @@ export const socketMiddleware = (
 					dispatch(closed());
 
 					if (isConnected) {
-						console.log('reconnect');
+						console.log("reconnect");
 						reconnectTimer = window.setTimeout(() => {
 							dispatch(start(url));
 						}, RECONNECT_PERIOD);

@@ -1,11 +1,12 @@
-import { ingredients } from './ingredients';
-import { constructorIngredients } from './constructor-ingredients';
-import { order } from './order';
-import { combineReducers } from 'redux';
-import { user } from './user';
-import { orderDetails } from './order-details';
-import { feedReducer } from './feed-reducer';
-import { privateFeedReducer } from './private-feed-reducer';
+import { ingredients } from "./ingredients";
+import { constructorIngredients } from "./constructor-ingredients";
+import { order } from "./order";
+import { combineReducers } from "redux";
+import { user } from "./user";
+import { orderDetails } from "./order-details";
+import { feedReducer } from "./feed-reducer";
+import { privateFeedReducer } from "./private-feed-reducer";
+import { changeUserInfoApi } from "../api/change-user-info-api";
 
 export const rootReducer = combineReducers({
 	[ingredients.reducerPath]: ingredients.reducer,
@@ -15,4 +16,5 @@ export const rootReducer = combineReducers({
 	[orderDetails.reducerPath]: orderDetails.reducer,
 	feed: feedReducer,
 	privateFeed: privateFeedReducer,
+	[changeUserInfoApi.reducerPath]: changeUserInfoApi.reducer,
 });

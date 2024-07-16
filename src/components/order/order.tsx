@@ -99,7 +99,7 @@ export const Order: FC<OrderPropTypes> = ({ isInModal = true }) => {
 
 	if (!order) {
 		if (order_) {
-			order = order_.orders[0];
+			order = order_;
 		} else if (!loading && !error) {
 			dispatch(getOrder(number));
 		}

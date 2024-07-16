@@ -14,16 +14,18 @@ export type UserState = {
 	state: RequestState;
 	errorMessage: string;
 	successMessage: string;
+	changeUserInfoState: RequestState;
 	passwordResetState: RequestState;
 	changePasswordState: RequestState;
 	registerState: RequestState;
 };
 
-const initialState: UserState = {
+export const initialState: UserState = {
 	user: null,
 	state: 'init',
 	errorMessage: '',
 	successMessage: '',
+	changeUserInfoState: 'init',
 	passwordResetState: 'init',
 	changePasswordState: 'init',
 	registerState: 'init',
@@ -71,14 +73,14 @@ export const user = createSlice({
 				state.errorMessage = 'Выйти не удалось';
 			})
 			.addCase(changeUserInfo.pending, (state) => {
-				state.state = 'pending';
+				state.changeUserInfoState = 'pending';
 			})
 			.addCase(changeUserInfo.rejected, (state) => {
-				state.state = 'error';
+				state.changeUserInfoState = 'error';
 				state.errorMessage = 'Не удалось поменять данные пользователя';
 			})
 			.addCase(changeUserInfo.fulfilled, (state, action) => {
-				state.state = 'success';
+				state.changeUserInfoState = 'success';
 				state.user = action.payload;
 				state.successMessage = 'Данные пользователя изменены';
 			})
@@ -109,7 +111,7 @@ export const user = createSlice({
 			})
 			.addCase(register.rejected, (state) => {
 				state.registerState = 'error';
-				state.errorMessage = 'Не удалось зарегистрироаться';
+				state.errorMessage = 'Не удалось зарегистрироваться';
 			})
 			.addCase(register.fulfilled, (state, action) => {
 				state.registerState = 'success';

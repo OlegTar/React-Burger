@@ -1,14 +1,14 @@
 import {
 	ConstructorElement,
 	DragIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-import { IIngredient } from '../../types/application-types/ingredient';
-import styles from './drag-constructor-element.module.scss';
-import { DragSourceMonitor, XYCoord, useDrag, useDrop } from 'react-dnd';
-import { FC, useRef } from 'react';
-import type { Identifier } from 'dnd-core';
-import { changeOrder } from '../../services/reducers/constructor-ingredients';
-import { useAppDispatch } from '../../hooks/redux';
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import { IIngredient } from "../../types/application-types/ingredient";
+import styles from "./drag-constructor-element.module.scss";
+import { DragSourceMonitor, XYCoord, useDrag, useDrop } from "react-dnd";
+import { FC, useRef } from "react";
+import type { Identifier } from "dnd-core";
+import { changeOrder } from "../../services/reducers/constructor-ingredients";
+import { useAppDispatch } from "../../hooks/redux";
 
 interface DragConstructorElementPropTypes {
 	ingredient: IIngredient;
@@ -35,7 +35,7 @@ export const DragConstructorElement: FC<DragConstructorElementPropTypes> = ({
 		void,
 		{ handlerId: Identifier | null }
 	>({
-		accept: 'constr',
+		accept: "constr",
 		collect(monitor) {
 			return {
 				handlerId: monitor.getHandlerId(),
@@ -92,20 +92,23 @@ export const DragConstructorElement: FC<DragConstructorElementPropTypes> = ({
 	});
 
 	const [{ isDragging }, drag] = useDrag({
-		type: 'constr',
+		type: "constr",
 		item: { uniqId, index },
 		collect: (
-			monitor: DragSourceMonitor<{ uniqId: string; index: number }, unknown>
+			monitor: DragSourceMonitor<{ uniqId: string; index: number }, unknown>,
 		) => ({
 			isDragging: monitor.isDragging(),
 		}),
 	});
 	drag(drop(ref));
 
-	const dashedClass = isDragging ? styles.dashed : '';
+	const dashedClass = isDragging ? styles.dashed : "";
 
 	return (
-		<li className={`${styles.ingredient} ${dashedClass} mb-4`}>
+		<li
+			className={`${styles.ingredient} ${dashedClass} mb-4`}
+			data-cy="constructor-item"
+		>
 			<section className={styles.drag} ref={ref} data-handler-id={handlerId}>
 				<DragIcon type="primary" />
 			</section>

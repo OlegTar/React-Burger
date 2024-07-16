@@ -7,7 +7,7 @@ export type IngredientsState = {
 	success: boolean | null;
 	ingredients: IngredientWithCount[];
 };
-const initialState: IngredientsState = {
+export const initialState: IngredientsState = {
 	loading: false,
 	success: null,
 	ingredients: [],
